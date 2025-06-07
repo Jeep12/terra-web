@@ -1,0 +1,75 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <h2 class="auth-title"><i class="fa-solid fa-user-plus"></i> Create an account</h2>
+
+    <form [formGroup]="registerForm" (ngSubmit)="register()">
+      <!-- Email -->
+      <div class="form-group">
+        <label for="email"><i class="fa-solid fa-envelope"></i> Email address</label>
+        <input type="email" id="email" formControlName="email" placeholder="Enter your email" class="form-control">
+        <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+          <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+        </div>
+      </div>
+
+      <!-- Password -->
+      <div class="form-group">
+        <label for="password"><i class="fa-solid fa-lock"></i> Password</label>
+        <input type="password" id="password" formControlName="password" placeholder="Create a password" class="form-control">
+        <div *ngIf="registerForm.get('password')?.invalid && registerForm.get('password')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+          <span *ngIf="registerForm.get('password')?.errors?.['minlength']">At least 6 characters</span>
+        </div>
+      </div>
+
+      <!-- Confirm Password -->
+      <div class="form-group">
+        <label for="confirmPassword"><i class="fa-solid fa-lock"></i> Confirm password</label>
+        <input type="password" id="confirmPassword" formControlName="confirmPassword" placeholder="Confirm your password" class="form-control">
+        <div *ngIf="registerForm.get('confirmPassword')?.invalid && registerForm.get('confirmPassword')?.touched" class="error-message">
+          <span *ngIf="registerForm.get('confirmPassword')?.errors?.['required']">Please confirm your password</span>
+        </div>
+        <div *ngIf="registerForm.errors?.['passwordMismatch'] && registerForm.get('confirmPassword')?.touched" class="error-message">
+          <span>Passwords do not match</span>
+        </div>
+      </div>
+
+      <!-- Terms -->
+      <div class="form-group checkbox-group">
+        <label class="checkbox-label">
+          <input type="checkbox" formControlName="acceptTerms">
+          <span><i class="fa-solid fa-check-square"></i> I agree to the <a href="#" class="terms-link">Terms</a> and <a href="#" class="terms-link">Privacy</a></span>
+        </label>
+        <div *ngIf="registerForm.get('acceptTerms')?.invalid && registerForm.get('acceptTerms')?.touched" class="error-message">
+          <span>You must accept the terms</span>
+        </div>
+      </div>
+
+      <!-- Register button -->
+      <button type="submit" class="btn-primary" [disabled]="registerForm.invalid">
+        <i class="fa-solid fa-user-plus"></i> Create account
+      </button>
+    </form>
+
+    <!-- Social login -->
+    <div class="social-login">
+      <p class="divider"><span>Or register with</span></p>
+      <div class="social-buttons">
+        <button type="button" class="btn-social google" (click)="registerWithGoogle()">
+          <i class="fab fa-google"></i> Google
+        </button>
+        <button type="button" class="btn-social facebook" (click)="registerWithFacebook()">
+          <i class="fab fa-facebook-f"></i> Facebook
+        </button>
+      </div>
+    </div>
+
+    <!-- Already have account -->
+    <div class="auth-links">
+      <p class="login-text">Already have an account? 
+        <a (click)="navigateToLogin()" class="auth-link"><i class="fa-solid fa-arrow-right-to-bracket"></i> Login</a>
+      </p>
+    </div>
+  </div>
+</div>
