@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://l2terra.online:8080/',
+  apiUrl: 'http://l2terra.online/',
   apiLocal:''
 };
 /*
