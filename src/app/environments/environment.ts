@@ -1,6 +1,7 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://l2terra.online:8080/' 
+  apiUrl: 'https://l2terra.online:8080/',
+  apiLocal:''
 };
 /*
 <IfModule mod_rewrite.c>
@@ -17,3 +18,5 @@ export const environment = {
 
 
 */
+
+
