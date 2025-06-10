@@ -49,6 +49,27 @@ label {
   font-size: 14px;
 }
 
+/* Password Input Container */
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 5px;
+}
+
+.password-toggle:hover {
+  color: #dabe64;
+}
+
 /* Input styling */
 .form-control {
   width: 100%;
@@ -59,6 +80,7 @@ label {
   color: white;
   font-size: 16px;
   transition: all 0.3s ease;
+  padding: 0 12px;
 }
 
 .form-control:focus {
@@ -175,9 +197,12 @@ label {
   background-color: rgba(255, 255, 255, 0.12);
 }
 
-.social-icon {
-  margin-right: 8px;
-  font-weight: bold;
+.google {
+  color: #db4437;
+}
+
+.facebook {
+  color: #4267B2;
 }
 
 /* Login link styling */
@@ -220,4 +245,173 @@ label {
   .social-buttons {
     flex-direction: column;
   }
+}
+
+/* Añade estos estilos al final de tu archivo CSS existente */
+
+/* Success Modal Styles */
+.modal-content.auth-modal {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  border-radius: 12px;
+}
+
+.modal-header {
+  border-bottom: none;
+  justify-content: center;
+  padding-bottom: 0;
+}
+
+.modal-footer {
+  border-top: none;
+  justify-content: center;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(to right, #746535, #dabe64);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 30px;
+  color: #0c0f20;
+}
+
+.modal-body h3 {
+  color: white;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+
+.modal-body p {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 20px;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content {
+  animation: fadeIn 0.3s ease-out;
+}
+
+
+.form-group {
+  margin-bottom: 20px
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.loading-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  overflow: hidden;
+}
+
+.loading-bar {
+  background-color: rgba(12, 15, 32, 0.3);
+  min-width: 100%;
+  min-height: 4px;
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-bar::after,
+.loading-bar::before {
+  content: "";
+  position: absolute;
+  min-height: 4px;
+  background: linear-gradient(to right, rgba(218, 190, 100, 0.8), rgba(255, 255, 255, 0.8));
+}
+
+.loading-bar::after {
+  animation: loading1 2s infinite;
+}
+
+.loading-bar::before {
+  animation: loading1 2s infinite;
+  animation-delay: 1s;
+}
+
+@keyframes loading1 {
+  0% {
+    transform: translateX(-150%);
+    width: 100px;
+  }
+
+  100% {
+    transform: translateX(300%);
+    width: 400px;
+  }
+}
+
+/* Modal styles + fade-in */
+.modal-content.auth-modal {
+  background-color: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px)
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0)
+  }
+}
+.btn-secondary {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid rgba(218, 190, 100, 0.5);
+  border-radius: 8px;
+  background: transparent;
+  color: #dabe64;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(218, 190, 100, 0.1);
+}
+
+.btn-secondary i {
+  margin-right: 8px;
 }

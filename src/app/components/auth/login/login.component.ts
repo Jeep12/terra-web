@@ -1,7 +1,9 @@
 import { CommonModule } from "@angular/common"
+import { HttpClient } from "@angular/common/http"
 import { Component, type OnInit } from "@angular/core"
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from "@angular/forms"
 import { Router } from "@angular/router"
+import { AuthService } from "../../../services/auth.service"
 
 /**
  * Login Component
@@ -15,7 +17,7 @@ import { Router } from "@angular/router"
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,],
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"],
 })
@@ -23,7 +25,7 @@ export class LoginComponent implements OnInit {
   // Form groups for each step
   emailForm: FormGroup
   passwordForm: FormGroup
-
+  errors:string []= [];
   // Track the current step in the login process
   currentStep = 1
 
@@ -33,6 +35,9 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
+    private http: HttpClient,
+    private authService:AuthService
+
   ) {
     // Initialize form groups with validators
     this.emailForm = this.fb.group({
@@ -74,26 +79,33 @@ export class LoginComponent implements OnInit {
   /**
    * Handle the login submission
    */
-  login(): void {
-    if (this.passwordForm.valid) {
-      const loginData = {
-        email: this.userEmail,
-        password: this.passwordForm.get("password")?.value,
+login(): void {
+  this.errors = [];
+  if (this.passwordForm.valid && this.userEmail) {
+    const loginData = {
+      email: this.userEmail,
+      password: this.passwordForm.get("password")?.value,
+    };
+    console.log('Datos de login:', loginData);
+
+    this.authService.login(loginData).subscribe({
+      next: (res) => {
+    this.router.navigate(['/dashboard']);
+        // Acá podés redirigir o guardar token
+      },
+      error: (err) => {
+        console.error('Error en login:', err);
+        this.errors.push(err.error?.message);
       }
-
-      // In a real app, you would call your authentication service here
-      console.log("Login attempt with:", loginData)
-
-      // Simulate successful login
-      alert("Login successful! (This is a stub - no actual authentication)")
-
-      // Navigate to dashboard or home page after successful login
-      // this.router.navigate(['/dashboard']);
-    } else {
-      // Mark form controls as touched to trigger validation messages
-      this.passwordForm.markAllAsTouched()
+    });
+  } else {
+    if (!this.userEmail) {
+      alert('El email es obligatorio');
     }
+    this.passwordForm.markAllAsTouched();
   }
+}
+
 
   /**
    * Handle Google login

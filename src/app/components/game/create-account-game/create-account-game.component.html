@@ -1,0 +1,52 @@
+<div class="create-account-container fadeInUp ">
+    <div class="form-wrapper">
+        <div class="form-header">
+            <h2>Create Game Account</h2>
+            <p>Join the adventure in Lineage II Terra</p>
+        </div>
+
+        <form [formGroup]="createAccountForm" (ngSubmit)="onSubmit()" class="create-form">
+            <div class="form-group">
+                <label for="username">
+                    <i class="fa-solid fa-user"></i>
+                    Username
+                </label>
+                <input type="text" id="username" formControlName="username" placeholder="Enter your username"
+                    [class.error]="getFieldError('username')">
+                <span class="error-message" *ngIf="getFieldError('username')">
+                    {{ getFieldError('username') }}
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">
+                    <i class="fa-solid fa-lock"></i>
+                    Password
+                </label>
+                <input type="password" id="password" formControlName="password" placeholder="Enter your password"
+                    [class.error]="getFieldError('password')">
+                <span class="error-message" *ngIf="getFieldError('password')">
+                    {{ getFieldError('password') }}
+                </span>
+            </div>
+
+            <div class="form-group">
+                <label for="confirmPassword">
+                    <i class="fa-solid fa-lock"></i>
+                    Confirm Password
+                </label>
+                <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                    placeholder="Confirm your password" [class.error]="getFieldError('confirmPassword')">
+                <span class="error-message" *ngIf="getFieldError('confirmPassword')">
+                    {{ getFieldError('confirmPassword') }}
+                </span>
+            </div>
+
+            <button type="submit" class="btn-create" [disabled]="createAccountForm.invalid || isSubmitting">
+                <i class="fa-solid fa-gamepad" *ngIf="!isSubmitting"></i>
+                <i class="fa-solid fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+                {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
+            </button>
+        </form>
+    </div>
+</div>

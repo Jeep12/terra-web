@@ -1,0 +1,325 @@
+@import url('https://fonts.googleapis.com/css2?family=Alumni+Sans+SC:ital,wght@0,100..900;1,100..900&display=swap');
+
+.parent {
+    background-color: black;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    background: linear-gradient(to bottom, #0c0f20, #000000);
+
+}
+
+.logoTerra {
+    filter: drop-shadow(0px 0px 2px #3b3b3b);
+    width: 100%;
+
+}
+
+.logoTerra:hover {
+    filter: drop-shadow(0px 0px 15px white) brightness(1.1);
+    animation: none;
+    cursor: pointer;
+
+}
+
+@keyframes shadowPulse {
+    0% {
+        filter: drop-shadow(0px 0px 15px #746535);
+    }
+
+    50% {
+        filter: drop-shadow(0px 0px 15px #dabe64) brightness(1.05);
+    }
+
+    100% {
+        filter: drop-shadow(0px 0px 15px #f0d67a);
+        /* Variante más clara */
+    }
+}
+
+.wrapper-sidebar {
+    width: 20%;
+    height: 100dvh;
+
+}
+
+.sidebar {
+    width: 70%;
+    height: 100%;
+    margin: auto;
+    float: right;
+    background-color: rgba(17, 17, 17, 0.397);
+    border: 1px solid #3b3b3b;
+    display: block !important;
+
+
+}
+
+.wrapper-pilar {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.nav {
+    height: 10%;
+    background-color: rgba(17, 17, 17, 0.397);
+    display: flex;
+    align-items: center;
+    border-top: 1px solid #3b3b3b;
+    border-bottom: 1px solid #3b3b3b;
+    padding: 0px;
+margin-top: 40px;
+
+
+}
+
+.nav ul {
+    list-style: none;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    margin-top: 15px;
+}
+
+.nav ul li {
+    padding-right: 110px;
+}
+
+
+.auth-link:hover {
+    text-decoration: underline;
+}
+
+.btn-logout {
+    width: 100%;
+    padding: 9px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, #746535, #998648);
+
+    color: #0c0f20;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 6px;
+}
+
+.btn-logout:hover {
+    background: linear-gradient(to right, #96813f, #dabe64);
+
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
+}
+
+.content {
+    height: 100%;
+
+}
+
+.content span {
+    margin: auto;
+    font-size: 22px;
+    color: #dabe64;
+    display: block;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.sidebar-nav {
+    display: block !important;
+
+
+
+}
+
+.sidebar-nav ul {
+    list-style: none;
+    margin-top: 20px;
+
+}
+
+.sidebar-nav ul li {
+    text-align: start;
+    font-size: 12px;
+    font-weight: 700;
+    text-shadow: 0px 0px 5px rgb(95, 95, 95);
+    color: #EFEFF0 !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-family: 'Segoe UI';
+    font-style: normal;
+    margin-top: 30px;
+    color: #746535;
+
+}
+
+.sidebar-nav ul li a i {
+    font-size: 17px;
+    color: #dabe64;
+
+}
+
+.sidebar-nav ul li :hover {
+    cursor: pointer;
+    text-shadow: 0px -2px 15px #dabe64;
+    color: #dabe64;
+
+}
+
+.btn-menu {
+    display: none;
+    /* sólo una vez */
+    position: absolute;
+    /* para usar top/left */
+    top: 100px;
+    /* mil‑imetros desde arriba del padre */
+    right: 100px;
+    /* idem desde la izquierda */
+    z-index: 1000;
+    /* que quede encima */
+}
+
+@media (min-width: 1080px) and (max-width: 1550px) {
+
+    .sidebar {
+        width: 90%;
+    }
+
+    .wrapper-pilar {}
+
+    .sidebar-nav {}
+
+    .sidebar-nav ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        padding: 0px;
+        text-align: start;
+        margin-left: 20px;
+    }
+
+    .sidebar-nav ul li {}
+}
+
+@media (min-width: 1080px) {
+
+    .parent {
+        display: flex;
+        height: 100%;
+        background-color: green !important;
+    }
+
+    .sidebar-nav {
+        display: block !important;
+        width: 100%;
+    }
+}
+
+.support {
+    position: absolute;
+    bottom: 0px;
+}
+
+@media (max-width: 1080px) {
+    .parent {
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        height: 80%;
+    }
+
+    .support {
+        position: relative;
+        bottom: 0px;
+    }
+
+    .nav {
+        border-top: none;
+        border-left: 1px solid #3b3b3b;
+        border-right: 1px solid #3b3b3b;
+
+    }
+
+    .sidebar-nav ul li {
+        margin-top: 15px;
+    }
+
+    .sidebar {}
+
+    .btn-menu {
+        display: block;
+    }
+
+    .logoTerra {
+        width: 220px !important;
+    }
+
+
+    .wrapper-sidebar {
+        width: 100%;
+        height: 80%;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: column;
+        align-items: start;
+        padding: 0px;
+        height: 80%;
+    }
+
+    .sidebar-nav {
+        display: none;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .sidebar-nav ul {
+        width: 100%;
+    }
+
+    .wrapper-pilar {
+        width: 100%;
+
+    }
+
+    .logoTerra {
+        width: 50%;
+    }
+
+    .content {
+
+        height: 100dvh;
+
+        margin-top: 20px;
+    }
+
+}
+
+
+.btn-secondary {
+    width: 100px;
+    padding: 12px;
+    border: 1px solid rgba(218, 190, 100, 0.5);
+    border-radius: 8px;
+    background: transparent;
+    color: #dabe64;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+}
+
+.btn-secondary:hover {
+    background-color: rgba(218, 190, 100, 0.1);
+}
+
+.btn-secondary i {
+    margin-right: 8px;
+}
