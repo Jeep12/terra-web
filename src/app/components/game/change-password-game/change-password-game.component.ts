@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators, FormsModule } from "@angular/forms";
 import { AccountGameResponse } from '../../../models/game.account.model';
 import { GameAccountService } from '../../../services/game-account.service';
+import { AccountMaster } from '../../../models/master.account.model';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-change-password-game',
@@ -21,27 +23,44 @@ export class ChangePasswordGameComponent implements OnInit {
 
   gameAccounts: AccountGameResponse[] = [];
   selectedAccount: AccountGameResponse | null = null;
+  accountM: AccountMaster | any = null;
   currentAccountIndex = 0;
   responseMessage = '';
   emailSent = false;
   loading = false;
 
-  constructor(private fb: FormBuilder, private gameAccountService: GameAccountService) {
+  constructor(private fb: FormBuilder, private gameAccountService: GameAccountService, private authService: AuthService) {
     // Solo creamos el form para las contraseñas
     this.changePasswordForm = this.fb.group({
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmNewPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
   }
-
   ngOnInit() {
-    const userEmail = 'encabojuan@gmail.com';
-    this.gameAccountService.getAccountsGame(userEmail).subscribe(accounts => {
-      this.gameAccounts = accounts;
-      this.selectedAccount = accounts.length ? accounts[0] : null;
-      this.currentAccountIndex = 0;
+    this.authService.getCurrentUser().subscribe({
+      next: user => {
+        this.accountM = user ?? null;
+        if (this.accountM) {
+
+          // Ahora que tenemos usuario, pedimos las cuentas:
+          this.gameAccountService.getAccountsGame(this.accountM.email).subscribe(accounts => {
+            this.gameAccounts = accounts || [];
+            this.selectedAccount = this.gameAccounts.length ? this.gameAccounts[0] : null;
+            this.currentAccountIndex = 0;
+          });
+
+
+        } else {
+          console.error('No user data found');
+        }
+      },
+      error: err => {
+        console.error('Error fetching user:', err);
+        this.accountM = null;
+      }
     });
   }
+
 
   passwordMatchValidator(form: FormGroup) {
     const newPass = form.get('newPassword');

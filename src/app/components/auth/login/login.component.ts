@@ -4,6 +4,7 @@ import { Component, type OnInit } from "@angular/core"
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from "@angular/forms"
 import { Router } from "@angular/router"
 import { AuthService } from "../../../services/auth.service"
+import { NgOptimizedImage } from '@angular/common';
 
 /**
  * Login Component
@@ -17,7 +18,7 @@ import { AuthService } from "../../../services/auth.service"
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,],
+  imports: [CommonModule, ReactiveFormsModule,NgOptimizedImage],
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"],
 })

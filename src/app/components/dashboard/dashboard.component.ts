@@ -1,27 +1,50 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { AccountMaster } from '../../models/master.account.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, NgOptimizedImage],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   navVisible = true;
   resolucionCambiada: boolean = false;
+  accountM: AccountMaster | any = null;
 
   constructor(
     private authService: AuthService,
     private router: Router
   ) {
 
-    
+
   }
-    @HostListener('window:resize', ['$event'])
+
+  ngOnInit() {
+    this.authService.getCurrentUser().subscribe({
+      next: user => {
+        this.accountM = user ?? null;
+        if (this.accountM) {
+
+          
+
+        } else {
+          console.error('No user data found');
+        }
+      },
+      error: err => {
+        console.error('Error fetching user:', err);
+        this.accountM = null;
+      }
+    });
+  }
+
+
+  @HostListener('window:resize', ['$event'])
   onResize(event: any) {
     if (window.innerWidth >= 1080) {
       this.navVisible = true;

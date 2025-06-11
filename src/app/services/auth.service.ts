@@ -1,12 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../environments/environment';
-import { Observable } from 'rxjs';
-
+import { Observable, of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
+import { AccountMaster } from '../models/master.account.model';
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+  private loggedIn = false;
 
 
   constructor(private http: HttpClient) { }
@@ -30,6 +32,23 @@ export class AuthService {
       `${environment.apiUrl}api/auth/reset-password?token=${encodeURIComponent(tokenUser)}`,
       { password }, // el body
       { withCredentials: true } // la cookie va sola si está seteada
+    );
+  }
+getCurrentUser(): Observable<AccountMaster> {
+  return this.http.get<AccountMaster>(`${environment.apiUrl}api/auth/me`, { withCredentials: true });
+}
+
+  isLoggedIn(): Observable<boolean> {
+    if (this.loggedIn) {
+      return of(true);
+    }
+    return this.getCurrentUser().pipe(
+      tap(() => this.loggedIn = true),
+      map(() => true),
+      catchError(() => {
+        this.loggedIn = false;
+        return of(false);
+      })
     );
   }
 

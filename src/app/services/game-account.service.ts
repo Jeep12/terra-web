@@ -11,10 +11,13 @@ export class GameAccountService {
 
   constructor(private http: HttpClient) { }
 
-
-  createAccountGame(account: GameAccount): Observable<any> {
-    return this.http.post(`${environment.apiUrl}api/auth/register`, account);
+  createAccountGame(account: any): Observable<any> {
+    return this.http.post(`${environment.apiUrl}api/game/auth/registerGameAccount`, account, {
+      withCredentials: true
+    });
   }
+
+
   getAccountsGame(email: string): Observable<AccountGameResponse[]> {
     return this.http.get<AccountGameResponse[]>(`${environment.apiUrl}api/game/auth/accounts?email=${email}`, { withCredentials: true });
 

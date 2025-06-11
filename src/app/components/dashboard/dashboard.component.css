@@ -12,7 +12,7 @@
 
 .logoTerra {
     filter: drop-shadow(0px 0px 2px #3b3b3b);
-    width: 100%;
+    width: 100px;
 
 }
 
@@ -71,7 +71,6 @@
     border-top: 1px solid #3b3b3b;
     border-bottom: 1px solid #3b3b3b;
     padding: 0px;
-margin-top: 40px;
 
 
 }
@@ -288,15 +287,12 @@ margin-top: 40px;
 
     }
 
-    .logoTerra {
-        width: 50%;
-    }
+ 
 
     .content {
 
         height: 100dvh;
 
-        margin-top: 20px;
     }
 
 }

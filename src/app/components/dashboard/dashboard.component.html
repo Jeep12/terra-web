@@ -2,7 +2,10 @@
     <div class="wrapper-sidebar">
 
         <div class="sidebar slideInDown ">
-            <img class="logoTerra" src="assets/images/lineage2Terra_blanco.png" alt="asd">
+            <div style="position: relative; width: 220px; height: 207px;">
+                <img class="logoTerra" ngSrc="assets/images/lineage2Terra_blanco.webp" fill alt="Logo de Terra"
+                    priority>
+            </div>
             <button class="btn-secondary btn-menu" (click)="toggleNav()"><i
                     [ngClass]="navVisible ? 'fa-xmark' : 'fa-bars'" class="fa-solid fa-bars"></i></button>
             <div class="sidebar-nav" *ngIf="navVisible">
@@ -35,9 +38,9 @@
         <div class="nav slideInRight ">
             <ul>
                 <li style="color: #dabe64;    font-family: 'Montserrat', sans-serif;font-style: italic;"><span><span><i
-                                class="fa-solid fa-coins"></i></span> Terra Coins: <span
-                            style="font-size: 16px;font-weight: 700;">0</span></span> | &nbsp; <i
-                        class="fa-solid fa-user"></i> encabojuangmail.com <br> <i
+                                class="fa-solid fa-coins"></i></span> Terra Coins:  <span
+                            style="font-size: 16px;font-weight: 700;">{{accountM?.terraCoins}}</span></span> | &nbsp; <i
+                        class="fa-solid fa-user"></i> {{accountM?.email}} <br> <i
                         class="fa-brands fa-telegram"></i>&nbsp; <i class="fa-brands fa-facebook"></i>&nbsp; <i
                         class="fa-brands fa-square-instagram"></i></li>
                 <li><button class="btn-logout" (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i>

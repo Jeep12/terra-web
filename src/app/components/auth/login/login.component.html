@@ -1,6 +1,9 @@
 <div class="auth-container">
   <div>
-    <img class="logoTerra" src="assets/images/lineage2Terra_blanco.png" width="300" alt="asd">
+    <!-- Si conoces la relación de aspecto de tu imagen (ej. 2:1) -->
+    <div style="position: relative; width: 300px; height: 227px;">
+      <img class="logoTerra" ngSrc="assets/images/lineage2Terra_blanco.webp" fill alt="Logo de Terra" priority>
+    </div>
   </div>
   <div class="auth-card">
     <h2 class="auth-title">
@@ -67,12 +70,13 @@
         </div>
         <div class="alert alert-danger" role="alert" *ngIf="errors.length > 0">
           <ul class="mb-0" style="list-style: none;padding: 0px;">
-            <li *ngFor="let error of errors"><i class="fa-solid fa-triangle-exclamation text-danger"></i> {{ error }}</li>
+            <li *ngFor="let error of errors"><i class="fa-solid fa-triangle-exclamation text-danger"></i> {{ error }}
+            </li>
           </ul>
         </div>
 
         <button type="submit" class="btn-primary" [disabled]="passwordForm.invalid">
-          Login  <i class="fas fa-sign-in-alt"></i>
+          Login <i class="fas fa-sign-in-alt"></i>
         </button>
         <br>
         <br>

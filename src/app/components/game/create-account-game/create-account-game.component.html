@@ -12,7 +12,7 @@
                     Username
                 </label>
                 <input type="text" id="username" formControlName="username" placeholder="Enter your username"
-                    [class.error]="getFieldError('username')">
+                    [class.error]="getFieldError('username')" autocomplete="username">
                 <span class="error-message" *ngIf="getFieldError('username')">
                     {{ getFieldError('username') }}
                 </span>
@@ -24,7 +24,7 @@
                     Password
                 </label>
                 <input type="password" id="password" formControlName="password" placeholder="Enter your password"
-                    [class.error]="getFieldError('password')">
+                    [class.error]="getFieldError('password')" autocomplete="new-password">
                 <span class="error-message" *ngIf="getFieldError('password')">
                     {{ getFieldError('password') }}
                 </span>
@@ -36,7 +36,7 @@
                     Confirm Password
                 </label>
                 <input type="password" id="confirmPassword" formControlName="confirmPassword"
-                    placeholder="Confirm your password" [class.error]="getFieldError('confirmPassword')">
+                    placeholder="Confirm your password" [class.error]="getFieldError('confirmPassword')" autocomplete="confirm-new-password">
                 <span class="error-message" *ngIf="getFieldError('confirmPassword')">
                     {{ getFieldError('confirmPassword') }}
                 </span>
