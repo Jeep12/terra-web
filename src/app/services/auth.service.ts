@@ -34,9 +34,9 @@ export class AuthService {
       { withCredentials: true } // la cookie va sola si está seteada
     );
   }
-getCurrentUser(): Observable<AccountMaster> {
-  return this.http.get<AccountMaster>(`${environment.apiUrl}api/auth/me`, { withCredentials: true });
-}
+  getCurrentUser(): Observable<AccountMaster> {
+    return this.http.get<AccountMaster>(`${environment.apiUrl}api/auth/me`, { withCredentials: true });
+  }
 
   isLoggedIn(): Observable<boolean> {
     if (this.loggedIn) {
@@ -51,5 +51,14 @@ getCurrentUser(): Observable<AccountMaster> {
       })
     );
   }
+
+  resendVerificationEmail(email: string): Observable<any> {
+    return this.http.post(`${environment.apiUrl}api/auth/resend-verification`, { email });
+  }
+  verifyEmail(token: string) {
+  return this.http.get(`${environment.apiUrl}api/auth/verify-email?token=${encodeURIComponent(token)}`);
+}
+
+
 
 }

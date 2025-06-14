@@ -1,4 +1,3 @@
-// auth.interceptor.ts
 import { HttpInterceptorFn, HttpRequest, HttpHandler } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { Router } from '@angular/router';
@@ -13,9 +12,16 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(authReq).pipe(
     catchError(error => {
-      if (error.status === 401) {
-        router.navigate(['/login']);
+      const ignore401Paths = [
+        '/account-game/reset-password'
+      ];
+
+      const shouldIgnore = error.status === 401 && ignore401Paths.some(path => req.url.includes(path));
+
+      if (error.status === 401 && !shouldIgnore) {
+
       }
+
       return throwError(() => error);
     })
   );

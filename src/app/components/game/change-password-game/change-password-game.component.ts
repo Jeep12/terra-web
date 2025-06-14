@@ -5,51 +5,54 @@ import { AccountGameResponse } from '../../../models/game.account.model';
 import { GameAccountService } from '../../../services/game-account.service';
 import { AccountMaster } from '../../../models/master.account.model';
 import { AuthService } from '../../../services/auth.service';
+declare var bootstrap: any;
 
 @Component({
   selector: 'app-change-password-game',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, FormsModule], // Agregamos FormsModule para ngModel
+  imports: [CommonModule, ReactiveFormsModule, FormsModule],
   templateUrl: './change-password-game.component.html',
   styleUrls: ['./change-password-game.component.css']
 })
 export class ChangePasswordGameComponent implements OnInit {
-  // Reactive Form para password
+
   changePasswordForm: FormGroup;
   isSubmitting = false;
+  accountM: AccountMaster | null = null;
 
-  // ngModel para códigos
-  codeInputs = ['', '', '', '', '', '']; // Array para los 6 códigos
+  // Steps control
+  currentStep = 1;
+  totalSteps = 3;
 
+  // Code verification
+  codeInputs = ['', '', '', '', '', ''];
+  loading = false;
+  codeSent = false;
+
+  // Account selection
   gameAccounts: AccountGameResponse[] = [];
   selectedAccount: AccountGameResponse | null = null;
-  accountM: AccountMaster | any = null;
   currentAccountIndex = 0;
+
+  // Response messages
   responseMessage = '';
   emailSent = false;
-  loading = false;
 
-  constructor(private fb: FormBuilder, private gameAccountService: GameAccountService, private authService: AuthService) {
-    // Solo creamos el form para las contraseñas
+  constructor(
+    private fb: FormBuilder,
+    private gameAccountService: GameAccountService,
+    private authService: AuthService
+  ) {
     this.changePasswordForm = this.fb.group({
       newPassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmNewPassword: ['', [Validators.required]]
     }, { validators: this.passwordMatchValidator });
-  }
-  ngOnInit() {
+
     this.authService.getCurrentUser().subscribe({
       next: user => {
         this.accountM = user ?? null;
         if (this.accountM) {
-
-          // Ahora que tenemos usuario, pedimos las cuentas:
-          this.gameAccountService.getAccountsGame(this.accountM.email).subscribe(accounts => {
-            this.gameAccounts = accounts || [];
-            this.selectedAccount = this.gameAccounts.length ? this.gameAccounts[0] : null;
-            this.currentAccountIndex = 0;
-          });
-
-
+          this.loadGameAccounts();
         } else {
           console.error('No user data found');
         }
@@ -61,16 +64,52 @@ export class ChangePasswordGameComponent implements OnInit {
     });
   }
 
+  ngOnInit(): void { }
 
-  passwordMatchValidator(form: FormGroup) {
-    const newPass = form.get('newPassword');
-    const confirmPass = form.get('confirmNewPassword');
-    if (newPass && confirmPass && newPass.value !== confirmPass.value) {
-      return { passwordMismatch: true };
+  loadGameAccounts() {
+    if (this.accountM?.email) {
+      this.gameAccountService.getAccountsGame(this.accountM.email).subscribe({
+        next: accounts => {
+          this.gameAccounts = accounts || [];
+          this.selectedAccount = this.gameAccounts.length ? this.gameAccounts[0] : null;
+          this.currentAccountIndex = 0;
+        },
+        error: err => {
+          console.error('Error loading game accounts:', err);
+          this.gameAccounts = [];
+          this.selectedAccount = null;
+        }
+      });
     }
-    return null;
   }
 
+  // Step navigation
+  nextStep() {
+    if (this.canProceedToNextStep() && this.currentStep < this.totalSteps) {
+      this.currentStep++;
+    }
+  }
+
+  prevStep() {
+    if (this.currentStep > 1) {
+      this.currentStep--;
+    }
+  }
+
+  canProceedToNextStep(): boolean {
+    switch (this.currentStep) {
+      case 1:
+        return this.selectedAccount !== null;
+      case 2:
+        return this.isCodeComplete();
+      case 3:
+        return false; // No next step after step 3
+      default:
+        return false;
+    }
+  }
+
+  // Account selection
   nextAccount() {
     if (this.gameAccounts.length === 0) return;
     this.currentAccountIndex = (this.currentAccountIndex + 1) % this.gameAccounts.length;
@@ -80,84 +119,26 @@ export class ChangePasswordGameComponent implements OnInit {
 
   previousAccount() {
     if (this.gameAccounts.length === 0) return;
-    this.currentAccountIndex = this.currentAccountIndex === 0 ? this.gameAccounts.length - 1 : this.currentAccountIndex - 1;
+    this.currentAccountIndex = this.currentAccountIndex === 0
+      ? this.gameAccounts.length - 1
+      : this.currentAccountIndex - 1;
     this.selectedAccount = this.gameAccounts[this.currentAccountIndex];
     this.resetFormAndCode();
   }
 
   resetFormAndCode() {
-    this.changePasswordForm.reset();
+    // Reset form only if we're not in step 3
+    if (this.currentStep !== 3) {
+      this.changePasswordForm.reset();
+    }
     this.emailSent = false;
+    this.codeSent = false;
     this.responseMessage = '';
     this.loading = false;
-    // Limpiamos los códigos
     this.codeInputs = ['', '', '', '', '', ''];
   }
 
-  onSubmit() {
-    // Obtenemos el código de los inputs con ngModel
-    const code = this.codeInputs.join('');
-    const password = this.changePasswordForm.get('newPassword')?.value;
-    const accountName = this.selectedAccount?.login;
-
-    // Mostramos por consola como solicitaste
-    console.log('Password:', password);
-    console.log('Code:', code);
-    console.log('Account:', accountName);
-
-    if (!code || code.length < 6 || code.includes('')) {
-      this.responseMessage = 'Enter the 6-digit code.';
-      return;
-    }
-
-    if (this.changePasswordForm.valid && this.selectedAccount) {
-      this.isSubmitting = true;
-
-      setTimeout(() => {
-        this.isSubmitting = false;
-        this.changePasswordForm.reset();
-        this.codeInputs = ['', '', '', '', '', ''];
-        this.responseMessage = 'Password changed successfully.';
-      }, 2000);
-    }
-  }
-
-  getFieldError(fieldName: string): string {
-    const field = this.changePasswordForm.get(fieldName);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) return `${fieldName} is required`;
-      if (field.errors['minlength']) return `Password must be at least ${field.errors['minlength'].requiredLength} characters`;
-    }
-    if (fieldName === 'confirmNewPassword' && this.changePasswordForm.errors?.['passwordMismatch'] && field?.touched) {
-      return 'Passwords do not match';
-    }
-    return '';
-  }
-
-  formatDate(dateStr: string) {
-    const d = new Date(dateStr);
-    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
-  }
-
-  sendEmailCodeAccount(): void {
-    this.loading = true;
-    const accountName: string = this.selectedAccount?.login || '';
-    this.responseMessage = '';
-
-    this.gameAccountService.sendResetCode(accountName).subscribe({
-      next: (res: any) => {
-        this.emailSent = true;
-        this.responseMessage = res.message;
-        this.loading = false;
-      },
-      error: (err: any) => {
-        this.emailSent = false;
-        this.responseMessage = err.error?.message;
-        this.loading = false;
-      }
-    });
-  }
-
+  // Code input handling
   onInputChange(event: any, index: number) {
     const input = event.target as HTMLInputElement;
     let value = input.value;
@@ -190,9 +171,115 @@ export class ChangePasswordGameComponent implements OnInit {
     if (next) next.focus();
   }
 
+  isCodeComplete(): boolean {
+    return this.codeInputs.every(code => code.trim() !== '');
+  }
+
+  getEnteredCode(): string {
+    return this.codeInputs.join('');
+  }
+
+  // Email verification
+  sendEmailCodeAccount() {
+    this.loading = true;
+    const accountName: string = this.selectedAccount?.login || '';
+    this.responseMessage = '';
+
+    this.gameAccountService.sendResetCode(accountName).subscribe({
+      next: (res: any) => {
+        console.log('Verification code sent:', res);
+        this.emailSent = true;
+        this.codeSent = true;
+        this.responseMessage = res.message || 'Code sent successfully';
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.error('Error sending verification code:', err);
+        this.emailSent = false;
+        this.codeSent = true;
+        this.responseMessage = err.error?.message || 'Error sending code';
+        this.loading = false;
+      }
+    });
+  }
+
+  resendCode() {
+    this.sendEmailCodeAccount();
+  }
+
+  // Form validation
+  passwordMatchValidator(form: FormGroup) {
+    const newPassword = form.get('newPassword');
+    const confirmNewPassword = form.get('confirmNewPassword');
+
+    if (newPassword && confirmNewPassword && newPassword.value !== confirmNewPassword.value) {
+      return { passwordMismatch: true };
+    }
+    return null;
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.changePasswordForm.get(fieldName);
+
+    if (field?.errors && field.touched) {
+      if (field.errors['required']) return `${fieldName} is required`;
+      if (field.errors['minlength'])
+        return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
+    }
+
+    if (fieldName === 'confirmNewPassword' &&
+      this.changePasswordForm.errors?.['passwordMismatch'] &&
+      field?.touched) {
+      return 'Passwords do not match';
+    }
+
+    return '';
+  }
+
+  // Form submission
+  onSubmit() {
+    if (this.changePasswordForm.valid && this.isCodeComplete() && this.selectedAccount) {
+      this.isSubmitting = true;
+
+      const newPassword = this.changePasswordForm.get('newPassword')?.value;
+      const verificationCode = this.getEnteredCode();
+      const accountName = this.selectedAccount.login;
+
+      console.log('New Password:', newPassword);
+      console.log('Verification Code:', verificationCode);
+      console.log('Account:', accountName);
+
+      const changePasswordPayload = {
+        login: accountName,
+        newPassword: newPassword,
+        code: verificationCode
+      }
 
 
+      // Uncomment this when you have the actual service method
+      this.gameAccountService.changePassword(changePasswordPayload).subscribe({
+        next: (response: any) => {
+          console.log('Password changed successfully:', response);
+          this.isSubmitting = false;
+          this.changePasswordForm.reset();
+          this.codeInputs = ['', '', '', '', '', ''];
+          const modal = new bootstrap.Modal(document.getElementById('successModal'));
+          modal.show();
+          // Add success message or redirect here
+        },
+        error: (error: any) => {
+          console.error('Error changing password:', error);
+          this.isSubmitting = false;
+          this.responseMessage = error.error?.message || 'Error changing password';
+        }
+      });
 
+    }
+  }
 
-
+  // Utility methods
+  formatDate(dateStr: string): string {
+    const d = new Date(dateStr);
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+  }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { Component, type OnInit } from "@angular/core"
+import { Component, type OnInit, Renderer2 } from "@angular/core"
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from "@angular/forms"
 import { Router } from "@angular/router"
 import { AuthService } from "../../../services/auth.service"
@@ -18,7 +18,7 @@ import { NgOptimizedImage } from '@angular/common';
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,NgOptimizedImage],
+  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage],
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"],
 })
@@ -26,10 +26,10 @@ export class LoginComponent implements OnInit {
   // Form groups for each step
   emailForm: FormGroup
   passwordForm: FormGroup
-  errors:string []= [];
+  errors: string[] = [];
   // Track the current step in the login process
   currentStep = 1
-
+  btnGoToResendEmailVerification = false;
   // Store the email for use in step 2
   userEmail = ""
 
@@ -37,7 +37,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private http: HttpClient,
-    private authService:AuthService
+    private authService: AuthService,
+    private renderer: Renderer2
 
   ) {
     // Initialize form groups with validators
@@ -51,7 +52,16 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Any initialization logic can go here
+    const authContainer = document.querySelector('.auth-container');
+    const savedTheme = localStorage.getItem('theme');
+
+    if (authContainer) {
+      if (savedTheme === 'dark') {
+        this.renderer.addClass(authContainer, 'dark-mode');
+      } else {
+        this.renderer.removeClass(authContainer, 'dark-mode');
+      }
+    }
   }
 
   /**
@@ -73,40 +83,58 @@ export class LoginComponent implements OnInit {
   /**
    * Go back to the email step
    */
-  goBack(): void {
+  goToBack(): void {
     this.currentStep = 1
   }
 
   /**
    * Handle the login submission
    */
-login(): void {
-  this.errors = [];
-  if (this.passwordForm.valid && this.userEmail) {
-    const loginData = {
-      email: this.userEmail,
-      password: this.passwordForm.get("password")?.value,
-    };
-    console.log('Datos de login:', loginData);
+  login(): void {
+    this.errors = [];
+    this.btnGoToResendEmailVerification = false;  // Reseteo al iniciar login
 
-    this.authService.login(loginData).subscribe({
-      next: (res) => {
-    this.router.navigate(['/dashboard']);
-        // Acá podés redirigir o guardar token
-      },
-      error: (err) => {
-        console.error('Error en login:', err);
-        this.errors.push(err.error?.message);
+    if (this.passwordForm.valid && this.userEmail) {
+      const loginData = {
+        email: this.userEmail,
+        password: this.passwordForm.get("password")?.value,
+      };
+
+      console.log('Datos de login:', loginData);
+
+      this.authService.login(loginData).subscribe({
+        next: (res) => {
+          this.btnGoToResendEmailVerification = false; // Login OK, oculto botón
+          this.router.navigate(['/dashboard']);
+        },
+        error: (err) => {
+          console.error('Error en login:', err);
+
+          if (err.error?.error === 'EMAIL_NOT_VERIFIED') {
+            this.btnGoToResendEmailVerification = true;
+            this.errors.push('Your email is not verified. Please verify it or resend verification email.');
+          } else {
+            this.btnGoToResendEmailVerification = false;
+            this.errors.push(err.error?.message || 'Login failed');
+          }
+        }
+      });
+    } else {
+      this.btnGoToResendEmailVerification = false;
+      if (!this.userEmail) {
+        alert('Email is required');
       }
-    });
-  } else {
-    if (!this.userEmail) {
-      alert('El email es obligatorio');
+      this.passwordForm.markAllAsTouched();
     }
-    this.passwordForm.markAllAsTouched();
   }
-}
 
+
+
+  navigateToResendEmailVerification(): void {
+    this.router.navigate(['/resend-email-verification'], {
+      queryParams: { email: this.userEmail }
+    });
+  }
 
   /**
    * Handle Google login

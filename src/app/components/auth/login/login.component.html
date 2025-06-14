@@ -78,10 +78,16 @@
         <button type="submit" class="btn-primary" [disabled]="passwordForm.invalid">
           Login <i class="fas fa-sign-in-alt"></i>
         </button>
+        <hr>
+        <button class="btn-secondary" (click)="goToBack()"> <i class="fas fa-arrow-left"></i> Back</button>
         <br>
         <br>
-        <button type="button" class="btn-secondary" (click)="goBack()">
-          <i class="fas fa-arrow-left"></i> Back
+        <div class="cf-turnstile" data-sitekey="0x4AAAAAABhBLTkGwYdbEAbo"></div>
+        <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+        <button ngClass="btn-secondary" *ngIf="btnGoToResendEmailVerification"
+          (click)="navigateToResendEmailVerification()">
+          <i class="fas fa-arrow-left"></i> Go to Resend Email Verification
         </button>
       </form>
     </div>

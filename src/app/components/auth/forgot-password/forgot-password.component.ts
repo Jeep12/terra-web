@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit, Renderer2 } from "@angular/core";
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
@@ -11,7 +11,7 @@ import { AuthService } from "../../../services/auth.service";
   templateUrl: "./forgot-password.component.html",
   styleUrls: ["./forgot-password.component.css"],
 })
-export class ForgotPasswordComponent {
+export class ForgotPasswordComponent implements OnInit {
   forgotPasswordForm: FormGroup;
   emailSent = false;
   responseMessage = '';
@@ -20,11 +20,26 @@ export class ForgotPasswordComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private renderer: Renderer2
+
   ) {
     this.forgotPasswordForm = this.fb.group({
       email: ["", [Validators.required, Validators.email]],
     });
+  }
+
+  ngOnInit(): void {
+    const authContainer = document.querySelector('.auth-container');
+    const savedTheme = localStorage.getItem('theme');
+
+    if (authContainer) {
+      if (savedTheme === 'dark') {
+        this.renderer.addClass(authContainer, 'dark-mode');
+      } else {
+        this.renderer.removeClass(authContainer, 'dark-mode');
+      }
+    }
   }
 
   sendResetEmail(): void {

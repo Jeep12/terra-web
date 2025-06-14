@@ -1,0 +1,19 @@
+.container-notfound {
+    background: linear-gradient(to bottom, #0c0f20, #000000);
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: red !important;
+}
+
+.box {
+    width: 500px;
+}
+
+.container-notfound.dark-mode {
+  background: linear-gradient(to bottom, #121212, #000000);
+  color: #ddd;
+}

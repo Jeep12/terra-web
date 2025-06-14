@@ -1,0 +1,24 @@
+<div class="verify-container">
+    <div>
+        <img class="logoTerra" src="assets/images/lineage2Terra_blanco.webp" alt="Logo de Terra" width="300"
+            height="227" />
+    </div>
+    <div class="verify-box">
+        <h2  style="font-size: 14px;margin-bottom: 20px;text-transform: uppercase;"><i class="fa-solid fa-clock-rotate-left"></i> Please wait while we verify your account</h2>
+
+        <p *ngIf="isLoading">Verifying your email...</p>
+        <div *ngIf="!isLoading && statusMessage" class="alert"
+            [ngClass]="{'alert-danger': isError, 'alert-success': !isError}" role="alert">
+            <i *ngIf="isError" class="fas fa-times-circle" style="margin-right: 8px;"></i>
+            <i *ngIf="!isError" class="fas fa-check-circle" style="margin-right: 8px;"></i>
+            {{ statusMessage }}
+        </div>
+
+        <div class="progress-bar" *ngIf="isLoading">
+            <div class="progress-fill"></div>
+        </div>
+        <hr>
+        <button class="btn-secondary" (click)="navigateToLogin()"> <i class="fas fa-arrow-left"></i> Back to
+            login</button>
+    </div>
+</div>

@@ -28,15 +28,29 @@ export const routes: Routes = [
         loadComponent: () => import('./components/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
     },
     {
+        path: 'resend-email-verification',
+        loadComponent: () => import('./components/auth/resend-email-verification/resend-email-verification.component').then(m => m.ResendEmailVerificationComponent)
+    },
+    {
+        path: 'verify-email',
+        loadComponent: () => import('./components/auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
+    },
+    {
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
-         canActivate: [authGuard], // importalo arriba, no lo pongas con promesas
+        canActivate: [authGuard], // importalo arriba, no lo pongas con promesas
 
         children: [
+
+
             {
                 path: '',
                 pathMatch: 'full',
                 redirectTo: 'create-account-game' // Ruta por defecto
+            },
+            {
+                path: 'home-dashboard', // <- ¡Sin "dashboard/"!
+                loadComponent: () => import('./components/dashboard-home/dashboard-home.component').then(m => m.DashboardHomeComponent)
             },
             {
                 path: 'create-account-game', // <- ¡Sin "dashboard/"!
@@ -45,9 +59,32 @@ export const routes: Routes = [
             {
                 path: 'change-password-game', // <- ¡Sin "dashboard/"!
                 loadComponent: () => import('./components/game/change-password-game/change-password-game.component').then(m => m.ChangePasswordGameComponent)
+            },
+            {
+                path: 'buy-terra-coin', // <- ¡Sin "dashboard/"!
+                loadComponent: () => import('./components/game/buy-terra-coin/buy-terra-coin.component').then(m => m.BuyTerraCoinComponent)
+            }
+            ,
+            {
+                path: 'send-terra-coin', // <- ¡Sin "dashboard/"!
+                loadComponent: () => import('./components/game/send-terra-coin/send-terra-coin.component').then(m => m.SendTerraCoinComponent)
+            }
+            ,
+            {
+                path: 'support', // <- ¡Sin "dashboard/"!
+                loadComponent: () => import('./components/support/support.component').then(m => m.SupportComponent)
+            }
+            ,
+            {
+                path: 'setting-account-master', // <- ¡Sin "dashboard/"!
+                loadComponent: () => import('./components/auth/settins-account-master/settins-account-master.component').then(m => m.SettinsAccountMasterComponent)
             }
         ]
-    }
+    },
+    {
+        path: '**',
+        loadComponent: () => import('./components/website-not-found/website-not-found.component').then(m => m.WebsiteNotFoundComponent)
+    },
 
 ];
 

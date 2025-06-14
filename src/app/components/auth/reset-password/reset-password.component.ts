@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -34,6 +34,8 @@ export class ResetPasswordComponent implements OnInit {
     private authService: AuthService,
     private route: ActivatedRoute,
     private router: Router,
+    private renderer: Renderer2
+
   ) {
     this.resetForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(8)]],
@@ -50,6 +52,16 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const authContainer = document.querySelector('.auth-container');
+    const savedTheme = localStorage.getItem('theme');
+
+    if (authContainer) {
+      if (savedTheme === 'dark') {
+        this.renderer.addClass(authContainer, 'dark-mode');
+      } else {
+        this.renderer.removeClass(authContainer, 'dark-mode');
+      }
+    }
     this.route.queryParams.subscribe(params => {
       this.tokenUser = params['token'];
     });

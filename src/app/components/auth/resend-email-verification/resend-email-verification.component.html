@@ -1,0 +1,56 @@
+<div class="auth-container">
+    <div>
+        <div style="position: relative; width: 300px; height: 227px;">
+            <img class="logoTerra" src="assets/images/lineage2Terra_blanco.webp" alt="Logo de Terra" width="300"
+                height="227" />
+        </div>
+    </div>
+
+    <div class="auth-card">
+        <h2 class="auth-title">
+            <i class="fa-solid fa-envelope"></i> Resend Verification Email
+        </h2>
+
+        <!-- Mensaje éxito -->
+        <div *ngIf="emailSent" class="success-message">
+            <div class="success-icon"><i class="fas fa-check-circle"></i></div>
+            <h3>Email sent!</h3>
+            <p> <i class="fas fa-info-circle"></i> Check your inbox to verify your account. Also check your spam folder.
+            </p>
+
+        </div>
+
+        <!-- Mensaje error -->
+        <div *ngIf="errorMessage" class="error-message">
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-exclamation-triangle text-danger"></i> {{ errorMessage }}
+            </div>
+
+        </div>
+
+        <!-- Formulario solo si no se envió el mail -->
+        <div *ngIf="!emailSent">
+            <div class="form-group">
+                <label for="email">
+                    <i class="fas fa-envelope"></i> Email address
+                </label>
+                <input type="email" id="email" [(ngModel)]="email" [disabled]="emailFromQuery"
+                    placeholder="Enter your email" class="form-control" required email />
+            </div>
+
+            <p class="hint-text">
+                <i class="fa-solid fa-circle-exclamation"></i> Check your spam folder
+                if you don't see the email.
+            </p>
+
+            <button class="btn-primary" (click)="resendEmail()" [disabled]="!email">
+                Resend Email
+            </button>
+        </div>
+
+        <hr />
+
+        <button class="btn-secondary" (click)="navigateToLogin()"> <i class="fas fa-arrow-left"></i> Back to
+            login</button>
+    </div>
+</div>

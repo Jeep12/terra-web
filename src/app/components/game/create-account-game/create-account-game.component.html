@@ -1,52 +1,194 @@
-<div class="create-account-container fadeInUp ">
-    <div class="form-wrapper">
-        <div class="form-header">
-            <h2>Create Game Account</h2>
-            <p>Join the adventure in Lineage II Terra</p>
+<div class="form-container">
+    <div class="header-section">
+        <h1>Create Your Game Account</h1>
+        <p class="subtitle">Join the adventure in Lineage II Terra</p>
+
+        <div class="steps-indicator">
+            <div class="step-item" [class.active]="currentStep === 1" [class.completed]="currentStep > 1">
+                <div class="step-number">1</div>
+                <div class="step-text">Email Verification</div>
+            </div>
+            <div class="step-divider"></div>
+            <div class="step-item" [class.active]="currentStep === 2">
+                <div class="step-number">2</div>
+                <div class="step-text">Account Details</div>
+            </div>
         </div>
+    </div>
 
-        <form [formGroup]="createAccountForm" (ngSubmit)="onSubmit()" class="create-form">
-            <div class="form-group">
-                <label for="username">
-                    <i class="fa-solid fa-user"></i>
-                    Username
-                </label>
-                <input type="text" id="username" formControlName="username" placeholder="Enter your username"
-                    [class.error]="getFieldError('username')" autocomplete="username">
-                <span class="error-message" *ngIf="getFieldError('username')">
-                    {{ getFieldError('username') }}
-                </span>
+    <!-- Step 1: Email Verification -->
+    <div *ngIf="currentStep === 1" class="form-step">
+        <div class="verification-container">
+            <div class="verification-header">
+                <i class="fa-solid fa-shield-halved verification-icon"></i>
+                <h2>Email Verification Required</h2>
+                <p class="verification-description">
+                    To ensure account security, we need to verify your email address.
+                    Click the button below to receive a 6-digit verification code.
+                </p>
             </div>
 
-            <div class="form-group">
-                <label for="password">
-                    <i class="fa-solid fa-lock"></i>
-                    Password
-                </label>
-                <input type="password" id="password" formControlName="password" placeholder="Enter your password"
-                    [class.error]="getFieldError('password')" autocomplete="new-password">
-                <span class="error-message" *ngIf="getFieldError('password')">
-                    {{ getFieldError('password') }}
-                </span>
+            <!-- Response message -->
+            <div class="response-message" *ngIf="responseMessage && !emailSent">
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> {{ responseMessage }}
+                </div>
             </div>
+            <div class="verification-content">
+                <div class="email-display" *ngIf="accountM?.email">
+                    <i class="fa-solid fa-envelope"></i>
+                    <span>Sending code to: <strong>{{ accountM?.email }}</strong></span>
+                </div>
 
-            <div class="form-group">
-                <label for="confirmPassword">
-                    <i class="fa-solid fa-lock"></i>
-                    Confirm Password
-                </label>
-                <input type="password" id="confirmPassword" formControlName="confirmPassword"
-                    placeholder="Confirm your password" [class.error]="getFieldError('confirmPassword')" autocomplete="confirm-new-password">
-                <span class="error-message" *ngIf="getFieldError('confirmPassword')">
-                    {{ getFieldError('confirmPassword') }}
-                </span>
+                <button (click)="sendEmailCodeCreateAccount()" type="button" class="btn-send-code" [disabled]="loading">
+                    <div class="loading-container" *ngIf="loading">
+                        <div class="loading-bar"></div>
+                    </div>
+                    <i class="fas fa-paper-plane" *ngIf="!loading"></i>
+                    <span>{{ loading ? 'Sending...' : (codeSent ? 'Resend Code' : 'Send Verification Code') }}</span>
+                </button>
+
+                <div class="code-verification-section" *ngIf="codeSent">
+                    <div class="container-input-code">
+                        <label class="code-label">
+                            <i class="fa-solid fa-lock"></i>
+                            Enter the 6-digit code sent to your email
+                        </label>
+                        <div class="code-input-wrapper">
+                            <input maxlength="1" type="text" [(ngModel)]="codeInputs[0]"
+                                (input)="onInputChange($event, 0)" (paste)="onPaste($event)" class="code-input"
+                                placeholder="0" />
+                            <input maxlength="1" type="text" [(ngModel)]="codeInputs[1]"
+                                (input)="onInputChange($event, 1)" class="code-input" placeholder="0" />
+                            <input maxlength="1" type="text" [(ngModel)]="codeInputs[2]"
+                                (input)="onInputChange($event, 2)" class="code-input" placeholder="0" />
+                            <input maxlength="1" type="text" [(ngModel)]="codeInputs[3]"
+                                (input)="onInputChange($event, 3)" class="code-input" placeholder="0" />
+                            <input maxlength="1" type="text" [(ngModel)]="codeInputs[4]"
+                                (input)="onInputChange($event, 4)" class="code-input" placeholder="0" />
+                            <input maxlength="1" type="text" [(ngModel)]="codeInputs[5]"
+                                (input)="onInputChange($event, 5)" class="code-input" placeholder="0" />
+                        </div>
+
+                        <div class="code-help-text">
+                            <p>Didn't receive the code?
+                                <button type="button" class="link-button" (click)="resendCode()">
+                                    Click here to resend
+                                </button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
 
-            <button type="submit" class="btn-create" [disabled]="createAccountForm.invalid || isSubmitting">
-                <i class="fa-solid fa-gamepad" *ngIf="!isSubmitting"></i>
-                <i class="fa-solid fa-spinner fa-spin" *ngIf="isSubmitting"></i>
-                {{ isSubmitting ? 'Creating Account...' : 'Create Account' }}
-            </button>
-        </form>
+    <!-- Step 2: Account Creation Form -->
+    <div *ngIf="currentStep === 2" class="form-step">
+        <div class="create-account-container fadeInUp">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <i class="fa-solid fa-gamepad form-icon"></i>
+                    <h2>Create Your Game Account</h2>
+                    <p>Choose your username and password to complete registration</p>
+                </div>
+                <div class="response-message" *ngIf="responseCreateAccountMessage ">
+                    <div class="alert alert-danger" role="alert">
+                        <i class="fas fa-exclamation-triangle"></i> {{ responseCreateAccountMessage }}
+                    </div>
+                </div>
+
+                <form [formGroup]="createAccountForm" (ngSubmit)="onSubmit()" class="create-form">
+                    <div class="form-group">
+                        <label for="username">
+                            <i class="fa-solid fa-user"></i>
+                            Username
+                        </label>
+                        <input type="text" id="username" formControlName="username"
+                            placeholder="Choose your game username" [class.error]="getFieldError('username')"
+                            autocomplete="username">
+                        <span class="error-message" *ngIf="getFieldError('username')">
+                            {{ getFieldError('username') }}
+                        </span>
+                        <small class="field-hint">4-16 characters, letters and numbers only</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">
+                            <i class="fa-solid fa-lock"></i>
+                            Password
+                        </label>
+                        <input type="password" id="password" formControlName="password"
+                            placeholder="Create a secure password" [class.error]="getFieldError('password')"
+                            autocomplete="new-password">
+                        <span class="error-message" *ngIf="getFieldError('password')">
+                            {{ getFieldError('password') }}
+                        </span>
+                        <small class="field-hint">Minimum 6 characters required</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">
+                            <i class="fa-solid fa-lock"></i>
+                            Confirm Password
+                        </label>
+                        <input type="password" id="confirmPassword" formControlName="confirmPassword"
+                            placeholder="Confirm your password" [class.error]="getFieldError('confirmPassword')"
+                            autocomplete="confirm-new-password">
+                        <span class="error-message" *ngIf="getFieldError('confirmPassword')">
+                            {{ getFieldError('confirmPassword') }}
+                        </span>
+                    </div>
+
+                    <button type="submit" class="btn-create"
+                        [disabled]="createAccountForm.invalid || isSubmitting || !isCodeComplete()">
+                        <i class="fa-solid fa-gamepad" *ngIf="!isSubmitting"></i>
+                        <i class="fa-solid fa-spinner fa-spin" *ngIf="isSubmitting"></i>
+                        {{ isSubmitting ? 'Creating Account...' : 'Create Game Account' }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div class="step-buttons">
+        <button type="button" (click)="prevStep()" [disabled]="currentStep === 1" class="btn-nav btn-prev">
+            <i class="fa-solid fa-arrow-left"></i>
+            Previous
+        </button>
+
+        <button type="button" (click)="nextStep()"
+            [disabled]="currentStep === totalSteps || (currentStep === 1 && !isCodeComplete())"
+            class="btn-nav btn-next">
+            Next
+            <i class="fa-solid fa-arrow-right"></i>
+        </button>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div #successModal class="modal show" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content auth-modal">
+            <div class="modal-header border-0 justify-content-center">
+                <div class="success-icon">
+                    <i class="fas fa-user-check"></i>
+                </div>
+            </div>
+            <div class="modal-body text-center">
+                <h3>Account Created!</h3>
+                <p>
+                    Your game account was successfully created.<br>
+                    You can now log in and start playing.<br>
+                    Good luck, gamer!
+                </p>
+            </div>
+            <div class="modal-footer border-0 justify-content-center">
+                <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times-circle"></i> Close
+                </button>
+            </div>
+        </div>
     </div>
 </div>

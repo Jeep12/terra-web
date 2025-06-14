@@ -225,3 +225,27 @@ label {
     gap: 10px;
   }
 }
+
+
+
+.auth-container.dark-mode {
+  background: linear-gradient(to bottom, #121212, #000000);
+  color: #ddd;
+}
+
+/* También podes cambiar inputs, textos, bordes para dark-mode */
+.auth-container.dark-mode .auth-card {
+  background-color: rgba(30, 30, 30, 0.7);
+  border-color: #555;
+}
+
+.auth-container.dark-mode .form-control {
+  background-color: rgba(50, 50, 50, 0.3);
+  color: #eee;
+  border-color: #666;
+}
+
+.auth-container.dark-mode label,
+.auth-container.dark-mode .auth-title {
+  color: #ccc;
+}

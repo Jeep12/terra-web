@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -20,7 +20,7 @@ declare var bootstrap: any;
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   passwordVisible = false;
   confirmPasswordVisible = false;
@@ -31,7 +31,9 @@ export class RegisterComponent {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthService,
+    private renderer: Renderer2
+
   ) {
     this.registerForm = this.fb.group(
       {
@@ -44,6 +46,19 @@ export class RegisterComponent {
     );
   }
 
+
+  ngOnInit(): void {
+    const authContainer = document.querySelector('.auth-container');
+    const savedTheme = localStorage.getItem('theme');
+
+    if (authContainer) {
+      if (savedTheme === 'dark') {
+        this.renderer.addClass(authContainer, 'dark-mode');
+      } else {
+        this.renderer.removeClass(authContainer, 'dark-mode');
+      }
+    }
+  }
 
 
   passwordMatch(ctrl: AbstractControl): ValidationErrors | null {
