@@ -1,16 +1,35 @@
 .container-notfound {
     background: linear-gradient(to bottom, #0c0f20, #000000);
     width: 100%;
-    height: 100dvh;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background-color: red !important;
+    color: white;
+    text-align: center;
+    padding: 20px;
 }
 
 .box {
-    width: 500px;
+    width: 400px;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.notfound-image {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.message {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.separator {
+    margin-bottom: 20px;
 }
 
 .container-notfound.dark-mode {

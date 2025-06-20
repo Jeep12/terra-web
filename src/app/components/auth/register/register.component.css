@@ -395,6 +395,7 @@ label {
     transform: translateY(0)
   }
 }
+
 .btn-secondary {
   width: 100%;
   padding: 12px;
@@ -437,4 +438,110 @@ label {
 .auth-container.dark-mode label,
 .auth-container.dark-mode .auth-title {
   color: #ccc;
+}
+
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  font-weight: 400;
+}
+
+.checkbox-input {
+  display: none;
+}
+
+.checkbox-custom {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(218, 190, 100, 0.3);
+  border-radius: 4px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.checkbox-input:checked+.checkbox-custom {
+  background: linear-gradient(45deg, #746535, #998648);
+  border-color: #dabe64;
+}
+
+.checkbox-input:checked+.checkbox-custom::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #0c0f20;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.offcanvas::-webkit-scrollbar {
+  width: 6px;
+  box-shadow: none;
+}
+
+.offcanvas::-webkit-scrollbar-track {
+  background: transparent;
+  box-shadow: none;
+
+}
+
+.offcanvas::-webkit-scrollbar-thumb {
+  background-color: #dabe64;
+  border-radius: 3px;
+  box-shadow: none;
+
+}
+
+.offcanvas::-webkit-scrollbar-thumb:hover {
+  background-color: #c9b456;
+  box-shadow: none;
+
+}
+
+
+.offcanvas {
+  position: fixed;
+  top: 0;
+  right: -100%;
+  width: 400px;
+  max-width: 90%;
+  height: 100%;
+  background: transparent;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
+  transition: right 0.3s ease;
+  z-index: 999;
+  padding: 2rem;
+  overflow-y: auto;
+  color: #746535;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+
+}
+
+.offcanvas.show {
+  right: 0;
+}
+
+.offcanvas-content {
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 0rem;
+  background: transparent;
+  border: none;
+  font-size: 2.0rem;
+  cursor: pointer;
+  color: #746535;
+}
+
+.offcanvas-text {
+  margin-top: 2rem;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }

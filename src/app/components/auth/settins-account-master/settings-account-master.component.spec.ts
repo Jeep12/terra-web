@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SettinsAccountMasterComponent } from './settins-account-master.component';
+import { SettingsAccountMasterComponent } from './settings-account-master.component';
 
 describe('SettinsAccountMasterComponent', () => {
-  let component: SettinsAccountMasterComponent;
-  let fixture: ComponentFixture<SettinsAccountMasterComponent>;
+  let component: SettingsAccountMasterComponent;
+  let fixture: ComponentFixture<SettingsAccountMasterComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SettinsAccountMasterComponent]
+      imports: [SettingsAccountMasterComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(SettinsAccountMasterComponent);
+    fixture = TestBed.createComponent(SettingsAccountMasterComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

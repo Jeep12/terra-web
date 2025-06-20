@@ -4,26 +4,28 @@ import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-website-not-found',
-  imports: [],
   templateUrl: './website-not-found.component.html',
-  styleUrl: './website-not-found.component.css'
+  styleUrls: ['./website-not-found.component.css']
 })
 export class WebsiteNotFoundComponent implements OnInit {
-
 
   constructor(
     private renderer: Renderer2,
     private router: Router,
     private authService: AuthService
-  ) {
+  ) {}
 
-  }
-  goToWebsite() {
-    this.authService.isLoggedIn().subscribe(logged => {
-      if (logged) {
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.router.navigate(['/login']);
+  goToWebsite(): void {
+    this.authService.isLoggedIn().subscribe({
+      next: (logged) => {
+        if (logged) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.router.navigate(['/login']);
+        }
+      },
+      error: (err) => {
+        console.error('Error checking login status', err);
       }
     });
   }

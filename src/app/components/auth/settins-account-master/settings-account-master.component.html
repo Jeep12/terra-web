@@ -1,0 +1,538 @@
+<div class="account-settings-container">
+  <header class="settings-header">
+    <h1 class="page-title"><span class="page-title-icon"><i class="fa-regular fa-circle-user"></i></span> Account
+      Master Settings</h1>
+    <p class="page-subtitle">Manage your account information, security, and preferences</p>
+  </header>
+
+  <div class="settings-grid">
+    <!-- Account Information -->
+    <div class="settings-card">
+      <div class="card-header">
+        <h2 class="card-title">Account Information</h2>
+        <span class="card-icon">👤</span>
+      </div>
+
+      <form [formGroup]="accountForm" (ngSubmit)="onUpdateAccount()" class="form">
+        <div class="form-group">
+          <label for="email"><i class="fa-solid fa-envelope"></i> Email Address</label>
+          <input id="email" type="email" formControlName="email" class="form-input" readonly
+            style="background: rgba(17, 17, 17, 0.4);">
+
+        </div>
+
+
+
+        <div class="form-group">
+          <label for="terraCoins"><i class="fa-solid fa-coins"></i> Terra Coins Balance</label>
+          <input id="terraCoins" type="number" formControlName="terraCoins" class="form-input" readonly
+            style="background: rgba(17, 17, 17, 0.4);">
+          <small class="form-help">Terra Coins balance is read-only</small>
+        </div>
+
+        <div class="account-meta">
+          <p><strong><i class="fa-solid fa-calendar-days"></i> Member Since:</strong> {{ accountMaster?.createdAt |
+            date:'mediumDate' }}</p>
+          <p><strong><i class="fa-solid fa-clock-rotate-left"></i> Last Login:</strong> {{ lastLoginDate | date:'short'
+            }}</p>
+        </div>
+
+
+      </form>
+    </div>
+
+    <!-- Password Change -->
+    <div class="settings-card">
+      <div class="card-header">
+        <h2 class="card-title">Change Password</h2>
+        <span class="card-icon">🔒</span>
+      </div>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="form">
+        <!-- Current Password -->
+        <div class="form-group">
+          <label for="currentPassword"> <i class="fa-solid fa-key"></i> Current Password</label>
+          <div class="password-input-container">
+            <input type="text" name="username" autocomplete="username" style="display: none;" />
+            <input id="currentPassword" [type]="currentPasswordVisible ? 'text' : 'password'"
+              formControlName="currentPassword" class="form-input"
+              [class.error]="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched"
+              autocomplete="current-password" />
+
+            <button type="button" class="password-toggle" (click)="toggleCurrentPasswordVisibility()">
+              <i class="fas" [ngClass]="currentPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+
+          </div>
+        </div>
+
+        <!-- New Password -->
+        <div class="form-group">
+          <label for="newPassword"> <i class="fa-solid fa-key"></i> New Password</label>
+          <div class="password-input-container">
+
+            <input id="newPassword" [type]="newPasswordVisible ? 'text' : 'password'" formControlName="newPassword"
+              class="form-input"
+              [class.error]="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched"
+              autocomplete="new-password" />
+
+            <button type="button" class="password-toggle" (click)="toggleNewPasswordVisibility()">
+              <i class="fas" [ngClass]="newPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+
+          </div>
+          <div class="error-message"
+            *ngIf="passwordForm.get('newPassword')?.invalid && passwordForm.get('newPassword')?.touched">
+            Password must be at least 8 characters long
+          </div>
+        </div>
+
+        <!-- Confirm New Password -->
+        <div class="form-group">
+          <label for="confirmPassword"> <i class="fa-solid fa-key"></i> Confirm New Password</label>
+          <div class="password-input-container">
+
+            <input id="confirmPassword" [type]="confirmPasswordVisible ? 'text' : 'password'"
+              formControlName="confirmPassword" class="form-input"
+              [class.error]="passwordForm.get('confirmPassword')?.invalid && passwordForm.get('confirmPassword')?.touched"
+              autocomplete="confirn-new-password" />
+
+            <button type="button" class="password-toggle" (click)="toggleConfirmPasswordVisibility()">
+              <i class="fas" [ngClass]="confirmPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+
+          </div>
+          <div class="error-message"
+            *ngIf="passwordForm.get('confirmPassword')?.hasError('passwordMismatch') && passwordForm.get('confirmPassword')?.touched">
+            Passwords do not match
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" [disabled]="passwordForm.invalid || isLoadingPassword">
+          <span *ngIf="isLoadingPassword" class="loading-spinner"></span>
+          {{ isLoadingPassword ? 'Changing...' : 'Change Password' }}
+        </button>
+      </form>
+    </div>
+
+    <!-- Security Preferences -->
+    <div class="settings-card">
+      <div class="card-header">
+        <h2 class="card-title">Security Preferences</h2>
+        <span class="card-icon">🛡️</span>
+      </div>
+
+      <form [formGroup]="securityForm" class="form">
+        <div class="form-group">
+
+          <span class="toggle-2fa-active">
+            <label class="checkbox-label">
+              <input type="checkbox" formControlName="twoFactorEnabled" class="checkbox-input" />
+              <span class="checkbox-custom"></span>
+              Enable Two-Factor Authentication (2FA)
+            </label>
+            <small class="form-help">Add an extra layer of protection to your account.</small>
+          </span>
+
+          <div class="info-box " style="margin-top: 1rem;">
+            <p><strong>What is 2FA?</strong></p>
+            <p>
+              2FA (Two-Factor Authentication) is a security method that adds an extra layer of protection to your
+              account.
+              In addition to your password, you'll need a second form of verification—like a code from an app, a text
+              message, or an email.
+              On trusted devices, you may skip this step in the future.
+            </p>
+            <p><strong>How it works when you enable 2FA:</strong></p>
+            <ol class="account-meta" style="padding: 25px;">
+              <li>When you enable 2FA, you’ll be logged out automatically.</li>
+              <li>You’ll need to log in again.</li>
+              <li>After logging in, you’ll be redirected to the 2FA screen where the “Send Code” button is.</li>
+              <li>Click “Send Code” to receive a verification code by email.</li>
+              <li>Enter the code to verify your identity and regain full access to your account.</li>
+
+
+            </ol>
+          </div>
+
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="onManageDevices()">
+            <i class="fa-solid fa-mobile-screen-button"></i> Manage Trusted Devices
+          </button>
+
+          <button type="button" class="btn btn-primary" style="margin:auto" (click)="onUpdateSecurity()"
+            [disabled]="isLoadingSecurity">
+            <span *ngIf="isLoadingSecurity" class="loading-spinner"></span>
+            <i class="fa-solid fa-shield-halved"></i>
+            {{ isLoadingSecurity ? 'Updating...' : 'Update Security' }}
+          </button>
+        </div>
+      </form>
+
+      <div *ngIf="showTrustedDevices" class="trusted-devices-container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="mb-0">
+            <i class="fas fa-shield-alt me-2"></i>Trusted Devices
+          </h4>
+          <button class="btn btn-sm btn-outline-secondary" (click)="toggleDeviceSortOrder()">
+            {{ deviceSortOrder === 'desc' ? 'Newest First' : 'Oldest First' }}
+            <i class="fas ms-1" [class.fa-sort-down]="deviceSortOrder === 'desc'"
+              [class.fa-sort-up]="deviceSortOrder === 'asc'"></i>
+          </button>
+        </div>
+
+        <div class="mb-3">
+          <select class="form-select form-select-sm" [(ngModel)]="selectedDeviceFilter" (change)="filterDevices()">
+            <option value="all">All Device Types</option>
+            <ng-container *ngFor="let type of deviceFilterOptions">
+              <option [value]="type" *ngIf="type !== 'all'">
+                {{ type }}
+              </option>
+            </ng-container>
+          </select>
+        </div>
+
+        <div class="list-group">
+          <div *ngFor="let device of filteredTrustedDevices" class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <i class="fas {{ getDeviceIconClass(device.userAgent) }} fa-lg me-3"></i>
+                <div>
+                  <h6 class="mb-1">{{ device.userAgent }}</h6>
+                  <small class="text-muted" style="font-size: 12px;">Added: {{ device?.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</small>
+                </div>
+              </div>
+              <div>
+                <button class="btn btn-sm btn-outline-danger" (click)="removeDeviceModal(device.deviceId)">
+                  <i class="fas fa-trash-alt"></i> Remove
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="filteredTrustedDevices.length === 0" class="alert alert-info mt-3">
+          No trusted devices found.
+        </div>
+      </div>
+    </div>
+
+
+    <!-- Notification Settings -->
+    <div class="settings-card">
+      <div class="card-header">
+        <h2 class="card-title">Notification Settings</h2>
+        <span class="card-icon">🔔</span>
+      </div>
+
+      <form [formGroup]="notificationForm" class="form">
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="emailNotifications" class="checkbox-input">
+            <span class="checkbox-custom"></span>
+            Email Notifications
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="pushNotifications" class="checkbox-input">
+            <span class="checkbox-custom"></span>
+            Push Notifications
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="marketingEmails" class="checkbox-input">
+            <span class="checkbox-custom"></span>
+            Marketing Emails
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="checkbox-label">
+            <input type="checkbox" formControlName="securityAlerts" class="checkbox-input">
+            <span class="checkbox-custom"></span>
+            Security Alerts
+          </label>
+        </div>
+
+        <button type="button" class="btn btn-primary" (click)="onUpdateNotifications()">
+          Update Notifications
+        </button>
+      </form>
+    </div>
+
+    <!-- Streamer Role Section -->
+    <div class="settings-card streamer-card">
+      <div class="streamer-card-header">
+        <div class="streamer-header-content">
+          <h2 class="streamer-card-title">Streamer Program</h2>
+          <span class="streamer-card-icon">🎥</span>
+        </div>
+        <p class="streamer-card-subtitle">Exclusive features for content creators</p>
+
+        <div class="plataforms">
+          <span>
+            <i class="fa-brands fa-twitch"></i>
+          </span>
+          <span>
+            <i class="fa-brands fa-kickstarter"></i>
+          </span>
+          <span>
+            <i class="fa-brands fa-youtube"></i>
+          </span>
+          <span>
+            <i class="fa-brands fa-instagram"></i>
+          </span>
+          <span>
+            <i class="fa-brands fa-facebook"></i>
+          </span>
+
+        </div>
+      </div>
+
+      <div class="streamer-card-body">
+        <div class="roles-list" *ngIf="filteredRoles.length > 0">
+          <div class="role-item" *ngFor="let role of filteredRoles">
+            <span class="streamer-role-badge" [class.streamer-badge]="role === 'STREAMER'">{{ role.replace('ROLE_', '')
+              }}</span>
+          </div>
+        </div>
+
+        <!-- Streamer application section -->
+        <div class="streamer-section" *ngIf="!hasStreamerRole()">
+          <div class="streamer-benefits-list">
+            <h3 class="streamer-benefits-title ">Benefits for Streamers:</h3>
+            <ul class="benefits-list">
+              <li>✅ Special in-game recognition</li>
+              <li>✅ Featured on our community page</li>
+              <li>✅ Exclusive streaming tools</li>
+              <li>✅ Priority support</li>
+            </ul>
+          </div>
+          <div class="request-section">
+            <p class="streamer-info-text">
+              Join our official streamer program to get these benefits and help grow our community!
+            </p>
+            <button class="streamer-request-btn">
+              <span class="btn-icon">🎮</span>
+              Apply for Streamer Role
+            </button>
+          </div>
+        </div>
+
+        <!-- Streamer active status -->
+        <div *ngIf="hasStreamerRole()" class="streamer-active">
+          <div class="status-banner">
+            <div class="status-icon">🌟</div>
+            <div class="status-content">
+              <h3 class="streamer-welcome-title">Welcome, Streamer!</h3> <!-- Clase añadida aquí también -->
+              <p>You have full access to our streaming features. Thank you for creating content for our community!</p>
+            </div>
+          </div>
+          <div class="streamer-resources">
+            <a href="#" class="resource-link">📺 Streaming Guidelines</a>
+            <a href="#" class="resource-link">🛠️ Streamer Tools</a>
+            <a href="#" class="resource-link">📅 Event Calendar</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <!-- /*       <div *ngIf="accountMaster?.roles?.includes('STREAMER')" class="streamer-active">
+            <p class="streamer-info success">
+              ✅ You have the Streamer role. Happy streaming!
+            </p>
+          </div> -->
+    <!-- Account Status -->
+    <div class="settings-card">
+      <div class="card-header">
+        <h2 class="card-title">Account Status</h2>
+        <span class="card-icon">⚡</span>
+      </div>
+
+      <div class="status-info">
+        <div class="status-item">
+          <span class="status-label">Current Status:</span>
+          <span [class]="'status-badge ' + getStatusClass()">
+            {{ getStatusText() }}
+          </span>
+        </div>
+
+        <button type="button" class="btn btn-desactivate" (click)="onToggleAccountStatus()">
+          {{ accountMaster?.enabled ? 'Deactivate' : 'Activate' }} Account
+        </button>
+      </div>
+    </div>
+
+
+
+
+
+    <!-- Activity History -->
+    <div class="settings-card activity-card">
+      <div class="card-header">
+        <h2 class="card-title">Recent Activity</h2>
+        <span class="card-icon">📊</span>
+      </div>
+
+      <!-- Filtros de actividad -->
+      <div class="activity-filters">
+        <div class="form-group">
+          <label for="actionFilter"><i class="fa-solid fa-filter"></i> Filter by Action</label>
+          <select id="actionFilter" class="form-input" [(ngModel)]="selectedAction" (change)="filterActivities()">
+            <option value="">All Actions</option>
+            <option *ngFor="let action of uniqueActions" [value]="action">{{ action }}</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="dateSort"><i class="fa-solid fa-sort"></i> Sort by Date</label>
+          <select id="dateSort" class="form-input" [(ngModel)]="dateSortOrder" (change)="sortActivities()">
+            <option value="desc">Newest First</option>
+            <option value="asc">Oldest First</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="activity-list">
+        <div class="activity-item" *ngFor="let activity of filteredActivities">
+          <div class="activity-info">
+            <span class="activity-action">{{ activity.action }}</span>
+            <span class="activity-time"><i class="fa-solid fa-calendar-days"></i> {{ activity.timestamp | date:'short'
+              }}</span>
+          </div>
+          <span class="activity-ip" (click)="toggleIpVisibility(activity)">
+            <i class="fa-solid" [ngClass]="activity.showIp ? 'fa-eye-slash' : 'fa-eye'"></i>
+            <span *ngIf="!activity.showIp" class="ip-masked">••••••••</span>
+            <span *ngIf="activity.showIp" class="ip-real">{{ activity.ip }}</span>
+          </span>
+        </div>
+
+        <div *ngIf="filteredActivities.length === 0" class="no-activities">
+          No activities found matching your criteria.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+<div #successModal class="modal fade" id="successModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content auth-modal">
+      <div class="modal-header border-0 justify-content-center">
+        <div class="success-icon">
+          <i class="fas fa-check-circle"></i>
+        </div>
+      </div>
+      <div class="modal-body text-center">
+        <h3>{{ successTitle }}</h3>
+        <p>{{ successMessage }}</p>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times-circle"></i> Close
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Deactivate Account Confirmation Modal -->
+<div #confirmModal class="modal " id="confirmModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content auth-modal">
+      <div class="modal-header border-0 justify-content-center">
+        <div class="confirm-desactivate-icon">
+          <i class="fas fa-exclamation-triangle"></i>
+        </div>
+      </div>
+      <div class="modal-body text-center">
+        <h3>Confirm Deactivation</h3>
+        <p class="text-center">
+          Deactivating your account is reversible via a support ticket (coming soon), but processing may take up to 24
+          hours.
+        </p>
+
+
+
+        <button type="button" style="margin: auto;" class="btn mb-3 btn-desactive" (click)="onConfirmDeactivate()">
+          <i class="fas fa-user-slash"></i> Deactivate Account
+        </button>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times-circle"></i> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Remove Device Confirmation Modal -->
+<div class="modal" id="confirmDeleteDevice" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content auth-modal">
+      <div class="modal-header border-0 justify-content-center">
+        <div class="confirm-desactivate-icon">
+          <i class="fas fa-trash-alt"></i>
+        </div>
+      </div>
+      <div class="modal-body text-center">
+        <h3>Remove Trusted Device</h3>
+
+        <div class="device-confirmation-details mb-4">
+          <div class="device-info-item">
+            <i class="fas fa-fingerprint me-2"></i>
+            <strong>Device ID:</strong> {{removeDeviceObj?.deviceId}}
+          </div>
+
+          <div class="device-info-item">
+            <i class="fas fa-calendar-alt me-2"></i>
+            <strong>Added:</strong> {{ removeDeviceObj?.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}
+          </div>
+
+          <div class="device-info-item">
+            <i class="fas fa-laptop me-2"></i>
+            <strong>Device Type:</strong> {{removeDeviceObj?.userAgent}}
+          </div>
+        </div>
+
+        <p class="text-center warning-message">
+          <i class="fas fa-exclamation-circle me-2"></i>
+          This device will no longer be recognized as trusted and may require additional verification when logging in.
+        </p>
+
+        <button type="button" style="margin: auto;" class="btn mb-3 btn-desactive"
+          (click)="removeTrustedDevice(removeDeviceObj?.deviceId)">
+          <i class="fas fa-trash-alt"></i> Remove Device
+        </button>
+
+        <div class="response-remove-device"
+          style="color: #c9b456;font-size: 20px;border: 1px solid #c9b456;padding: 15px;border-radius: 5px;"
+          *ngIf="removeDeviceSuccess==true">
+
+          <i class="fa-solid fa-circle-check"></i> Device removed successfully
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn-secondary" data-bs-dismiss="modal">
+          <i class="fas fa-times-circle"></i> Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

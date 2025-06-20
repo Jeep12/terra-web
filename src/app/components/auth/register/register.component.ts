@@ -26,8 +26,8 @@ export class RegisterComponent implements OnInit {
   confirmPasswordVisible = false;
   loading = false;
   errors: string[] = [];
-
-
+  showOffcanvas = false;
+  activeContent: 'terms' | 'privacy' | null = null;
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -93,6 +93,17 @@ export class RegisterComponent implements OnInit {
         this.errors = [err.error?.message || 'Ocurrió un error'];
       },
     });
+  }
+
+  openOffcanvas(type: 'terms' | 'privacy', event: Event) {
+    event.preventDefault();
+    this.activeContent = type;
+    this.showOffcanvas = true;
+  }
+
+  closeOffcanvas() {
+    this.showOffcanvas = false;
+    this.activeContent = null;
   }
   togglePasswordVisibility() {
     this.passwordVisible = !this.passwordVisible;

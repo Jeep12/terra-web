@@ -51,18 +51,19 @@ export class DashboardComponent implements OnInit {
     }
     this.authService.getCurrentUser().subscribe({
       next: user => {
-        this.accountM = user ?? null;
-        if (this.accountM) {
-
-
-
+        if (user) {
+          this.accountM = user;
+          console.log(this.accountM);
         } else {
           console.error('No user data found');
+          this.accountM = null;
         }
       },
       error: err => {
         console.error('Error fetching user:', err);
-        this.accountM = null;
+        if (err?.message === '2FA required') {
+          this.router.navigate(['/two-factor-step']);
+        }
       }
     });
   }

@@ -36,6 +36,10 @@ export const routes: Routes = [
         loadComponent: () => import('./components/auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
     },
     {
+        path: 'two-factor-step',
+        loadComponent: () => import('./components/auth/two-factor/two-factor.component').then(m => m.TwoFactorComponent)
+    },
+    {
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
         canActivate: [authGuard], // importalo arriba, no lo pongas con promesas
@@ -77,7 +81,7 @@ export const routes: Routes = [
             ,
             {
                 path: 'setting-account-master', // <- ¡Sin "dashboard/"!
-                loadComponent: () => import('./components/auth/settins-account-master/settins-account-master.component').then(m => m.SettinsAccountMasterComponent)
+                loadComponent: () => import('./components/auth/settins-account-master/settings-account-master.component').then(m => m.SettingsAccountMasterComponent)
             }
         ]
     },

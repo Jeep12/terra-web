@@ -49,6 +49,7 @@ body {
     }
 }
 
+
 .slideInDown {
     -webkit-animation-name: slideInDown;
     animation-name: slideInDown;
@@ -173,12 +174,13 @@ input:-webkit-autofill:active {
 }
 
 
-.dark-mode .wrapper-sidebar,
-.dark-mode .nav,
-.dark-mode .content {}
+
 
 .dark-mode .nav-scrolled {
-    background-color: rgb(17, 17, 17) !important;
+
+    
+    /* opcional, para ver el blur */
+
 }
 
 .dark-mode .parent {
@@ -199,4 +201,3 @@ body,
 .auth-container {
     transition: background-color 0.4s ease, color 0.4s ease;
 }
-

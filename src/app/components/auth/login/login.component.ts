@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
   btnGoToResendEmailVerification = false;
   // Store the email for use in step 2
   userEmail = ""
+  passwordVisible = false;
 
   constructor(
     private fb: FormBuilder,
@@ -83,6 +84,14 @@ export class LoginComponent implements OnInit {
   /**
    * Go back to the email step
    */
+
+  getEmail(): String {
+
+    return this.emailForm.get("email")?.value
+
+
+
+  }
   goToBack(): void {
     this.currentStep = 1
   }
@@ -105,10 +114,10 @@ export class LoginComponent implements OnInit {
       this.authService.login(loginData).subscribe({
         next: (res) => {
           this.btnGoToResendEmailVerification = false; // Login OK, oculto botón
+          this.authService.setEmail(this.userEmail);
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-          console.error('Error en login:', err);
 
           if (err.error?.error === 'EMAIL_NOT_VERIFIED') {
             this.btnGoToResendEmailVerification = true;
@@ -172,5 +181,9 @@ export class LoginComponent implements OnInit {
     this.router.navigate(['/register']);
 
     // this.router.navigate(['/auth/register']);
+  }
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
   }
 }

@@ -6,21 +6,15 @@ import { catchError, throwError } from 'rxjs';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
 
+  const deviceId = localStorage.getItem('deviceId') || '';
+
   const authReq = req.clone({
     withCredentials: true,
+    headers: req.headers.set('X-Device-Id', deviceId),
   });
 
   return next(authReq).pipe(
     catchError(error => {
-      const ignore401Paths = [
-        '/account-game/reset-password'
-      ];
-
-      const shouldIgnore = error.status === 401 && ignore401Paths.some(path => req.url.includes(path));
-
-      if (error.status === 401 && !shouldIgnore) {
-
-      }
 
       return throwError(() => error);
     })

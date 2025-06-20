@@ -57,12 +57,17 @@
           <label for="password">
             <i class="fas fa-lock"></i> Password
           </label>
-          <input type="password" id="password" formControlName="password" placeholder="Enter your password"
-            class="form-control" />
+          <div class="password-input-container">
+            <input id="password" [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
+              placeholder="Enter your password" class="form-control" />
+            <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+              <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+            </button>
+          </div>
           <div *ngIf="
-              passwordForm.get('password')?.invalid &&
-              passwordForm.get('password')?.touched
-            " class="error-message">
+          passwordForm.get('password')?.invalid &&
+          passwordForm.get('password')?.touched
+        " class="error-message">
             <span *ngIf="passwordForm.get('password')?.errors?.['required']">
               Password is required
             </span>

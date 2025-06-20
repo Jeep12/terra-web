@@ -50,14 +50,20 @@
 
       <!-- Terms -->
       <div class="form-group checkbox-group">
+
+
         <label class="checkbox-label">
-          <input type="checkbox" formControlName="acceptTerms">
+          <input type="checkbox" formControlName="acceptTerms" class="checkbox-input">
+          <span class="checkbox-custom"></span>
           <span>
-            <i class="fas fa-check-square"></i>
-            I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#"
-              class="terms-link">Privacy Policy</a>
+            I agree to the
+            <a href="#" class="terms-link" (click)="openOffcanvas('terms', $event)">Terms of Service</a>
+            and
+            <a href="#" class="terms-link" (click)="openOffcanvas('privacy', $event)">Privacy Policy</a>
           </span>
         </label>
+
+
         <div *ngIf="registerForm.get('acceptTerms')?.invalid && registerForm.get('acceptTerms')?.touched"
           class="error-message">
           <span>You must accept the terms</span>
@@ -123,6 +129,171 @@
           <i class="fas fa-times-circle"></i> Close
         </button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="offcanvas" [class.show]="showOffcanvas">
+  <div class="offcanvas-content">
+    <button class="close-btn" (click)="closeOffcanvas()">×</button>
+    <h2 *ngIf="activeContent === 'terms'">Terms of Service</h2>
+    <h2 *ngIf="activeContent === 'privacy'">Privacy Policy</h2>
+
+    <div class="offcanvas-text">
+      <ng-container *ngIf="activeContent === 'terms'">
+        <p>Welcome to our private Lineage 2 server powered by L2JMobius. This Terms of Service (“Terms”) govern your
+          access to and use of our server, website, forums, Discord, and related services (collectively, the “Service”).
+          By accessing or using the Service, you acknowledge that you have read, understood, and agree to be bound by
+          these Terms.</p>
+
+        <h3>1. Eligibility</h3>
+        <p>By using the Service, you affirm that you are at least thirteen (13) years of age or that you have obtained
+          parental or guardian consent to use the Service. If you are under the age of majority, you confirm that your
+          parent or guardian accepts these Terms on your behalf.</p>
+
+        <h3>2. Nature of the Service</h3>
+        <p>The Service is an unofficial, fan-operated private server based on the Lineage 2 game engine. We are not
+          affiliated with or endorsed by NCSOFT or any of its affiliates. Any references to NCSOFT in the Service are
+          for descriptive purposes only.</p>
+
+        <h3>3. Account Creation & Responsibility</h3>
+        <p>To access the Service, you must create an account and provide a valid email address. Keep your login
+          credentials confidential. You agree to notify us immediately of any unauthorized use of your account. We are
+          not liable for losses resulting from unauthorized access caused by your failure to safeguard your account.</p>
+
+        <h3>4. Server Rules & Community Conduct</h3>
+        <p>As a user of the Service, you agree to comply with the following rules:</p>
+        <ul>
+          <li>No unauthorized software, botting, macros, or scripted automation.</li>
+          <li>No exploitation of bugs, glitches, or unintended game mechanics.</li>
+          <li>No harassment, hate speech, threats, or abusive language directed at other users or staff.</li>
+          <li>No advertising or solicitation of external services without prior approval.</li>
+          <li>No disruptive behavior, including spamming, trolling, or griefing.</li>
+        </ul>
+        <p>Violation of these rules may result in penalties ranging from warnings and temporary suspensions to permanent
+          bans, at our sole discretion.</p>
+
+        <h3>5. Donations & In-Game Purchases</h3>
+        <p>We may offer optional donation packages or in-game benefits. All purchases are voluntary and non-refundable.
+          These donations do not constitute a sale of goods; they are contributions to support the maintenance and
+          operation of the Service. We reserve the right to change, modify, or revoke donor benefits at any time without
+          prior notice.</p>
+
+        <h3>6. Service Availability & Changes</h3>
+        <p>We strive to maintain continuous availability of the Service, but we do not guarantee uptime or uninterrupted
+          access. We may perform maintenance, updates, or modifications at any time, which may require temporary
+          downtime. We are not responsible for any loss of data or inaccessibility during such periods.</p>
+
+        <h3>7. Termination of Access</h3>
+        <p>We reserve the right to suspend or terminate your access to the Service or related accounts for any reason,
+          including but not limited to violation of these Terms, legal obligations, or technical disruptions. Upon
+          termination, your right to access the Service immediately ceases, and you waive any claims against us arising
+          from the termination.</p>
+
+        <h3>8. Limited Warranty Disclaimer</h3>
+        <p>The Service is provided on an “as-is” and “as-available” basis, without warranties of any kind, whether
+          express or implied. We disclaim all warranties, including merchantability, fitness for a particular purpose,
+          and non-infringement. We make no guarantees regarding performance, availability, or fitness of the Service.
+        </p>
+
+        <h3>9. Limitation of Liability</h3>
+        <p>To the maximum extent permitted by law, in no event shall we, our affiliates, employees, or licensors be
+          liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the
+          Service. Our total liability for any claim arising out of or relating to the Service shall not exceed the
+          amount of donations made by you in the six (6) months preceding the incident.</p>
+
+        <h3>10. Intellectual Property</h3>
+        <p>All intellectual property rights in game assets, software, graphics, trademarks, and other materials are
+          owned by their respective copyright holders. This Service does not transfer any intellectual property rights
+          to you.</p>
+
+        <h3>11. Modifications to Terms</h3>
+        <p>We reserve the right to amend these Terms at any time. Changes become effective when posted on our website or
+          announced to users. Continued use of the Service after changes indicates your acceptance of the new Terms.</p>
+
+        <h3>12. Governing Law & Dispute Resolution</h3>
+        <p>These Terms are governed by the laws of [Your Jurisdiction], without regard to conflict of law principles.
+          Any dispute shall be resolved exclusively by the courts located in [Your Jurisdiction].</p>
+
+        <p><strong>By using the Service, you acknowledge that you have read, understood, and agreed to be bound by these
+            Terms.</strong></p>
+      </ng-container>
+
+
+      <ng-container *ngIf="activeContent === 'privacy'">
+        <p>This Privacy Policy (“Policy”) explains how we collect, use, store, and disclose information when you use our
+          private Lineage 2 server and related services (collectively, the “Service”). By accessing or using the
+          Service, you consent to the data practices described herein.</p>
+
+        <h3>1. Information We Collect</h3>
+        <ul>
+          <li><strong>Account Information:</strong> email address, username, encrypted password.</li>
+          <li><strong>Usage Data:</strong> IP address, device/browser metadata, connection timestamps.</li>
+          <li><strong>Donation Data:</strong> donation amounts, transaction IDs, payment metadata (no sensitive payment
+            info stored).</li>
+        </ul>
+
+        <h3>2. How We Use Your Data</h3>
+        <p>We use collected information for the following purposes:</p>
+        <ul>
+          <li>Enable account creation, login, and authentication.</li>
+          <li>Manage game functionality, track progress, and enforce rules.</li>
+          <li>Prevent fraud, cheating, and security breaches.</li>
+          <li>Provide support and respond to your inquiries.</li>
+          <li>Improve server performance, gameplay experience, and service offerings.</li>
+          <li>Process donations, validate payments, and issue receipts.</li>
+        </ul>
+
+        <h3>3. Data Retention</h3>
+        <p>We retain user data for as long as necessary to fulfill the purposes outlined in this Policy or as required
+          by law. Gameplay and account data may be retained indefinitely unless you request deletion.</p>
+
+        <h3>4. Data Sharing & Disclosure</h3>
+        <p>We do not sell, rent, or share personal information with third parties except in the following cases:</p>
+        <ul>
+          <li>With authorized staff for moderation and server maintenance.</li>
+          <li>If required by law or legal process.</li>
+          <li>In a business transfer (e.g., merger, sale of assets), subject to privacy commitments.</li>
+        </ul>
+
+        <h3>5. Cookies & Tracking Technologies</h3>
+        <p>We may use cookies, web beacons, and similar technologies on our website to track session information,
+          preferences, and analytics. You can disable cookies via your browser settings, but this may affect
+          functionality.</p>
+
+        <h3>6. Security Measures</h3>
+        <p>We implement reasonable security safeguards to protect your data. However, no online system is completely
+          secure. You use the Service at your own risk.</p>
+
+        <h3>7. Third-Party Services</h3>
+        <p>We may integrate external services like Google Analytics, Discord, payment processors, or hosting providers.
+          These service providers may collect anonymized or technical data to provide their functionality. We do not
+          share personally identifiable information unless required.</p>
+
+        <h3>8. Children’s Privacy</h3>
+        <p>The Service is not intended for children under 13. We do not knowingly collect data from minors. If you
+          believe we have inadvertently collected data from a child under 13, please contact us and we will delete the
+          information promptly.</p>
+
+        <h3>9. Policy Updates</h3>
+        <p>We may update this Policy at any time. We will post changes on our website or announce via Discord. Your
+          continued use of the Service after such modifications indicates your acceptance.</p>
+
+        <h3>10. Your Rights</h3>
+        <p>You can:</p>
+        <ul>
+          <li>Request access to the personal data we hold about you.</li>
+          <li>Request correction or deletion of your data (except data required for legal or operational reasons).</li>
+          <li>Withdraw consent for data processing (subject to continued access limitations).</li>
+        </ul>
+
+        <h3>11. Contact Information</h3>
+        <p>If you have questions about this Policy or your data, contact us at <a
+            href="mailto:admin@yourdomain.com">{{"admin@l2terra.online"}}</a> or via our official Discord.</p>
+
+        <p><strong>Last updated: June 18, 2025.</strong></p>
+      </ng-container>
+
     </div>
   </div>
 </div>

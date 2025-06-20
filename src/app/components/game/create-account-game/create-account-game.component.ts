@@ -27,6 +27,10 @@ export class CreateAccountGameComponent implements OnInit {
   responseMessage = '';
   responseCreateAccountMessage = '';
   emailSent = false;
+
+  passwordVisible = false;
+  confirmPasswordVisible = false;
+
   constructor(
     private fb: FormBuilder,
     private accountsGameService: GameAccountService,
@@ -56,7 +60,7 @@ export class CreateAccountGameComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    
+
   }
 
   onInputChange(event: any, index: number) {
@@ -126,7 +130,7 @@ export class CreateAccountGameComponent implements OnInit {
           this.isSubmitting = false;
           this.createAccountForm.reset();
           this.codeInputs = ['', '', '', '', '', ''];
-          this.responseCreateAccountMessage="";
+          this.responseCreateAccountMessage = "";
           const modal = new bootstrap.Modal(document.getElementById('successModal'));
           modal.show();
         },
@@ -199,5 +203,14 @@ export class CreateAccountGameComponent implements OnInit {
 
   resendCode() {
     this.sendEmailCodeCreateAccount();
+  }
+
+
+  togglePasswordVisibility() {
+    this.passwordVisible = !this.passwordVisible;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.confirmPasswordVisible = !this.confirmPasswordVisible;
   }
 }

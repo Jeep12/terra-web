@@ -1,5 +1,8 @@
-<div class="form-container">
+<div class="form-container ">
     <div class="header-section">
+        <br>
+        <br>
+        <br>
         <h1>Create Your Game Account</h1>
         <p class="subtitle">Join the adventure in Lineage II Terra</p>
 
@@ -92,7 +95,7 @@
                     <h2>Create Your Game Account</h2>
                     <p>Choose your username and password to complete registration</p>
                 </div>
-                <div class="response-message" *ngIf="responseCreateAccountMessage ">
+                <div class="response-message" *ngIf="responseCreateAccountMessage">
                     <div class="alert alert-danger" role="alert">
                         <i class="fas fa-exclamation-triangle"></i> {{ responseCreateAccountMessage }}
                     </div>
@@ -102,11 +105,11 @@
                     <div class="form-group">
                         <label for="username">
                             <i class="fa-solid fa-user"></i>
-                            Username
+                            Name account
                         </label>
                         <input type="text" id="username" formControlName="username"
                             placeholder="Choose your game username" [class.error]="getFieldError('username')"
-                            autocomplete="username">
+                            autocomplete="username" />
                         <span class="error-message" *ngIf="getFieldError('username')">
                             {{ getFieldError('username') }}
                         </span>
@@ -118,9 +121,14 @@
                             <i class="fa-solid fa-lock"></i>
                             Password
                         </label>
-                        <input type="password" id="password" formControlName="password"
-                            placeholder="Create a secure password" [class.error]="getFieldError('password')"
-                            autocomplete="new-password">
+                        <div class="password-input-container">
+                            <input [type]="passwordVisible ? 'text' : 'password'" id="password"
+                                formControlName="password" placeholder="Create a secure password"
+                                [class.error]="getFieldError('password')" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
+                                <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+                            </button>
+                        </div>
                         <span class="error-message" *ngIf="getFieldError('password')">
                             {{ getFieldError('password') }}
                         </span>
@@ -130,11 +138,16 @@
                     <div class="form-group">
                         <label for="confirmPassword">
                             <i class="fa-solid fa-lock"></i>
-                            Confirm Password
+                            Confirm password
                         </label>
-                        <input type="password" id="confirmPassword" formControlName="confirmPassword"
-                            placeholder="Confirm your password" [class.error]="getFieldError('confirmPassword')"
-                            autocomplete="confirm-new-password">
+                        <div class="password-input-container">
+                            <input [type]="confirmPasswordVisible ? 'text' : 'password'" id="confirmPassword"
+                                formControlName="confirmPassword" placeholder="Confirm your password"
+                                [class.error]="getFieldError('confirmPassword')" autocomplete="new-password" />
+                            <button type="button" class="password-toggle" (click)="toggleConfirmPasswordVisibility()">
+                                <i class="fas" [ngClass]="confirmPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
+                            </button>
+                        </div>
                         <span class="error-message" *ngIf="getFieldError('confirmPassword')">
                             {{ getFieldError('confirmPassword') }}
                         </span>
@@ -150,6 +163,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- Navigation Buttons -->
     <div class="step-buttons">

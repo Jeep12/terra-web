@@ -18,7 +18,7 @@
   padding: 30px;
   width: 100%;
   max-width: 400px;
-      border: 1px solid #3b3b3b;
+  border: 1px solid #3b3b3b;
 
 }
 
@@ -197,6 +197,7 @@ label {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -248,4 +249,24 @@ label {
 .auth-container.dark-mode label,
 .auth-container.dark-mode .auth-title {
   color: #ccc;
+}
+
+.password-input-container {
+  position: relative;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  padding: 5px;
+}
+
+.password-toggle:hover {
+  color: #dabe64;
 }

@@ -4,5 +4,8 @@ export interface AccountMaster {
   enabled: boolean;
   emailVerified: boolean;
   roles: string[];
-  terraCoins: number; 
+  terraCoins: number;
+  createdAt: string;  // Fecha de creación, ISO string o Date
+  twoFactorEnabled: boolean;  // nuevo campo
+
 }

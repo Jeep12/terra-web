@@ -1,0 +1,90 @@
+<div class="auth-container">
+    <div style="position: relative; width: 300px; height: 227px;">
+        <img class="logoTerra" ngSrc="assets/images/lineage2Terra_blanco.webp" fill alt="Logo Terra" priority />
+    </div>
+
+    <div class="auth-card">
+        <h2 class="auth-title">
+            <i class="fa-solid fa-shield-halved"></i> Two-Factor Authentication
+        </h2>
+
+        <!-- Step 1 -->
+        <div *ngIf="currentStep === 1" class="form-step">
+            <div class="info-message">
+                <i class="fa-solid fa-bell"></i> You enabled 2FA. Enter your email to receive the verification code.
+            </div>
+
+            <button type="button" (click)="send2FACode()" class="btn-primary" [disabled]="loading">
+                <div class="loading-container" *ngIf="loading">
+                    <div class="loading-bar"></div>
+                </div>
+                <i class="fas fa-paper-plane"></i>
+                {{ loading ? '' : 'Send code 2FA' }}
+            </button>
+            <p style="color: #dabe64; font-size: 0.9em; margin-top: 10px; text-align: center;">
+                The code is valid for 5 minutes. If you don’t see it, check your spam or junk folder.
+            </p>
+            <hr>
+            <button class="btn-secondary" (click)="navigateToLogin()">Go to Login</button>
+        </div>
+
+        <!-- Step 2 -->
+        <div *ngIf="currentStep === 2" class="form-step">
+            <div class="info-message">
+                A 6-digit code was sent to your email. Enter it to complete login.
+            </div>
+
+            <form (ngSubmit)="verify2FACode()">
+                <div class="form-group">
+                    <label class="code-label"><i class="fa-solid fa-lock"></i> Enter 2FA code</label>
+                    <div class="code-input-wrapper">
+                        <input maxlength="1" type="text" [(ngModel)]="codeInputs[0]" name="code0"
+                            (input)="onInputChange($event, 0)" (paste)="onPaste($event)" class="code-input"
+                            placeholder="0" required />
+                        <input maxlength="1" type="text" [(ngModel)]="codeInputs[1]" name="code1"
+                            (input)="onInputChange($event, 1)" class="code-input" placeholder="0" required />
+                        <input maxlength="1" type="text" [(ngModel)]="codeInputs[2]" name="code2"
+                            (input)="onInputChange($event, 2)" class="code-input" placeholder="0" required />
+                        <input maxlength="1" type="text" [(ngModel)]="codeInputs[3]" name="code3"
+                            (input)="onInputChange($event, 3)" class="code-input" placeholder="0" required />
+                        <input maxlength="1" type="text" [(ngModel)]="codeInputs[4]" name="code4"
+                            (input)="onInputChange($event, 4)" class="code-input" placeholder="0" required />
+                        <input maxlength="1" type="text" [(ngModel)]="codeInputs[5]" name="code5"
+                            (input)="onInputChange($event, 5)" class="code-input" placeholder="0" required />
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary" [disabled]="isCodeIncomplete()">
+                    Verify Code <i class="fas fa-check"></i>
+                </button>
+
+
+                <p class="code-help-text" style="margin-top: 15px;">
+                    Didn't receive the code? Go back to request a new one.
+                    <br>
+                    <button type="button" class="btn-secondary" (click)="goBackToEmail()" style="margin-top: 15px;">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </button>
+                </p>
+
+            </form>
+        </div>
+
+
+        <div class="error-not-token" *ngIf="showNoTokenError" style="color: red; margin-top: 10px;">
+            Your session has expired. Please log in again and try to send the code.
+            <button type="button" class="btn-secondary" (click)="navigateToLogin()" style="margin-top: 15px;">
+                <i class="fas fa-arrow-left"></i> Back to Login
+            </button>
+        </div>
+        <!-- Mensaje de respuesta -->
+        <div *ngIf="responseMessage" class="alert text-center" [ngClass]="isError ? 'alert-danger' : 'alert-success'"
+            role="alert" style="margin-top: 15px;">
+            <i class="fa-solid fa-triangle-exclamation"></i>&nbsp; <span
+                style="text-decoration: underline;">{{email}}</span>
+            <hr>
+            {{ responseMessage }}
+        </div>
+
+    </div>
+</div>

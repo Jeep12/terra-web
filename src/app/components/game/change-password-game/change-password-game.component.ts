@@ -37,6 +37,8 @@ export class ChangePasswordGameComponent implements OnInit {
   // Response messages
   responseMessage = '';
   emailSent = false;
+  newPasswordVisible = false;
+  confirmNewPasswordVisible = false;
 
   constructor(
     private fb: FormBuilder,
@@ -281,5 +283,12 @@ export class ChangePasswordGameComponent implements OnInit {
   formatDate(dateStr: string): string {
     const d = new Date(dateStr);
     return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+  }
+  toggleNewPasswordVisibility() {
+    this.newPasswordVisible = !this.newPasswordVisible;
+  }
+
+  toggleConfirmNewPasswordVisibility() {
+    this.confirmNewPasswordVisible = !this.confirmNewPasswordVisible;
   }
 }
