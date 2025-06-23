@@ -55,7 +55,6 @@ export class TwoFactorComponent {
         this.isError = true;
         this.currentStep = 2;
         this.email = error.error.email;
-        console.log(error)
         if (error.error.code == "NO_TOKEN") {
           this.showNoTokenError = true;
         } else if (error.error.code == "2FA_REQUIRED_NO_DEVICE") {

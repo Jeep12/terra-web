@@ -189,14 +189,12 @@ export class ChangePasswordGameComponent implements OnInit {
 
     this.gameAccountService.sendResetCode(accountName).subscribe({
       next: (res: any) => {
-        console.log('Verification code sent:', res);
         this.emailSent = true;
         this.codeSent = true;
         this.responseMessage = res.message || 'Code sent successfully';
         this.loading = false;
       },
       error: (err: any) => {
-        console.error('Error sending verification code:', err);
         this.emailSent = false;
         this.codeSent = true;
         this.responseMessage = err.error?.message || 'Error sending code';
@@ -247,9 +245,7 @@ export class ChangePasswordGameComponent implements OnInit {
       const verificationCode = this.getEnteredCode();
       const accountName = this.selectedAccount.login;
 
-      console.log('New Password:', newPassword);
-      console.log('Verification Code:', verificationCode);
-      console.log('Account:', accountName);
+
 
       const changePasswordPayload = {
         login: accountName,
@@ -261,7 +257,6 @@ export class ChangePasswordGameComponent implements OnInit {
       // Uncomment this when you have the actual service method
       this.gameAccountService.changePassword(changePasswordPayload).subscribe({
         next: (response: any) => {
-          console.log('Password changed successfully:', response);
           this.isSubmitting = false;
           this.changePasswordForm.reset();
           this.codeInputs = ['', '', '', '', '', ''];

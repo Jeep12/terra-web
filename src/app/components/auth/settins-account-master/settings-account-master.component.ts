@@ -111,7 +111,6 @@ export class SettingsAccountMasterComponent implements OnInit {
     this.authService.recentActivity().subscribe(
       activities => {
         try {
-          console.log('Actividades recientes:', activities);
 
           // Asegurar que sea un array y añadir propiedad showIp
           this.recentActivities = (Array.isArray(activities) ? activities : [activities]).map(activity => ({
@@ -171,7 +170,6 @@ export class SettingsAccountMasterComponent implements OnInit {
 
       // Simulate API call
       setTimeout(() => {
-        console.log("Account updated:", formData);
         this.isLoadingAccount = false;
         // Show success message
       }, 1500);
@@ -186,7 +184,6 @@ export class SettingsAccountMasterComponent implements OnInit {
 
       // Simulate API call
       setTimeout(() => {
-        console.log("Password changed successfully");
         this.passwordForm.reset();
         this.isLoadingPassword = false;
         // Show success message
@@ -250,7 +247,6 @@ export class SettingsAccountMasterComponent implements OnInit {
 
   onUpdateNotifications() {
     const formData = this.notificationForm.value;
-    console.log("Notification settings updated:", formData);
   }
 
 
@@ -313,7 +309,6 @@ export class SettingsAccountMasterComponent implements OnInit {
   }
 
   removeTrustedDevice(deviceIdObj: string) {
-    console.log(deviceIdObj)
     this.authService.removeTrustedDevice(deviceIdObj).subscribe({
       next: (res) => {
         this.removeDeviceSuccess = true;
@@ -323,7 +318,6 @@ export class SettingsAccountMasterComponent implements OnInit {
       error: (err) => {
         this.removeDeviceSuccess = false;
 
-        console.log(err)
       }
     });
   }
@@ -388,7 +382,6 @@ export class SettingsAccountMasterComponent implements OnInit {
       this.filteredTrustedDevices = [...devices];
       this.extractDeviceFilterOptions();
       this.sortDevices();
-      console.log(devices)
     });
   }
 

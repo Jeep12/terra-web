@@ -40,7 +40,6 @@ export class VerifyEmailComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       const token = params['token'];
-      console.log("Token recibido: " + token);
       this.verifyEmail(token);
 
     });
@@ -62,7 +61,6 @@ export class VerifyEmailComponent implements OnInit {
           this.isLoading = false;
           this.isError = false;
           this.statusMessage = res.message || "¡Email verificado correctamente!";
-          console.log('Respuesta backend:', res);
         }, 3500);
       },
       error: (err) => {
@@ -70,7 +68,6 @@ export class VerifyEmailComponent implements OnInit {
           this.isLoading = false;
           this.isError = true;
           this.statusMessage = err.error?.message || "Error al verificar el email, el token puede ser inválido o expirado.";
-          console.log('Error backend:', err);
         }, 3500);
       }
     });

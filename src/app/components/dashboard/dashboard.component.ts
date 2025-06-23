@@ -53,7 +53,6 @@ export class DashboardComponent implements OnInit {
       next: user => {
         if (user) {
           this.accountM = user;
-          console.log(this.accountM);
         } else {
           console.error('No user data found');
           this.accountM = null;
@@ -73,12 +72,10 @@ export class DashboardComponent implements OnInit {
   onResize(event: any) {
     if (window.innerWidth >= 1080) {
       this.navVisible = true;
-      console.log('Pasó los 1080px');
     }
   }
 
   toggleNav() {
-    console.log('Toggling navigation visibility');
     this.navVisible = !this.navVisible;
   }
 
@@ -115,5 +112,8 @@ export class DashboardComponent implements OnInit {
   }
   navigateToSupport() {
     this.router.navigate(['/dashboard/support']);
+  }
+    navigateToDownload() {
+    this.router.navigate(['/dashboard/download']);
   }
 }

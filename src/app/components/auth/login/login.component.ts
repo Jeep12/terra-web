@@ -74,7 +74,6 @@ export class LoginComponent implements OnInit {
       this.currentStep = 2
 
       // In a real app, you might check if the email exists in your system here
-      console.log("Email validated:", this.userEmail)
     } else {
       // Mark form controls as touched to trigger validation messages
       this.emailForm.markAllAsTouched()
@@ -109,7 +108,6 @@ export class LoginComponent implements OnInit {
         password: this.passwordForm.get("password")?.value,
       };
 
-      console.log('Datos de login:', loginData);
 
       this.authService.login(loginData).subscribe({
         next: (res) => {
@@ -150,7 +148,6 @@ export class LoginComponent implements OnInit {
    */
   loginWithGoogle(): void {
     // In a real app, you would integrate with Google OAuth
-    console.log("Google login clicked")
     alert("Google login clicked (This is a stub - no actual authentication)")
   }
 
@@ -159,7 +156,6 @@ export class LoginComponent implements OnInit {
    */
   loginWithFacebook(): void {
     // In a real app, you would integrate with Facebook OAuth
-    console.log("Facebook login clicked")
     alert("Facebook login clicked (This is a stub - no actual authentication)")
   }
 
@@ -177,7 +173,6 @@ export class LoginComponent implements OnInit {
    */
   navigateToRegister(): void {
     // In a real app, you would use Angular Router
-    console.log("Navigate to register")
     this.router.navigate(['/register']);
 
     // this.router.navigate(['/auth/register']);

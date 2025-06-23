@@ -83,7 +83,6 @@ export class ResetPasswordComponent implements OnInit {
       this.errors = ['Invalid token.'];
       return;
     }
-    console.log('Form submitted:', this.tokenUser);
 
     const { password, confirmPassword } = this.resetForm.value;
 
@@ -103,7 +102,6 @@ export class ResetPasswordComponent implements OnInit {
           } else {
             const modal = new bootstrap.Modal(document.getElementById('successModal'));
             modal.show();
-            console.log('Password reset successful:', response);
           }
           this.loading = false;
         },

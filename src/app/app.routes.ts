@@ -39,6 +39,7 @@ export const routes: Routes = [
         path: 'two-factor-step',
         loadComponent: () => import('./components/auth/two-factor/two-factor.component').then(m => m.TwoFactorComponent)
     },
+
     {
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
@@ -79,6 +80,10 @@ export const routes: Routes = [
                 loadComponent: () => import('./components/support/support.component').then(m => m.SupportComponent)
             }
             ,
+            {
+                path: 'download',
+                loadComponent: () => import('./components/game/download/download.component').then(m => m.DownloadComponent)
+            },
             {
                 path: 'setting-account-master', // <- ¡Sin "dashboard/"!
                 loadComponent: () => import('./components/auth/settins-account-master/settings-account-master.component').then(m => m.SettingsAccountMasterComponent)

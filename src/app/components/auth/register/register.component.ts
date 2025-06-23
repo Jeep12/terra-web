@@ -84,7 +84,6 @@ export class RegisterComponent implements OnInit {
     this.authService.register({ email, password }).subscribe({
       next: res => {
         this.loading = false;
-        console.log('Registro exitoso:', res);
         const modal = new bootstrap.Modal(document.getElementById('successModal'));
         modal.show();
       },
@@ -114,10 +113,8 @@ export class RegisterComponent implements OnInit {
   }
 
   registerWithGoogle() {
-    console.log('Google register');
   }
   registerWithFacebook() {
-    console.log('FB register');
   }
 
   navigateToLogin() {

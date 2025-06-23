@@ -123,10 +123,8 @@ export class CreateAccountGameComponent implements OnInit {
         createCode: verificationCode
       };
 
-      console.log(accountPayload)
       this.accountsGameService.createAccountGame(accountPayload).subscribe({
         next: (response: any) => {
-          console.log('Account created successfully:', response);
           this.isSubmitting = false;
           this.createAccountForm.reset();
           this.codeInputs = ['', '', '', '', '', ''];
@@ -170,7 +168,6 @@ export class CreateAccountGameComponent implements OnInit {
     this.loading = true;
     this.accountsGameService.sendCreateCode().subscribe({
       next: (res) => {
-        console.log('Verification code sent:', res);
         this.loading = false;
         this.codeSent = true;
         // Show success message to user
