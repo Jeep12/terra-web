@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, inject, OnInit, Renderer2, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,6 +10,7 @@ import {
 } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { GoogleAuthService } from "../../../services/google-auth.service"
 
 declare var bootstrap: any;
 
@@ -28,6 +29,12 @@ export class RegisterComponent implements OnInit {
   errors: string[] = [];
   showOffcanvas = false;
   activeContent: 'terms' | 'privacy' | null = null;
+
+
+  private googleAuth = inject(GoogleAuthService);
+  isLoading = false;
+  errorMessage = '';
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -112,11 +119,50 @@ export class RegisterComponent implements OnInit {
     this.confirmPasswordVisible = !this.confirmPasswordVisible;
   }
 
-  registerWithGoogle() {
-  }
-  registerWithFacebook() {
-  }
+  /**
+    * Handle Google login
+    */
+  async registerWithGoogle(): Promise<void> {
+    this.isLoading = true;
+    this.errorMessage = '';
 
+    try {
+      console.log('Iniciando autenticación con Google...'); // Debug
+
+      const user = await this.googleAuth.signInWithGoogle();
+
+      console.log('Usuario:', user);
+      console.log('Token almacenado:', localStorage.getItem('google_token'));
+      this.router.navigate(['/dashboard']);
+      // Verifica si la navegación está ocurriendo demasiado rápido
+      // this.router.navigate(['/dashboard']); // Comenta temporalmente para pruebas
+
+    } catch (error) {
+      this.errorMessage = 'Error al iniciar sesión con Google';
+      console.error('Error completo:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+  /**
+   * Handle Facebook login
+   */
+  async registerWithFacebook(): Promise<void> {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    try {
+      console.log('Iniciando autenticación con Facebook...');
+      const user = await this.googleAuth.signInWithFacebook();
+      console.log('Usuario:', user);
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      this.errorMessage = 'Error al iniciar sesión con Facebook';
+      console.error('Error completo:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
   navigateToLogin() {
     this.router.navigate(['/login']);
   }

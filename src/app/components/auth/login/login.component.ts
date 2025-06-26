@@ -1,10 +1,11 @@
 import { CommonModule } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { Component, type OnInit, Renderer2 } from "@angular/core"
+import { Component, inject, type OnInit, Renderer2 } from "@angular/core"
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from "@angular/forms"
 import { Router } from "@angular/router"
 import { AuthService } from "../../../services/auth.service"
 import { NgOptimizedImage } from '@angular/common';
+import { GoogleAuthService } from "../../../services/google-auth.service"
 
 /**
  * Login Component
@@ -33,6 +34,11 @@ export class LoginComponent implements OnInit {
   // Store the email for use in step 2
   userEmail = ""
   passwordVisible = false;
+
+
+  private googleAuth = inject(GoogleAuthService);
+  isLoading = false;
+  errorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -146,17 +152,46 @@ export class LoginComponent implements OnInit {
   /**
    * Handle Google login
    */
-  loginWithGoogle(): void {
-    // In a real app, you would integrate with Google OAuth
-    alert("Google login clicked (This is a stub - no actual authentication)")
-  }
+  async loginWithGoogle(): Promise<void> {
+    this.isLoading = true;
+    this.errorMessage = '';
 
+    try {
+      console.log('Iniciando autenticación con Google...'); // Debug
+
+      const user = await this.googleAuth.signInWithGoogle();
+
+      console.log('Usuario:', user);
+      console.log('Token almacenado:', localStorage.getItem('google_token'));
+      this.router.navigate(['/dashboard']);
+      // Verifica si la navegación está ocurriendo demasiado rápido
+      // this.router.navigate(['/dashboard']); // Comenta temporalmente para pruebas
+
+    } catch (error) {
+      this.errorMessage = 'Error al iniciar sesión con Google';
+      console.error('Error completo:', error);
+    } finally {
+      this.isLoading = false;
+    }
+  }
   /**
    * Handle Facebook login
    */
-  loginWithFacebook(): void {
-    // In a real app, you would integrate with Facebook OAuth
-    alert("Facebook login clicked (This is a stub - no actual authentication)")
+  async loginWithFacebook(): Promise<void> {
+    this.isLoading = true;
+    this.errorMessage = '';
+
+    try {
+      console.log('Iniciando autenticación con Facebook...');
+      const user = await this.googleAuth.signInWithFacebook();
+      console.log('Usuario:', user);
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      this.errorMessage = 'Error al iniciar sesión con Facebook';
+      console.error('Error completo:', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   /**

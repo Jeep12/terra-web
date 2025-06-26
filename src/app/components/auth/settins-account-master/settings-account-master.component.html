@@ -48,6 +48,10 @@
         <span class="card-icon">🔒</span>
       </div>
 
+      <div *ngIf="accountMaster?.googleUid!= ''">
+        This account is created with google or facebook
+      </div>
+
       <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="form">
         <!-- Current Password -->
         <div class="form-group">
@@ -90,6 +94,7 @@
         <!-- Confirm New Password -->
         <div class="form-group">
           <label for="confirmPassword"> <i class="fa-solid fa-key"></i> Confirm New Password</label>
+
           <div class="password-input-container">
 
             <input id="confirmPassword" [type]="confirmPasswordVisible ? 'text' : 'password'"
@@ -201,7 +206,8 @@
                 <i class="fas {{ getDeviceIconClass(device.userAgent) }} fa-lg me-3"></i>
                 <div>
                   <h6 class="mb-1">{{ device.userAgent }}</h6>
-                  <small class="text-muted" style="font-size: 12px;">Added: {{ device?.createdAt | date:'dd/MM/yyyy HH:mm:ss' }}</small>
+                  <small class="text-muted" style="font-size: 12px;">Added: {{ device?.createdAt | date:'dd/MM/yyyy
+                    HH:mm:ss' }}</small>
                 </div>
               </div>
               <div>

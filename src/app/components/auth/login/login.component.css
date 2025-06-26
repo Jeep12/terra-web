@@ -139,6 +139,11 @@ label {
   gap: 12px;
 }
 
+.social-buttons {
+  display: flex;
+  gap: 12px;
+}
+
 .btn-social {
   flex: 1;
   padding: 10px;
@@ -158,8 +163,12 @@ label {
   background-color: rgba(255, 255, 255, 0.12);
 }
 
-.social-icon {
-  margin-right: 8px;
+.google {
+  color: #db4437;
+}
+
+.facebook {
+  color: #4267B2;
 }
 
 .auth-links {

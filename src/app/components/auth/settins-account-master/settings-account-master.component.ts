@@ -58,6 +58,10 @@ export class SettingsAccountMasterComponent implements OnInit {
   selectedAction: string = '';
   dateSortOrder: 'asc' | 'desc' = 'desc';
 
+  isOAuthUser = false;
+
+
+
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
