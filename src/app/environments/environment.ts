@@ -3,7 +3,7 @@ export const environment = {
   apiUrl: 'https://l2terra.online:8443/',
   firebaseConfig: {
     apiKey: "AIzaSyBYU7bmzPZh3Kk-P_P28QKg3rZEhimCpu4",
-    authDomain: "l2-terra.firebaseapp.com",
+    authDomain: "l2terra.online",
     projectId: "l2-terra",
     storageBucket: "l2-terra.firebasestorage.app",
     messagingSenderId: "542352063291",
