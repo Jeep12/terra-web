@@ -1,6 +1,6 @@
 export const environment = {
-  production: false,
-  apiUrl: 'https://l2terra.online:8443/',
+  production: true,
+  apiUrl: 'https://l2terra.online/',
   firebaseConfig: {
     apiKey: "AIzaSyBYU7bmzPZh3Kk-P_P28QKg3rZEhimCpu4",
     authDomain: "l2-terra.firebaseapp.com",
@@ -13,6 +13,7 @@ export const environment = {
 };
 
 /*
+apiUrl: 'https://l2terra.online:8443/',
 apiUrl: 'https://l2terra.online:8443/'
   apiUrl: 'https://l2terra.online:8443/',
 http://localhost:8080/

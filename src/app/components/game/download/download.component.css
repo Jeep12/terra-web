@@ -138,26 +138,10 @@
   cursor: not-allowed;
 }
 
-.btn-primary {
-  background: linear-gradient(45deg, #746535, #998648);
-  color: #0c0f20;
-}
 
-.btn-primary:hover:not(:disabled) {
-  background: linear-gradient(45deg, #96813f, #dabe64);
-  transform: translateY(-1px);
-}
 
-.btn-secondary {
-  background: rgba(218, 190, 100, 0.1);
-  color: #dabe64;
-  border: 1px solid rgba(218, 190, 100, 0.3);
-}
 
-.btn-secondary:hover:not(:disabled) {
-  background: rgba(218, 190, 100, 0.2);
-  border-color: #dabe64;
-}
+
 
 .btn-full {
   width: 100%;
@@ -284,9 +268,6 @@
   box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
 }
 
-.settings-card:hover .btn-secondary {
-  box-shadow: 0 4px 12px rgba(218, 190, 100, 0.2);
-}
 
 /* Icon colors for different download methods */
 .fa-server {

@@ -1,4 +1,4 @@
-/* Container styling with background gradient */
+/* ==== CONTAINER ==== */
 .auth-container {
   display: flex;
   flex-direction: column;
@@ -11,7 +11,23 @@
   box-sizing: border-box;
 }
 
-/* Card styling */
+.auth-container.dark-mode {
+  background: linear-gradient(to bottom, #121212, #000000);
+  color: #ddd;
+}
+
+.logo-container {
+  position: relative;
+  width: 350px;
+  height: 237px;
+}
+
+.logo-container img {
+  width: 100%;
+  height: 230px;
+}
+
+/* ==== CARD ==== */
 .auth-card {
   background-color: rgba(17, 17, 17, 0.397);
   border-radius: 12px;
@@ -19,10 +35,14 @@
   width: 100%;
   max-width: 400px;
   border: 1px solid #3b3b3b;
-
 }
 
-/* Title styling */
+.auth-container.dark-mode .auth-card {
+  background-color: rgba(30, 30, 30, 0.7);
+  border-color: #555;
+}
+
+/* ==== TITULO ==== */
 .auth-title {
   color: #f9f9f9;
   text-align: center;
@@ -31,12 +51,15 @@
   font-size: 24px;
 }
 
-/* Form group styling */
+.auth-container.dark-mode .auth-title {
+  color: #ccc;
+}
+
+/* ==== FORM ==== */
 .form-group {
   margin-bottom: 20px;
 }
 
-/* Label styling */
 label {
   display: block;
   margin-bottom: 8px;
@@ -44,16 +67,20 @@ label {
   font-size: 14px;
 }
 
-/* Input styling */
+.auth-container.dark-mode label {
+  color: #ccc;
+}
+
 .form-control {
   width: 100%;
-  border-radius: 8px;
   height: 50px;
+  border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   background-color: rgba(255, 255, 255, 0.07);
   color: white;
   font-size: 16px;
   transition: all 0.3s ease;
+  padding: 0 12px;
 }
 
 .form-control:focus {
@@ -66,50 +93,15 @@ label {
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* Buttons */
-.btn-primary {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(to right, #746535, #dabe64);
-  color: #0c0f20;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
+.auth-container.dark-mode .form-control {
+  background-color: rgba(50, 50, 50, 0.3);
+  color: #eee;
+  border-color: #666;
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
-}
 
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
 
-.btn-secondary {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid rgba(218, 190, 100, 0.5);
-  border-radius: 8px;
-  background: transparent;
-  color: #dabe64;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background-color: rgba(218, 190, 100, 0.1);
-}
-
-/* Social login styling */
+/* ==== SOCIAL ==== */
 .social-login {
   margin-top: 24px;
 }
@@ -132,11 +124,6 @@ label {
 
 .divider span {
   padding: 0 10px;
-}
-
-.social-buttons {
-  display: flex;
-  gap: 12px;
 }
 
 .social-buttons {
@@ -171,13 +158,16 @@ label {
   color: #4267B2;
 }
 
+/* ==== LINKS ==== */
 .auth-links {
   display: flex;
   justify-content: space-between;
   margin-top: 24px;
+  flex-wrap: wrap;
 }
 
-.auth-link {
+.auth-link,
+.terms-link {
   color: #dabe64;
   text-decoration: none;
   font-size: 14px;
@@ -185,18 +175,19 @@ label {
   transition: all 0.3s ease;
 }
 
-.auth-link:hover {
+.auth-link:hover,
+.terms-link:hover {
   text-decoration: underline;
 }
 
-/* Error message styling */
+/* ==== ERRORES ==== */
 .error-message {
   color: #ff6b6b;
   font-size: 12px;
   margin-top: 5px;
 }
 
-/* Animation */
+/* ==== ANIMACIONES ==== */
 .form-step {
   animation: fadeIn 0.3s ease-in-out;
 }
@@ -213,14 +204,12 @@ label {
   }
 }
 
-/* Responsive */
+/* ==== RESPONSIVE ==== */
 @media (max-width: 480px) {
   .auth-card {
     padding: 20px;
   }
 
-  .btn-primary,
-  .btn-secondary,
   .form-control {
     padding: 10px;
   }
@@ -234,48 +223,4 @@ label {
     align-items: center;
     gap: 10px;
   }
-}
-
-
-
-.auth-container.dark-mode {
-  background: linear-gradient(to bottom, #121212, #000000);
-  color: #ddd;
-}
-
-/* También podes cambiar inputs, textos, bordes para dark-mode */
-.auth-container.dark-mode .auth-card {
-  background-color: rgba(30, 30, 30, 0.7);
-  border-color: #555;
-}
-
-.auth-container.dark-mode .form-control {
-  background-color: rgba(50, 50, 50, 0.3);
-  color: #eee;
-  border-color: #666;
-}
-
-.auth-container.dark-mode label,
-.auth-container.dark-mode .auth-title {
-  color: #ccc;
-}
-
-.password-input-container {
-  position: relative;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  cursor: pointer;
-  padding: 5px;
-}
-
-.password-toggle:hover {
-  color: #dabe64;
 }

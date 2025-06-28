@@ -1,7 +1,11 @@
 <div class="account-settings-container">
   <header class="settings-header">
-    <h1 class="page-title"><span class="page-title-icon"><i class="fa-regular fa-circle-user"></i></span> Account
-      Master Settings</h1>
+    <h1 class="page-title">
+      <span class="page-title-icon">
+        <i class="fa-regular fa-circle-user" aria-hidden="true"></i>
+      </span>
+      Account Master Settings
+    </h1>
     <p class="page-subtitle">Manage your account information, security, and preferences</p>
   </header>
 
@@ -30,7 +34,7 @@
           <small class="form-help">Terra Coins balance is read-only</small>
         </div>
 
-        <div class="account-meta">
+        <div>
           <p><strong><i class="fa-solid fa-calendar-days"></i> Member Since:</strong> {{ accountMaster?.createdAt |
             date:'mediumDate' }}</p>
           <p><strong><i class="fa-solid fa-clock-rotate-left"></i> Last Login:</strong> {{ lastLoginDate | date:'short'
@@ -206,8 +210,8 @@
                 <i class="fas {{ getDeviceIconClass(device.userAgent) }} fa-lg me-3"></i>
                 <div>
                   <h6 class="mb-1">{{ device.userAgent }}</h6>
-                  <small class="text-muted" style="font-size: 12px;">Added: {{ device?.createdAt | date:'dd/MM/yyyy
-                    HH:mm:ss' }}</small>
+                  <small class="text-muted" style="font-size: 12px;">Added: {{ device?.createdAt |
+                    date:'dd/MM/yyyyHH:mm:ss' }} </small>
                 </div>
               </div>
               <div>

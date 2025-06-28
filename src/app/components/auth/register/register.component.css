@@ -1,33 +1,24 @@
-/* 
-  Register Component - CSS Styles
-  Modern, responsive styling with the specified gradients
-  Includes styles for form elements, buttons, and layout
-*/
-
-/* Container styling with background gradient */
 .auth-container {
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   padding: 20px;
-  background: linear-gradient(to bottom, #0c0f20, #000000);
+  background: linear-gradient(to bottom, #0c0f20, #000);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Card styling */
 .auth-card {
-  background-color: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 30px;
-  width: 100%;
   max-width: 400px;
+  width: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Title styling */
 .auth-title {
   color: white;
   text-align: center;
@@ -36,12 +27,10 @@
   font-size: 24px;
 }
 
-/* Form group styling */
 .form-group {
   margin-bottom: 20px;
 }
 
-/* Label styling */
 label {
   display: block;
   margin-bottom: 8px;
@@ -49,38 +38,18 @@ label {
   font-size: 14px;
 }
 
-/* Password Input Container */
-.password-input-container {
-  position: relative;
-}
 
-.password-toggle {
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.6);
-  cursor: pointer;
-  padding: 5px;
-}
 
-.password-toggle:hover {
-  color: #dabe64;
-}
-
-/* Input styling */
 .form-control {
   width: 100%;
   height: 40px;
   border-radius: 8px;
   border: 1px solid rgba(255, 255, 255, 0.2);
-  background-color: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.07);
   color: white;
   font-size: 16px;
-  transition: all 0.3s ease;
   padding: 0 12px;
+  transition: all 0.3s ease;
 }
 
 .form-control:focus {
@@ -93,62 +62,28 @@ label {
   color: rgba(255, 255, 255, 0.4);
 }
 
-/* Checkbox styling */
-.checkbox-group {
-  display: flex;
-  align-items: flex-start;
-}
-
+/* Checkbox */
 .checkbox-label {
   display: flex;
-  align-items: flex-start;
-  color: #e0e0e0;
-  font-size: 14px;
-  cursor: pointer;
+  align-items: center;
+
 }
 
-.checkbox-label input {
-  margin-right: 10px;
-  margin-top: 3px;
-}
-
-.terms-link {
+/* Links */
+.terms-link,
+.auth-link {
   color: #dabe64;
   text-decoration: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.terms-link:hover {
+.terms-link:hover,
+.auth-link:hover {
   text-decoration: underline;
 }
 
-/* Button styling with gradient */
-.btn-primary {
-  width: 100%;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  background: linear-gradient(to right, #746535, #dabe64);
-  color: #0c0f20;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  margin-bottom: 16px;
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-/* Social login styling */
+/* Buttons social */
 .social-login {
   margin-top: 24px;
 }
@@ -156,7 +91,6 @@ label {
 .divider {
   display: flex;
   align-items: center;
-  text-align: center;
   color: rgba(255, 255, 255, 0.5);
   font-size: 14px;
   margin: 20px 0;
@@ -183,18 +117,18 @@ label {
   padding: 10px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  background-color: rgba(255, 255, 255, 0.07);
+  background: rgba(255, 255, 255, 0.07);
   color: white;
   font-size: 14px;
   cursor: pointer;
-  transition: all 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-color 0.3s ease;
 }
 
 .btn-social:hover {
-  background-color: rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .google {
@@ -205,7 +139,7 @@ label {
   color: #4267B2;
 }
 
-/* Login link styling */
+/* Login text */
 .login-text {
   text-align: center;
   color: #e0e0e0;
@@ -213,33 +147,17 @@ label {
   margin-top: 24px;
 }
 
-.auth-link {
-  color: #dabe64;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.auth-link:hover {
-  text-decoration: underline;
-}
-
-/* Error message styling */
+/* Error messages */
 .error-message {
   color: #ff6b6b;
   font-size: 12px;
   margin-top: 5px;
 }
 
-/* Responsive adjustments */
+/* Responsive */
 @media (max-width: 480px) {
   .auth-card {
     padding: 20px;
-  }
-
-  .btn-primary,
-  .form-control {
-    padding: 10px;
   }
 
   .social-buttons {
@@ -247,264 +165,9 @@ label {
   }
 }
 
-/* Añade estos estilos al final de tu archivo CSS existente */
-
-/* Success Modal Styles */
-.modal-content.auth-modal {
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: white;
-  border-radius: 12px;
-}
-
-.modal-header {
-  border-bottom: none;
-  justify-content: center;
-  padding-bottom: 0;
-}
-
-.modal-footer {
-  border-top: none;
-  justify-content: center;
-}
-
-.success-icon {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(to right, #746535, #dabe64);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto 20px;
-  font-size: 30px;
-  color: #0c0f20;
-}
-
-.modal-body h3 {
-  color: white;
-  margin-bottom: 10px;
-  font-size: 20px;
-}
-
-.modal-body p {
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 20px;
-}
-
-/* Fade in animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.modal-content {
-  animation: fadeIn 0.3s ease-out;
-}
-
-
-.form-group {
-  margin-bottom: 20px
-}
-
-.password-input-container {
-  position: relative;
-}
-
-.btn-primary {
-  position: relative;
-  overflow: hidden;
-}
-
-.btn-primary:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.loading-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  overflow: hidden;
-}
-
-.loading-bar {
-  background-color: rgba(12, 15, 32, 0.3);
-  min-width: 100%;
-  min-height: 4px;
-  position: relative;
-  overflow: hidden;
-}
-
-.loading-bar::after,
-.loading-bar::before {
-  content: "";
-  position: absolute;
-  min-height: 4px;
-  background: linear-gradient(to right, rgba(218, 190, 100, 0.8), rgba(255, 255, 255, 0.8));
-}
-
-.loading-bar::after {
-  animation: loading1 2s infinite;
-}
-
-.loading-bar::before {
-  animation: loading1 2s infinite;
-  animation-delay: 1s;
-}
-
-@keyframes loading1 {
-  0% {
-    transform: translateX(-150%);
-    width: 100px;
-  }
-
-  100% {
-    transform: translateX(300%);
-    width: 400px;
-  }
-}
-
-/* Modal styles + fade-in */
-.modal-content.auth-modal {
-  background-color: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  animation: fadeIn 0.3s ease-out;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px)
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0)
-  }
-}
-
-.btn-secondary {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid rgba(218, 190, 100, 0.5);
-  border-radius: 8px;
-  background: transparent;
-  color: #dabe64;
-  font-weight: 600;
-  font-size: 16px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.btn-secondary:hover {
-  background-color: rgba(218, 190, 100, 0.1);
-}
-
-.btn-secondary i {
-  margin-right: 8px;
-}
-
-
-.auth-container.dark-mode {
-  background: linear-gradient(to bottom, #121212, #000000);
-  color: #ddd;
-}
-
-/* También podes cambiar inputs, textos, bordes para dark-mode */
-.auth-container.dark-mode .auth-card {
-  background-color: rgba(30, 30, 30, 0.7);
-  border-color: #555;
-}
-
-.auth-container.dark-mode .form-control {
-  background-color: rgba(50, 50, 50, 0.3);
-  color: #eee;
-  border-color: #666;
-}
-
-.auth-container.dark-mode label,
-.auth-container.dark-mode .auth-title {
-  color: #ccc;
-}
-
-
-.checkbox-label {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  cursor: pointer;
-  font-weight: 400;
-}
-
-.checkbox-input {
-  display: none;
-}
-
-.checkbox-custom {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(218, 190, 100, 0.3);
-  border-radius: 4px;
-  position: relative;
-  transition: all 0.2s ease;
-}
-
-.checkbox-input:checked+.checkbox-custom {
-  background: linear-gradient(45deg, #746535, #998648);
-  border-color: #dabe64;
-}
-
-.checkbox-input:checked+.checkbox-custom::after {
-  content: "✓";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  color: #0c0f20;
-  font-weight: bold;
-  font-size: 12px;
-}
-
-.offcanvas::-webkit-scrollbar {
-  width: 6px;
-  box-shadow: none;
-}
-
-.offcanvas::-webkit-scrollbar-track {
-  background: transparent;
-  box-shadow: none;
-
-}
-
-.offcanvas::-webkit-scrollbar-thumb {
-  background-color: #dabe64;
-  border-radius: 3px;
-  box-shadow: none;
-
-}
-
-.offcanvas::-webkit-scrollbar-thumb:hover {
-  background-color: #c9b456;
-  box-shadow: none;
-
-}
-
-
+/* Offcanvas */
 .offcanvas {
-  position: fixed;
+  position: absolute;
   top: 0;
   right: -100%;
   width: 400px;
@@ -513,29 +176,24 @@ label {
   background: transparent;
   box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
   transition: right 0.3s ease;
-  z-index: 999;
   padding: 2rem;
   overflow-y: auto;
   color: #746535;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-
+  font-family: inherit;
+  z-index: 1000 !important;
 }
 
 .offcanvas.show {
   right: 0;
 }
 
-.offcanvas-content {
-  position: relative;
-}
-
 .close-btn {
   position: absolute;
   right: 1rem;
-  top: 0rem;
+  top: 0;
   background: transparent;
   border: none;
-  font-size: 2.0rem;
+  font-size: 2rem;
   cursor: pointer;
   color: #746535;
 }

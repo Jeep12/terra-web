@@ -1,3 +1,5 @@
+@import 'animations.css';
+
 /* You can add global styles to this file, and also import other style files */
 * {
     padding: 0px;
@@ -6,7 +8,6 @@
 }
 
 body {
-
     padding: 0px;
     overflow-x: hidden;
     background: linear-gradient(to bottom, #0c0f20, #000000);
@@ -14,133 +15,52 @@ body {
 
 }
 
-.slideInRight {
-    -webkit-animation-name: slideInRight;
-    animation-name: slideInRight;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-}
-
-@-webkit-keyframes slideInRight {
-    0% {
-        -webkit-transform: translateX(100%);
-        transform: translateX(100%);
-        visibility: visible;
-    }
-
-    100% {
-        -webkit-transform: translateX(0);
-        transform: translateX(0);
-    }
-}
-
-@keyframes slideInRight {
-    0% {
-        -webkit-transform: translateX(100%);
-        transform: translateX(100%);
-        visibility: visible;
-    }
-
-    100% {
-        -webkit-transform: translateX(0);
-        transform: translateX(0);
-    }
-}
 
 
-.slideInDown {
-    -webkit-animation-name: slideInDown;
-    animation-name: slideInDown;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-}
 
-@-webkit-keyframes slideInDown {
-    0% {
-        -webkit-transform: translateY(-100%);
-        transform: translateY(-100%);
-        visibility: visible;
-    }
-
-    100% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-    }
-}
-
-@keyframes slideInDown {
-    0% {
-        -webkit-transform: translateY(-100%);
-        transform: translateY(-100%);
-        visibility: visible;
-    }
-
-    100% {
-        -webkit-transform: translateY(0);
-        transform: translateY(0);
-    }
-}
-
-.fadeInUp {
-    -webkit-animation-name: fadeInUp;
-    animation-name: fadeInUp;
-    -webkit-animation-duration: 1s;
-    animation-duration: 1s;
-    -webkit-animation-fill-mode: both;
-    animation-fill-mode: both;
-}
-
-@-webkit-keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        -webkit-transform: translate3d(0, 100%, 0);
-        transform: translate3d(0, 100%, 0);
-    }
-
-    100% {
-        opacity: 1;
-        -webkit-transform: none;
-        transform: none;
-    }
-}
-
-@keyframes fadeInUp {
-    0% {
-        opacity: 0;
-        -webkit-transform: translate3d(0, 100%, 0);
-        transform: translate3d(0, 100%, 0);
-    }
-
-    100% {
-        opacity: 1;
-        -webkit-transform: none;
-        transform: none;
-    }
-}
+/* SCROLLBAR */
 
 ::-webkit-scrollbar-track {
     background: linear-gradient(to right, #746535, #998648);
     background: linear-gradient(to bottom, #0c0f20, #000000);
-
-
 }
 
 /* Scroll en sí (la barrita) */
 ::-webkit-scrollbar-thumb {
     background: linear-gradient(to bottom, #746535, #998648, #746535) !important;
     box-shadow: 0px 0px 15px 15px #746535;
-
-
 }
 
 /* Tamaño del scrollbar */
 ::-webkit-scrollbar {
     width: 5px;
+}
 
+/* Buttons */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(to right, #746535, #dabe64);
+    color: #0c0f20;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
+}
+
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 .btn-secondary {
@@ -164,24 +84,19 @@ body {
     margin-right: 8px;
 }
 
+/* INPUT AUTOCOMPLETED */
+
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
     box-shadow: 0 0 0 30px #1B1C20 inset !important;
-    /* mismo fondo del input */
     -webkit-text-fill-color: #fdfdfd !important;
 }
 
 
-
-
-.dark-mode .nav-scrolled {
-
-    
-    /* opcional, para ver el blur */
-
-}
+/* DARK MODE */
+.dark-mode .nav-scrolled {}
 
 .dark-mode .parent {
     background: linear-gradient(to bottom, #121212, #000000);
@@ -191,13 +106,117 @@ input:-webkit-autofill:active {
 body.dark-mode {
     background: linear-gradient(to bottom, #121212, #000000);
     color: #eee;
-    /* cualquier otro estilo global */
 }
 
 
 
-body,
-.parent,
-.auth-container {
-    transition: background-color 0.4s ease, color 0.4s ease;
+
+/* Modal */
+
+.modal-content.auth-modal {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    border-radius: 12px;
+}
+
+.modal-header,
+.modal-footer {
+    border: none;
+    justify-content: center;
+}
+
+.success-icon {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(to right, #746535, #dabe64);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 30px;
+    color: #0c0f20;
+}
+
+.modal-body h3 {
+    color: white;
+    font-size: 20px;
+}
+
+.modal-body p {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+
+/* CHANGE TYPE INPUT PASSWORD*/
+
+.password-input-container {
+    position: relative;
+}
+
+.password-toggle {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    padding: 5px;
+}
+
+.password-toggle:hover {
+    color: #dabe64;
+}
+
+
+/*CHECKBOX CUSTOM */
+/* Checkbox */
+
+.checkbox-group {
+    display: flex;
+    align-items: flex-start;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-weight: 400;
+    color: #e0e0e0;
+    font-size: 14px;
+}
+
+.checkbox-input {
+    display: none;
+}
+
+.checkbox-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(218, 190, 100, 0.3);
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.2s ease;
+}
+
+.checkbox-input:checked+.checkbox-custom {
+    background: linear-gradient(45deg, #746535, #998648);
+    border-color: #dabe64;
+}
+
+.checkbox-input:checked+.checkbox-custom::after {
+    content: "✓";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #0c0f20;
+    font-weight: bold;
+    font-size: 12px;
 }

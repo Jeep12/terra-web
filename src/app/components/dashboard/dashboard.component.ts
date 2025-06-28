@@ -1,13 +1,13 @@
 import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
 import { RouterOutlet, Router } from '@angular/router';
-import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { AccountMaster } from '../../models/master.account.model';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, NgOptimizedImage],
+  imports: [CommonModule, RouterOutlet],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -113,7 +113,7 @@ export class DashboardComponent implements OnInit {
   navigateToSupport() {
     this.router.navigate(['/dashboard/support']);
   }
-    navigateToDownload() {
+  navigateToDownload() {
     this.router.navigate(['/dashboard/download']);
   }
 }

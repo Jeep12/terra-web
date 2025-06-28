@@ -4,11 +4,12 @@
 
         <div class="sidebar slideInDown ">
             <div class="logoTerra-container">
-                <img class="logoTerra" ngSrc="assets/images/lineage2Terra_blanco.webp" fill alt="Logo de Terra"
-                    priority>
+                <img class="logoTerra" src="https://assets.l2terra.online/logoJuanLineage_baja_enBlanco.webp" alt="Logo de Terra">
+                
             </div>
-            <button class=" btn-menu" (click)="toggleNav()"><i [ngClass]="navVisible ? 'fa-xmark' : 'fa-bars'"
-                    class="fa-solid fa-bars"></i></button>
+            <button class="btn-menu" (click)="toggleNav()" aria-label="Toggle navigation menu">
+                <i [ngClass]="navVisible ? 'fa-xmark' : 'fa-bars'" class="fa-solid fa-bars"></i>
+            </button>
 
             <div class="sidebar-nav" *ngIf="navVisible">
 

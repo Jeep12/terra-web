@@ -8,20 +8,21 @@
 
 }
 
+.logoTerra-container {
+    position: relative;
+    width: 220px;
+    height: 207px;
+}
+
 .logoTerra {
-    filter: drop-shadow(0px 0px 2px #3b3b3b);
-    width: 100px;
+    filter: drop-shadow(0 0 2px #3b3b3b);
+    width: 100%;
+    height: auto;
     transition: all 0.5s ease-in-out;
-
-
 }
 
 .logoTerra:hover {
-
     cursor: pointer;
-
-
-
 }
 
 @keyframes shadowPulse {
@@ -51,8 +52,6 @@
     float: right;
     display: block !important;
     background-color: none;
-
-
 
 }
 
@@ -138,7 +137,7 @@
     transition: all 0.3s ease;
     position: relative;
     border: none;
-  
+
 
 }
 
@@ -279,38 +278,22 @@
 }
 
 @media (min-width: 1081px) {
+    .logoTerra {
+        height: 200px;
+    }
+
     .logoTerra-container {
         background: rgb(17, 17, 17);
-
-        position: relative;
         border-bottom: 2px solid #dabe64;
-
-        /* sombra dorada general */
     }
 
     .logoTerra-container:hover .logoTerra {
         padding: 10px;
-        filter: drop-shadow(0px 0px 15px white) brightness(1.1);
-        animation: none;
-        cursor: pointer;
+        filter: drop-shadow(0 0 15px white) brightness(1.1);
         transform: scale(1.1);
     }
 
-    .logoTerra-container::before {
-        content: "";
-        display: block;
-        width: 20px;
-        height: 100%;
-        background-color: transparent;
-        position: absolute;
-        top: 0px;
-        left: -20px;
-        border-right: 20px solid rgb(17, 17, 17);
-        border-bottom: 20px solid transparent;
-        filter: drop-shadow(-2px 2px 0px #dabe64);
-        /* sombra en esquina izquierda */
-    }
-
+    .logoTerra-container::before,
     .logoTerra-container::after {
         content: "";
         display: block;
@@ -318,12 +301,21 @@
         height: 100%;
         background-color: transparent;
         position: absolute;
-        top: 0px;
+        top: 0;
+    }
+
+    .logoTerra-container::before {
+        left: -20px;
+        border-right: 20px solid rgb(17, 17, 17);
+        border-bottom: 20px solid transparent;
+        filter: drop-shadow(-2px 2px 0 #dabe64);
+    }
+
+    .logoTerra-container::after {
         right: -20px;
         border-left: 20px solid rgb(17, 17, 17);
         border-bottom: 20px solid transparent;
-        filter: drop-shadow(2px 2px 0px #dabe64);
-        /* sombra en esquina derecha */
+        filter: drop-shadow(2px 2px 0 #dabe64);
     }
 
 
@@ -428,7 +420,7 @@
     .nav ul {
         display: flex;
         flex-wrap: wrap;
-        
+
     }
 
     .nav ul li {
@@ -505,34 +497,8 @@
 
     }
 
-
-
-
-
 }
 
-
-.btn-secondary {
-    width: 100px;
-    padding: 12px;
-    border: 1px solid rgba(218, 190, 100, 0.5);
-    border-radius: 8px;
-    background: transparent;
-    color: #dabe64;
-    font-weight: 600;
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-
-}
-
-.btn-secondary:hover {
-    background-color: rgba(218, 190, 100, 0.1);
-}
-
-.btn-secondary i {
-    margin-right: 8px;
-}
 
 .nav-scrolled {
     z-index: 1000;
