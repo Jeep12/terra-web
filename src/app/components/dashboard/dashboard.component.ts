@@ -1,5 +1,5 @@
 import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
-import { RouterOutlet, Router } from '@angular/router';
+import { RouterOutlet, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { AccountMaster } from '../../models/master.account.model';
@@ -7,7 +7,7 @@ import { AccountMaster } from '../../models/master.account.model';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -91,29 +91,5 @@ export class DashboardComponent implements OnInit {
     this.scrolled = window.scrollY > 50; // o el valor que quieras
   }
 
-  navigateToCreateAccountGame() {
-    this.router.navigate(['/dashboard/create-account-game']);
-  }
 
-  navigateToChangePasswordGame() {
-    this.router.navigate(['/dashboard/change-password-game']);
-  }
-  navigateToHome() {
-    this.router.navigate(['/dashboard/home-dashboard']);
-  }
-  navigateToBuyTerraCoin() {
-    this.router.navigate(['/dashboard/buy-terra-coin']);
-  }
-  navigateToSendTerraCoin() {
-    this.router.navigate(['/dashboard/send-terra-coin']);
-  }
-  navigateToSettingsAccountsMaster() {
-    this.router.navigate(['/dashboard/setting-account-master']);
-  }
-  navigateToSupport() {
-    this.router.navigate(['/dashboard/support']);
-  }
-  navigateToDownload() {
-    this.router.navigate(['/dashboard/download']);
-  }
 }

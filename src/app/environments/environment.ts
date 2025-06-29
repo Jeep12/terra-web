@@ -1,6 +1,7 @@
 export const environment = {
   production: true,
   apiUrl: 'https://l2terra.online/',
+  
   firebaseConfig: {
     apiKey: "AIzaSyBYU7bmzPZh3Kk-P_P28QKg3rZEhimCpu4",
     authDomain: "l2-terra.firebaseapp.com",
@@ -16,18 +17,8 @@ export const environment = {
 apiUrl: 'https://l2terra.online:8443/',
 apiUrl: 'https://l2terra.online:8443/'
   apiUrl: 'https://l2terra.online:8443/',
-http://localhost:8080/
-
-<IfModule mod_rewrite.c>
-  RewriteEngine On
-  RewriteBase /
 
 
-  # Si no es un archivo o carpeta, redirige al index.html
-  RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{REQUEST_FILENAME} !-d
-  RewriteRule ^ index.html [L]
-</IfModule>
 
 
 

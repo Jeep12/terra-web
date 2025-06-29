@@ -4,65 +4,68 @@
 
         <div class="sidebar slideInDown ">
             <div class="logoTerra-container">
-                <img class="logoTerra" src="https://assets.l2terra.online/logoJuanLineage_baja_enBlanco.webp" alt="Logo de Terra">
-                
+                <img class="logoTerra" src="https://assets.l2terra.online/logoJuanLineage_baja_enBlanco.webp"
+                    alt="Logo de Terra">
+
             </div>
             <button class="btn-menu" (click)="toggleNav()" aria-label="Toggle navigation menu">
                 <i [ngClass]="navVisible ? 'fa-xmark' : 'fa-bars'" class="fa-solid fa-bars"></i>
             </button>
 
             <div class="sidebar-nav" *ngIf="navVisible">
-
                 <ul>
-                    <li (click)="navigateToHome()">
-                        <a><i class="fa-solid fa-house-chimney"></i>&nbsp; Home</a>
-                        &nbsp;
-
+                    <li>
+                        <a [routerLink]="['/dashboard/home-dashboard']">
+                            <i class="fa-solid fa-house-chimney"></i>&nbsp; Home
+                        </a>
                     </li>
                     <li>
-                        <a><i class="fa-solid fa-users"></i>&nbsp; Community</a>
-
-
+                        <a [routerLink]="['/community']">
+                            <i class="fa-solid fa-users"></i>&nbsp; Community
+                        </a>
                     </li>
-                    <li (click)="navigateToDownload()">
-                        <a><i class="fa-solid fa-cloud-arrow-down"></i>&nbsp; Download Client</a>
-
-
+                    <li>
+                        <a [routerLink]="['/dashboard/download']">
+                            <i class="fa-solid fa-cloud-arrow-down"></i>&nbsp; Download Client
+                        </a>
                     </li>
-
-                    <li (click)="navigateToBuyTerraCoin()">
-                        <a><i class="fa-solid fa-coins"></i>&nbsp; Buy Terra Coin</a>
-
-
+                    <li>
+                        <a [routerLink]="['/dashboard/buy-terra-coin']">
+                            <i class="fa-solid fa-coins"></i>&nbsp; Buy Terra Coin
+                        </a>
                     </li>
-                    <li (click)="navigateToSendTerraCoin()">
-                        <a><i class="fa-solid fa-share"></i> &nbsp;Send Terra
-                            Coin</a>
-
-
+                    <li>
+                        <a [routerLink]="['/dashboard/send-terra-coin']">
+                            <i class="fa-solid fa-share"></i>&nbsp; Send Terra Coin
+                        </a>
                     </li>
-                    <li (click)="navigateToCreateAccountGame()">
-                        <a><i class="fa-solid fa-gamepad"></i>&nbsp; Create account</a>
-
+                    <li>
+                        <a [routerLink]="['/dashboard/create-account-game']">
+                            <i class="fa-solid fa-gamepad"></i>&nbsp; Create account
+                        </a>
                     </li>
-                    <li (click)="navigateToChangePasswordGame()">
-                        <a><i class="fa-solid fa-lock"></i>&nbsp; Change Password</a>
-
+                    <li>
+                        <a [routerLink]="['/dashboard/change-password-game']">
+                            <i class="fa-solid fa-lock"></i>&nbsp; Change Password
+                        </a>
                     </li>
-                    <li (click)="navigateToSettingsAccountsMaster()">
-                        <a><i class="fa-solid fa-gears"></i>&nbsp;
-                            Settings</a>
-
+                    <li>
+                        <a [routerLink]="['/dashboard/setting-account-master']">
+                            <i class="fa-solid fa-gears"></i>&nbsp; Settings
+                        </a>
                     </li>
-
                 </ul>
                 <ul class="support">
-                    <li (click)="navigateToSupport()">
-                        <a><i class="fa-solid fa-circle-question"></i>&nbsp; Support</a>
-
+                    <li>
+                        <a [routerLink]="['/dashboard/support']">
+                            <i class="fa-solid fa-circle-question"></i>&nbsp; Support
+                        </a>
                     </li>
                 </ul>
             </div>
+
+
+
 
 
         </div>
