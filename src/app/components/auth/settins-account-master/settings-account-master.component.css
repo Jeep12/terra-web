@@ -60,8 +60,9 @@
   border-left: 10px solid #0c0f20;
   border-bottom: 10px solid transparent;
   border-top: 10px solid transparent;
-  
+
 }
+
 .settings-card::before {
   content: "";
   display: block;
@@ -94,11 +95,12 @@
   font-weight: 600;
   margin: 0;
   color: #dabe64;
+  background-color: green;
 }
 
 .card-icon {
   font-size: 1.3rem;
-  opacity: 0.7;
+
 }
 
 .form {
@@ -334,6 +336,7 @@
   color: #a0a0a0;
   font-family: monospace;
 }
+
 .info-box {
   color: #dabe64;
 }
@@ -385,11 +388,18 @@
   }
 
   .card-header {
-    flex-direction: column;
-    align-items: flex-start;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
     gap: 0.4rem;
-    /* Reducido */
   }
+
+  .card-icon {
+    font-size: 1rem;
+  }
+
+
 
   .status-item {
     flex-direction: column;
