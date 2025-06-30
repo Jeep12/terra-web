@@ -1,4 +1,3 @@
-
 <div class="dashboard-container">
     <!-- Mobile backdrop -->
     <div class="mobile-backdrop" *ngIf="!sidebarCollapsed" (click)="toggleSidebar()" [style.display]="'none'">
@@ -91,13 +90,15 @@
             <div class="header-right">
 
                 <div class="header-actions">
+                    
                     <button class="action-btn">
                         <span class="notification-badge" style="display: none;">-</span>
-                        <i class="fa-solid fa-bell"></i>
+                        <i class="fa-solid fa-bell" style="color: #dabe64;"></i>
                     </button>
                     <div class="user-profile">
-                        <span> <i class="fa-solid fa-coins"></i> Terra Coins: {{accountMaster?.terraCoins }}</span>
-                        <span class="user-name">{{accountMaster?.email}}</span>
+                        <span class="user-name"><i class="fa-solid fa-envelope"></i> {{accountMaster?.email}}</span>
+                        <span class="terra-coins"> <i class="fa-solid fa-coins"></i> Terra Coins:
+                            {{accountMaster?.terraCoins }}</span>
                     </div>
                     <button class="btn-logout" (click)="logout()">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout

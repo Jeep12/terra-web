@@ -25,7 +25,7 @@ body {
     border: none;
     border-radius: 8px;
     background: linear-gradient(to right, #746535, #dabe64);
-    color: #0c0f20;
+    color: white;
     font-weight: 600;
     font-size: 16px;
     cursor: pointer;
@@ -35,7 +35,10 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
+    border: 1px solid rgba(218, 190, 100, 0.5);
+    background: transparent;
+    color: #dabe64;
+    transition: all 0.3s ease;
 }
 
 .btn-primary:disabled {

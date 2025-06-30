@@ -202,25 +202,43 @@
   border-radius: 0.5rem;
   cursor: pointer;
   transition: background-color 0.2s;
-  background-color: #f1f5f9;
 
+
+}
+
+.terra-coins {
+  border: 1px solid rgba(218, 190, 100, 0.5);
+  border-radius: 8px;
+  padding: 7px;
+  background: transparent;
+  color: #dabe64;
+  font-weight: 600;
+  font-size: 16px;
+
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.terra-coins:hover {
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(to right, #746535, #dabe64);
+  color: white;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
 }
 
 
 
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  object-fit: cover;
-  flex-shrink: 0;
-}
+
 
 .user-name {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #374151;
+  color: #575757;
   white-space: nowrap;
+  text-decoration: underline;
 }
 
 .dashboard-content {
