@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: 100vh;
+  height: 100%;
   padding: 20px;
   background: linear-gradient(to bottom, #0c0f20, #000000);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -34,7 +34,7 @@
   padding: 30px;
   width: 100%;
   max-width: 400px;
-  border: 1px solid #3b3b3b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .auth-container.dark-mode .auth-card {

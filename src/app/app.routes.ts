@@ -42,7 +42,7 @@ export const routes: Routes = [
 
     {
         path: 'dashboard',
-        loadComponent: () => import('./components/dashboard/dashboard.component').then(m => m.DashboardComponent),
+        loadComponent: () => import('./components/dashboard2/dashboard2.component').then(m => m.Dashboard2Component),
         canActivate: [authGuard], // importalo arriba, no lo pongas con promesas
 
         children: [

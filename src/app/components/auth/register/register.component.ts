@@ -127,12 +127,10 @@ export class RegisterComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      console.log('Iniciando autenticación con Google...'); // Debug
 
       const user = await this.googleAuth.signInWithGoogle();
 
-      console.log('Usuario:', user);
-      console.log('Token almacenado:', localStorage.getItem('google_token'));
+
       this.router.navigate(['/dashboard']);
       // Verifica si la navegación está ocurriendo demasiado rápido
       // this.router.navigate(['/dashboard']); // Comenta temporalmente para pruebas
@@ -152,13 +150,10 @@ export class RegisterComponent implements OnInit {
     this.errorMessage = '';
 
     try {
-      console.log('Iniciando autenticación con Facebook...');
       const user = await this.googleAuth.signInWithFacebook();
-      console.log('Usuario:', user);
       this.router.navigate(['/dashboard']);
     } catch (error) {
       this.errorMessage = 'Error al iniciar sesión con Facebook';
-      console.error('Error completo:', error);
     } finally {
       this.isLoading = false;
     }

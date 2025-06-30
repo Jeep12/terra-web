@@ -14,7 +14,7 @@
     <div class="settings-card">
       <div class="card-header">
         <h2 class="card-title">Account Information</h2>
-        <span class="card-icon">👤</span>
+        <span class="card-icon"><i class="fa-solid fa-user" style="color: #dabe64;"></i></span>
       </div>
 
       <form [formGroup]="accountForm" (ngSubmit)="onUpdateAccount()" class="form">
@@ -49,7 +49,7 @@
     <div class="settings-card">
       <div class="card-header">
         <h2 class="card-title">Change Password</h2>
-        <span class="card-icon">🔒</span>
+        <span class="card-icon"><i class="fa-solid fa-lock" style="color: #dabe64;"></i></span>
       </div>
 
       <div *ngIf="accountMaster?.googleUid!= ''">
@@ -128,7 +128,7 @@
     <div class="settings-card">
       <div class="card-header">
         <h2 class="card-title">Security Preferences</h2>
-        <span class="card-icon">🛡️</span>
+        <span class="card-icon"><i class="fa-solid fa-shield-halved" style="color: #dabe64;"></i></span>
       </div>
 
       <form [formGroup]="securityForm" class="form">
@@ -143,7 +143,7 @@
             <small class="form-help">Add an extra layer of protection to your account.</small>
           </span>
 
-          <div class="info-box " style="margin-top: 1rem;">
+          <div class="info-box" style="margin-top: 1rem;">
             <p><strong>What is 2FA?</strong></p>
             <p>
               2FA (Two-Factor Authentication) is a security method that adds an extra layer of protection to your
@@ -234,7 +234,7 @@
     <div class="settings-card">
       <div class="card-header">
         <h2 class="card-title">Notification Settings</h2>
-        <span class="card-icon">🔔</span>
+        <span class="card-icon"><i class="fa-solid fa-bell" style="color: #dabe64;"></i></span>
       </div>
 
       <form [formGroup]="notificationForm" class="form">
@@ -281,7 +281,7 @@
       <div class="streamer-card-header">
         <div class="streamer-header-content">
           <h2 class="streamer-card-title">Streamer Program</h2>
-          <span class="streamer-card-icon">🎥</span>
+          <span class="streamer-card-icon"><i class="fa-solid fa-video" style="color: #9957FF;"></i></span>
         </div>
         <p class="streamer-card-subtitle">Exclusive features for content creators</p>
 
@@ -364,7 +364,7 @@
     <div class="settings-card">
       <div class="card-header">
         <h2 class="card-title">Account Status</h2>
-        <span class="card-icon">⚡</span>
+        <span class="card-icon"><i class="fa-solid fa-bolt" style="color: #dabe64;"></i></span>
       </div>
 
       <div class="status-info">
@@ -389,7 +389,7 @@
     <div class="settings-card activity-card">
       <div class="card-header">
         <h2 class="card-title">Recent Activity</h2>
-        <span class="card-icon">📊</span>
+        <span class="card-icon"><i class="fa-solid fa-chart-line" style="color: #dabe64;"></i></span>
       </div>
 
       <!-- Filtros de actividad -->

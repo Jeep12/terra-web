@@ -2,7 +2,6 @@
 
 .parent {
     width: 100%;
-
     display: flex;
     flex-direction: row;
 
@@ -25,20 +24,7 @@
     cursor: pointer;
 }
 
-@keyframes shadowPulse {
-    0% {
-        filter: drop-shadow(0px 0px 15px #746535);
-    }
 
-    50% {
-        filter: drop-shadow(0px 0px 15px #dabe64) brightness(1.05);
-    }
-
-    100% {
-        filter: drop-shadow(0px 0px 15px #f0d67a);
-        /* Variante más clara */
-    }
-}
 
 .wrapper-sidebar {
     width: 20%;
@@ -74,7 +60,7 @@
     background-color: #111111;
     position: relative;
     border-bottom: 1px solid #dabe64;
-
+    z-index: 1000 !important;
 
 }
 
@@ -324,7 +310,7 @@
 
     .parent {
         display: flex;
-        height: 100%;
+       
     }
 
     .sidebar-nav {
@@ -405,9 +391,6 @@
         bottom: 0px;
     }
 
-    .wrapper-sidebar {}
-
-    .wrapper-pilar {}
 
     .nav {
         border-top: none;
@@ -445,8 +428,7 @@
         margin-top: 15px;
     }
 
-    .sidebar {}
-
+    
     .btn-menu {
         display: block;
     }
@@ -493,7 +475,6 @@
         width: 300px;
     }
 
-    .sidebar-nav ul li:last-child {}
 
     .wrapper-pilar {
         width: 100%;
