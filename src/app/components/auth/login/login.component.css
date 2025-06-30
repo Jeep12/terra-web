@@ -4,7 +4,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  
+  min-height: 100vh;
   padding: 20px;
   background: linear-gradient(to bottom, #0c0f20, #000000);
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
