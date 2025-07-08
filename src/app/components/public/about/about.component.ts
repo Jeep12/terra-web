@@ -8,9 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrl: './about.component.css'
 })
 export class AboutComponent implements OnInit {
-  
+
   isVisible = false;
-  
+
   projectHighlights = [
     {
       title: 'Stability Commitment',
@@ -23,8 +23,8 @@ export class AboutComponent implements OnInit {
       icon: '👥'
     },
     {
-      title: 'Classic Essence',
-      description: 'Authentic Lineage II experience with modern improvements',
+      title: 'Classic 3.0',
+      description: 'Authentic Lineage II experience with kamels and modern tweaks',
       icon: '⚔️'
     }
   ];

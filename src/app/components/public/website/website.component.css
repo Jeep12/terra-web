@@ -294,7 +294,7 @@
   padding: 12px;
   border-radius: 8px;
   text-decoration: none;
-  color: #4b5563;
+  color: white;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.2s;
@@ -302,8 +302,7 @@
 
 .mobile-nav-link:hover,
 .mobile-nav-link.active-mobile-link {
-  background-color: #eff6ff;
-  color: #3b82f6;
+  color: #dabe64;
 }
 
 /* Redes sociales móvil */
@@ -314,7 +313,7 @@
 .section-title {
   font-size: 14px;
   font-weight: 500;
-  color: #6b7280;
+  color: white;
   margin-bottom: 12px;
 }
 

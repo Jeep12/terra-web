@@ -93,6 +93,8 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
+              this.isAuthenticating = false;
+
           if (err.error?.error === 'EMAIL_NOT_VERIFIED') {
             this.btnGoToResendEmailVerification = true;
             this.errors.push('Your email is not verified. Please verify it or resend verification email.');
