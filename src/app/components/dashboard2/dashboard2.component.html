@@ -20,7 +20,7 @@
         </div>
 
         <nav class="sidebar-nav">
-            <ul class="nav-list">
+            <ul class="nav-list ">
                 <li class="nav-item">
                     <a [routerLink]="['/dashboard/home-dashboard']" class="nav-link">
                         <span class="nav-icon"> <i class="fa-solid fa-house-chimney"></i></span>
@@ -84,22 +84,28 @@
         <!-- Header -->
         <header class="header">
             <div class="header-left">
-                <h1 class="page-title"><i class="fa-solid fa-table-columns"></i> Dashboard Terra</h1>
+
+                <button [routerLink]="['/']" class="action-btn">
+                    <span class="notification-badge" style="display: none;">-</span>
+                    Go to Website <i class="fa-solid fa-arrow-up-right-from-square"></i>
+
+                </button>
             </div>
 
             <div class="header-right">
 
                 <div class="header-actions">
-                    
+
                     <button class="action-btn">
                         <span class="notification-badge" style="display: none;">-</span>
                         <i class="fa-solid fa-bell" style="color: #dabe64;"></i>
                     </button>
                     <div class="user-profile">
-                        <span class="user-name"><i class="fa-solid fa-envelope"></i> {{accountMaster?.email}}</span>
+                        <span class="user-name"><i class="fa-solid fa-envelope"></i> {{accountMaster?.email}}</span> &nbsp;
                         <span class="terra-coins"> <i class="fa-solid fa-coins"></i> Terra Coins:
                             {{accountMaster?.terraCoins }}</span>
                     </div>
+                    &nbsp;
                     <button class="btn-logout" (click)="logout()">
                         <i class="fa-solid fa-right-from-bracket"></i> Logout
                     </button>

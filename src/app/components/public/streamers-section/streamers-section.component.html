@@ -1,0 +1,36 @@
+<div class="streamers-section">
+  <div class="header">
+    <h1 class="title">Official Streamers</h1>
+
+    <div class="platform-selector">
+      <button *ngFor="let platform of platforms" class="platform-btn"
+        [class.active]="selectedPlatform() === platform.id" (click)="selectPlatform(platform.id)">
+        <span class="platform-icon" [innerHTML]="platform.icon"></span>
+        <span class="platform-name">{{ platform.name }}</span>
+      </button>
+    </div>
+
+  </div>
+
+  <div class="content">
+    <app-kick-platform-live *ngIf="selectedPlatform() === 'kick'" class="widget-container"></app-kick-platform-live>
+    <!-- 
+     <app-kick-live *ngIf="selectedPlatform() === 'kick'" class="widget-container"></app-kick-live>
+  -->
+    <div *ngIf="selectedPlatform() === 'youtube'" class="coming-soon">
+      <div class="coming-soon-content">
+        <span class="coming-soon-icon">📺</span>
+        <h3>YouTube Streamers</h3>
+        <p>Coming Soon...</p>
+      </div>
+    </div>
+
+    <div *ngIf="selectedPlatform() === 'twitch'" class="coming-soon">
+      <div class="coming-soon-content">
+        <span class="coming-soon-icon">🎮</span>
+        <h3>Twitch Streamers</h3>
+        <p>Coming Soon...</p>
+      </div>
+    </div>
+  </div>
+</div>

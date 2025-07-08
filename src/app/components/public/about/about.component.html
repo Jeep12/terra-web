@@ -1,0 +1,81 @@
+<div class="terra-about-wrapper l2font">
+    <div class="container" [class.visible]="isVisible">
+
+        <!-- Main Content Card -->
+        <div class="content-card">
+
+            <!-- Header Section -->
+            <div class="header-section l2font">
+                <h2 class="main-title">
+                    Project <span class="terra-accent l2font">T</span>erra
+                </h2>
+                <div class="separator"></div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="content-section">
+                <p class="intro-paragraph">
+                    <strong>Terra is beginning</strong> and we want to welcome you to a project born
+                    from our passion for Lineage II and the community that surrounds it. We know that many private
+                    servers of
+                    this game have a short lifespan, closing within a few months and leaving players with a feeling of
+                    loss
+                    and disappointment. That's why, at Terra, our commitment is different.
+                </p>
+
+                <p class="content-paragraph">
+                    We want to create a stable and lasting server, where players feel that their progress is valued and
+                    where
+                    decisions are made with the long-term experience in mind. Our commitment is that the server will be
+                    available for at least 2 years after the beta phase ends. If the community desires it and the server
+                    is
+                    sustainable, we are open to extending its duration.
+                </p>
+
+                <p class="content-paragraph">
+                    At Terra, we value our players' opinions. We want you to be an active part of this project, where we
+                    will
+                    implement changes and improvements based on the needs and desires of our community. This is a living
+                    project, and with your help, we are convinced that we can create something truly special.
+                </p>
+
+                <!-- Highlights Section -->
+                <div class="highlights-grid">
+                    <div class="highlight-card" *ngFor="let highlight of projectHighlights">
+                        <div class="highlight-icon">{{ highlight.icon }}</div>
+                        <h4 class="highlight-title">{{ highlight.title }}</h4>
+                        <p class="highlight-description">{{ highlight.description }}</p>
+                    </div>
+                </div>
+
+                <p class="content-paragraph">
+                    <strong>Project Terra</strong> is an idea that we have developed,
+                    <span class="developer-name" *ngFor="let dev of developers; let last = last">
+                        <strong>{{ dev.name }}</strong>
+                        <span class="developer-role">({{ dev.role }})</span>{{ !last ? ' and ' : '' }}
+                    </span>,
+                    players and developers who understand what it means to invest time and effort in a server that is
+                    not
+                    destined to disappear. We are committed to offering you an authentic and quality experience.
+                </p>
+
+                <div class="closing-message">
+                    <p class="final-paragraph">
+                        <strong>We await you on this journey and together we will make Terra an unforgettable
+                            place!</strong>
+                    </p>
+                </div>
+
+                <!-- Call to Action Buttons -->
+                <div class="cta-section">
+                    <button class="cta-button primary" (click)="onJoinCommunity()">
+                        Join Our Community
+                    </button>
+                    <button class="cta-button secondary" (click)="onLearnMore()">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+<div class="kick-platform-container">
+  <div class="platform-header">
+    <h3 class="platform-title"><i class="fa-brands fa-kickstarter"></i> Kick</h3>
+    <div class="wrapper-buttons-channels">
+      <button *ngFor="let slug of channels" (click)="loadChannel(slug)" [class.active]="slug === currentSlug"
+        class="channel-btn">
+        {{ slug }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="loading">
+    <div class="loading-spinner"></div>
+    <p>Cargando stream...</p>
+  </div>
+
+  <div *ngIf="!loading && !channel" class="error-state">
+    <div class="error-icon">❌</div>
+    <p>No se encontró el canal o no está disponible.</p>
+  </div>
+
+  <div *ngIf="!loading && channel" class="channel-content">
+    <!-- Información del canal mejorada -->
+    <div class="channel-info" *ngIf="channel.stream?.is_live">
+      <div class="channel-header">
+        <div class="channel-avatar">
+          <div class="avatar-placeholder">
+            <i class="fa-solid fa-user"></i>
+          </div>
+     
+        </div>
+        
+        <div class="channel-main-info">
+          <h3 class="channel-name">{{ channel.slug }}</h3>
+          <p class="stream-title" *ngIf="channel.stream_title">{{ channel.stream_title }}</p>
+          <p class="channel-description" *ngIf="channel.channel_description">
+            {{ channel.channel_description }}
+          </p>
+        </div>
+      </div>
+
+      <div class="channel-metadata">
+        <div class="metadata-grid">
+          <div class="metadata-item" *ngIf="channel.stream?.viewer_count !== undefined">
+            <div class="metadata-icon">
+              <i class="fa-solid fa-eye"></i>
+            </div>
+            <div class="metadata-content">
+              <span class="metadata-label">Espectadores</span>
+              <span class="metadata-value">{{ channel.stream.viewer_count | number }}</span>
+            </div>
+          </div>
+
+          <div class="metadata-item" *ngIf="channel.category?.name">
+            <div class="metadata-icon">
+              <img 
+                *ngIf="channel.category?.thumbnail; else categoryIcon"
+                [src]="channel.category.thumbnail"
+                [alt]="channel.category.name"
+                class="category-thumbnail"
+              />
+              <ng-template #categoryIcon>
+                <i class="fa-solid fa-gamepad"></i>
+              </ng-template>
+            </div>
+            <div class="metadata-content">
+              <span class="metadata-label">Categoría</span>
+              <span class="metadata-value">{{ channel.category.name }}</span>
+            </div>
+          </div>
+
+          <div class="metadata-item" *ngIf="channel.stream?.start_time">
+            <div class="metadata-icon">
+              <i class="fa-solid fa-clock"></i>
+            </div>
+            <div class="metadata-content">
+              <span class="metadata-label">Inicio</span>
+              <span class="metadata-value">{{ channel.stream.start_time | date:'short' }}</span>
+            </div>
+          </div>
+
+          <div class="metadata-item" *ngIf="channel.stream?.language">
+            <div class="metadata-icon">
+              <i class="fa-solid fa-globe"></i>
+            </div>
+            <div class="metadata-content">
+              <span class="metadata-label">Idioma</span>
+              <span class="metadata-value">{{ channel.stream.language | uppercase }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="channel-badges" *ngIf="channel.stream?.is_mature">
+          <div class="badge mature-badge">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>Contenido Maduro</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="stream-section">
+      <div class="stream-container" *ngIf="channel.stream?.is_live; else noStream">
+        <iframe [src]="safeUrl" class="stream-iframe" frameborder="0" allowfullscreen allow="autoplay"
+          scrolling="no"></iframe>
+      </div>
+      <ng-template #noStream>
+        <div class="no-stream">
+          <div class="no-stream-icon">📺</div>
+          <h3 class="no-stream-title">{{ channel.slug }}</h3>
+          <p class="no-stream-message">Este canal no está transmitiendo en vivo.</p>
+        </div>
+      </ng-template>
+      
+      <button (click)="refreshPlayer()" [disabled]="isRefreshing" class="refresh-btn" [class.refreshing]="isRefreshing">
+        <span class="refresh-icon" [class.spinning]="isRefreshing">🔄</span>
+        {{ isRefreshing ? 'Actualizando...' : 'Actualizar stream' }}
+      </button>
+    </div>
+  </div>
+</div>

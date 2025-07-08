@@ -40,7 +40,7 @@
             <div class="verification-content">
                 <div class="email-display" *ngIf="accountM?.email">
                     <i class="fa-solid fa-envelope"></i>
-                    <span>Sending code to: <strong>{{ accountM?.email }}</strong></span>
+                    <span>Send code to: <strong>{{ accountM?.email }}</strong></span>
                 </div>
 
                 <button (click)="sendEmailCodeCreateAccount()" type="button" class="btn-send-code" [disabled]="loading">

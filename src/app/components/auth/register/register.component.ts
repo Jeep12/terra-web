@@ -11,13 +11,14 @@ import {
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { GoogleAuthService } from "../../../services/google-auth.service"
+import { MagicCrystalComponent } from '../../magic-crystal/magic-crystal.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,MagicCrystalComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })
@@ -30,7 +31,7 @@ export class RegisterComponent implements OnInit {
   showOffcanvas = false;
   activeContent: 'terms' | 'privacy' | null = null;
 
-
+  isLoadingFirebase: boolean = false;
   private googleAuth = inject(GoogleAuthService);
   isLoading = false;
   errorMessage = '';
@@ -123,39 +124,41 @@ export class RegisterComponent implements OnInit {
     * Handle Google login
     */
   async registerWithGoogle(): Promise<void> {
-    this.isLoading = true;
+    this.isLoadingFirebase = true;
     this.errorMessage = '';
 
     try {
-
       const user = await this.googleAuth.signInWithGoogle();
-
-
       this.router.navigate(['/dashboard']);
-      // Verifica si la navegación está ocurriendo demasiado rápido
-      // this.router.navigate(['/dashboard']); // Comenta temporalmente para pruebas
+      this.isLoadingFirebase = false;
 
     } catch (error) {
       this.errorMessage = 'Error al iniciar sesión con Google';
-      console.error('Error completo:', error);
+      this.isLoadingFirebase = false;
+
     } finally {
-      this.isLoading = false;
+      this.isLoadingFirebase = false;
     }
   }
   /**
    * Handle Facebook login
    */
   async registerWithFacebook(): Promise<void> {
-    this.isLoading = true;
+    this.isLoadingFirebase = true;
     this.errorMessage = '';
 
     try {
       const user = await this.googleAuth.signInWithFacebook();
       this.router.navigate(['/dashboard']);
+      this.isLoadingFirebase = false;
+
     } catch (error) {
       this.errorMessage = 'Error al iniciar sesión con Facebook';
+      console.error('Error completo:', error);
+      this.isLoadingFirebase = false;
+
     } finally {
-      this.isLoading = false;
+      this.isLoadingFirebase = false;
     }
   }
   navigateToLogin() {

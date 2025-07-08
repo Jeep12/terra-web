@@ -24,7 +24,12 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post(`${environment.apiUrl}api/auth/logout`, {}, { withCredentials: true });
+    return this.http.post(`${environment.apiUrl}api/auth/logout`, {}, { withCredentials: true }).pipe(
+      tap(() => {
+        this.loggedIn = false; 
+        this.router.navigate(['/login']); 
+      })
+    );
   }
   recoveryPassword(email: string) {
     return this.http.post(`${environment.apiUrl}api/auth/resend-reset-email?email=${encodeURIComponent(email)}`, {});

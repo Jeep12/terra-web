@@ -1,0 +1,113 @@
+<div class="carousel-hero">
+    <div class="filter">
+    </div>
+    <div class="flame-container flame-top">
+        <img src="/assets/images/footer-corner.webp" alt="Flame decoration" class="flame-image flame-top-img">
+    </div>
+
+    <div class="carousel-wrapper">
+        <div class="slider">
+            <div *ngFor="let slide of slides" class="slide-item">
+                <img [src]="slide.img" [alt]="slide.alt" class="slide-image" />
+                <div class="slide-overlay"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content-carrousel">
+
+        <div class="events">
+            <ul class="list-events">
+                <li class="events-item">
+                    <div class="feature-item">
+                        <i class="fa-solid fa-khanda"></i>
+                    </div>
+                    <div class="font-beaufort-bold text-event">
+                        Daily Events
+                    </div>
+                </li>
+                <li class="events-item">
+                    <div class="feature-item">
+                        <i class="fa-brands fa-fort-awesome"></i>
+                    </div>
+                    <div class="font-beaufort-bold text-event">
+                        Sieges
+                    </div>
+                </li>
+                <li class="events-item">
+                    <div class="feature-item">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
+                    <div class="font-beaufort-bold text-event">
+                        Olympics
+                    </div>
+                </li>
+                <li class="events-item">
+                    <div class="feature-item">
+                        <i class="fa-solid fa-location-crosshairs"></i>
+                    </div>
+                    <div class="font-beaufort-bold text-event">
+                        Epic Raid Boss
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <div class="presentation">
+            <img src="assets/images/lineage2Terra_blanco.webp" alt="Terra Logo" class="logoTerra">
+            <br>
+            <img src="assets/images/title_bottom_bg.png" alt="" class="divider-top">
+            <p class="font-din-normal">
+                <i style="color: yellow;" class="fa-solid fa-triangle-exclamation"></i> &nbsp;
+                The server and website are under development, but they are online. Your feedback/opinions are
+                welcome as
+                we work to improve the experience.
+            </p>
+            <p class="font-din-bold">
+                We want to build a solid community, so any opinion counts.
+            </p>
+            <img src="assets/images/title_bottom_bg.png" alt="" class="divider-bottom">
+
+            <button class="play-button">
+                <i class="fa-solid fa-gamepad"></i>
+                Start Playing
+            </button>
+        </div>
+
+        <div class="information">
+            <img src="assets/images/classic.png" class="logoInterlude" alt="Interlude Logo">
+            <div class="status-sv">
+                <span class="font-beaufort-bold">
+                    STATUS
+                </span>
+                <img class="rotating" src="assets/images/marker_green_icon.png" alt="Online Status">
+            </div>
+            <div class="rates-sv">
+                <div class="header-rates-sv">
+                    <img src="assets/images/tn1bZ9rL7z8g3W75oqTy7QMPhYeBEVkA8yfUkY3Y.png" alt="Rates Icon">
+                    <span>
+                        <span class="font-beaufort-bold"><b>TERRA X3</b></span>
+                        <br>
+                        <span class="font-din-normal" style="font-size: 11px;">SERVER RATES</span>
+                    </span>
+                </div>
+                <div class="rates">
+                    <img src="assets/images/title_bottom_bg.png" alt=""
+                        style="width: 100%;height: 10px; margin-top: -10px;">
+                    <ul>
+                        <li class="font-beaufort-regular">EXP <span class="colorRate">X3</span></li>
+                        <li class="font-beaufort-regular">SP <span class="colorRate">X3</span></li>
+                        <li class="font-beaufort-regular">DROP <span class="colorRate">X2</span></li>
+                        <li class="font-beaufort-regular">ADENA <span class="colorRate">X2</span></li>
+                        <li class="font-beaufort-regular">SPOIL <span class="colorRate">X2</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="flame-container flame-bottom">
+        <img src="/assets/images/footer-corner.webp" alt="Flame decoration" class="flame-image flame-bottom-img">
+    </div>
+</div>

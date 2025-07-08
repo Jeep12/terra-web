@@ -1,35 +1,26 @@
+<!-- login.component.html -->
 <div class="auth-container">
-  <div><link rel="preconnect" href="https://assets.l2terra.online">
-
-    <!-- Si conoces la relación de aspecto de tu imagen (ej. 2:1) -->
+  <div>
+    <link rel="preconnect" href="https://assets.l2terra.online" />
     <div class="logo-container">
-      <img ngSrc="https://assets.l2terra.online/logoJuanLineage_baja_enBlanco.webp" fill alt="Logo de Terra" priority>
+      <img ngSrc="https://assets.l2terra.online/logoJuanLineage_baja_enBlanco.webp" fill alt="Logo de Terra" priority />
     </div>
   </div>
+
   <div class="auth-card">
     <h2 class="auth-title">
       <i class="fa-solid fa-user"></i> Sign In to Your Account
-
     </h2>
 
     <!-- Step 1 -->
     <div *ngIf="currentStep === 1" class="form-step">
       <form [formGroup]="emailForm" (ngSubmit)="goToNextStep()">
         <div class="form-group">
-          <label for="email">
-            <i class="fas fa-envelope"></i> Email address
-          </label>
+          <label for="email"><i class="fas fa-envelope"></i> Email address</label>
           <input type="email" id="email" formControlName="email" placeholder=" Enter your email" class="form-control" />
-          <div *ngIf="
-              emailForm.get('email')?.invalid &&
-              emailForm.get('email')?.touched
-            " class="error-message">
-            <span *ngIf="emailForm.get('email')?.errors?.['required']">
-              Email is required
-            </span>
-            <span *ngIf="emailForm.get('email')?.errors?.['email']">
-              Please enter a valid email
-            </span>
+          <div *ngIf="emailForm.get('email')?.invalid && emailForm.get('email')?.touched" class="error-message">
+            <span *ngIf="emailForm.get('email')?.errors?.['required']">Email is required</span>
+            <span *ngIf="emailForm.get('email')?.errors?.['email']">Please enter a valid email</span>
           </div>
         </div>
 
@@ -42,10 +33,10 @@
       <div class="social-login">
         <p class="divider"><span>Or continue with</span></p>
         <div class="social-buttons">
-          <button type="button" class="btn-social google" (click)="loginWithGoogle()">
+          <button type="button" class="btn-social google" (click)="loginWithGoogle()" [disabled]="isLoading">
             <i class="fab fa-google social-icon"></i> &nbsp; Google
           </button>
-          <button type="button" class="btn-social facebook" (click)="loginWithFacebook()">
+          <button type="button" class="btn-social facebook" (click)="loginWithFacebook()" [disabled]="isLoading">
             <i class="fab fa-facebook-f social-icon"></i> &nbsp;Facebook
           </button>
         </div>
@@ -56,9 +47,7 @@
     <div *ngIf="currentStep === 2" class="form-step">
       <form [formGroup]="passwordForm" (ngSubmit)="login()">
         <div class="form-group">
-          <label for="password">
-            <i class="fas fa-lock"></i> Password
-          </label>
+          <label for="password"><i class="fas fa-lock"></i> Password</label>
           <div class="password-input-container">
             <input id="password" [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
               placeholder="Enter your password" class="form-control" />
@@ -66,29 +55,31 @@
               <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
             </button>
           </div>
-          <div *ngIf="
-          passwordForm.get('password')?.invalid &&
-          passwordForm.get('password')?.touched
-        " class="error-message">
-            <span *ngIf="passwordForm.get('password')?.errors?.['required']">
-              Password is required
-            </span>
+          <div *ngIf="passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched"
+            class="error-message">
+            <span *ngIf="passwordForm.get('password')?.errors?.['required']">Password is required</span>
           </div>
         </div>
         <div class="alert alert-danger" role="alert" *ngIf="errors.length > 0">
-          <ul class="mb-0" style="list-style: none;padding: 0px;">
-            <li *ngFor="let error of errors"><i class="fa-solid fa-triangle-exclamation text-danger"></i> {{ error }}
+          <ul class="mb-0" style="list-style: none; padding: 0;">
+            <li *ngFor="let error of errors">
+              <i class="fa-solid fa-triangle-exclamation text-danger"></i> {{ error }}
             </li>
           </ul>
         </div>
 
-        <button type="submit" class="btn-primary" [disabled]="passwordForm.invalid">
-          Login <i class="fas fa-sign-in-alt"></i>
+        <button type="submit" class="btn-primary" [disabled]="passwordForm.invalid || isAuthenticating">
+          <div class="loading-container" *ngIf="isAuthenticating">
+            <div class="loading-bar"></div>
+          </div>
+          <i class="fas fa-sign-in-alt" *ngIf="!isAuthenticating"></i>
+          {{ isAuthenticating ? 'Logging in...' : 'Login' }}
         </button>
-        <hr>
-        <button class="btn-secondary" (click)="goToBack()"> <i class="fas fa-arrow-left"></i> Back</button>
-        <br>
-        <br>
+        <hr />
+        <button class="btn-secondary" (click)="goToBack()">
+          <i class="fas fa-arrow-left"></i> Back
+        </button>
+        <br /><br />
         <div class="cf-turnstile" data-sitekey="0x4AAAAAABhBLTkGwYdbEAbo"></div>
         <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
@@ -108,5 +99,12 @@
         <i class="fas fa-user-plus"></i> Create an account
       </a>
     </div>
+    <hr />
+    <button class="btn-secondary" [routerLink]="['/']">
+      <i class="fa-solid fa-globe"></i> Go to website
+    </button>
   </div>
+
+  <app-magic-crystal *ngIf="isLoading"></app-magic-crystal>
+
 </div>

@@ -1,0 +1,277 @@
+.container-discord {
+  background: linear-gradient(to bottom, #000000, #0c0f20);
+  height: 100dvh;
+  display: flex;
+  justify-content: end;
+  gap: 10px;
+}
+
+.discord-widget {
+  width: 100%;
+  max-width: 340px;
+  background: #2b2d31;
+  max-height: 500px;
+  border-radius: 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
+  font-family: "Segoe UI", sans-serif;
+  overflow: hidden;
+  color: #f2f3f5;
+  margin-right: 50px;
+}
+
+/* Loading & Error States */
+.widget-state {
+  padding: 40px 20px;
+  text-align: center;
+  color: #b5bac1;
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #404249;
+  border-top: 3px solid #5865f2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.error {
+  color: #f23f43;
+}
+
+.error-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.widget-state h3 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+}
+
+.widget-state p {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+}
+
+.retry-btn {
+  background: #5865f2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.retry-btn:hover {
+  background: #4752c4;
+}
+
+/* Server Header */
+.server-header {
+  padding: 16px;
+  border-bottom: 1px solid #3f4147;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.server-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.server-icon {
+  width: 48px;
+  height: 48px;
+  background: #5865f2;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 20px;
+  color: white;
+}
+
+.server-header h2 {
+  margin: 0 0 4px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #f2f3f5;
+}
+
+.online-count {
+  margin: 0;
+  font-size: 12px;
+  color: #23a55a;
+  font-weight: 500;
+}
+
+.join-btn {
+  background: #5865f2;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.join-btn:hover {
+  background: #4752c4;
+}
+
+/* Members Section */
+.members-section {
+  padding: 16px;
+}
+
+.members-section h3 {
+  color: #949ba4;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin: 0 0 12px 0;
+  letter-spacing: 0.5px;
+}
+
+.empty-members {
+  text-align: center;
+  padding: 20px;
+  color: #80848e;
+}
+
+.empty-members p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.members-list {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+/* Member Item */
+.member {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 8px;
+  border-radius: 4px;
+  transition: background-color 0.15s ease;
+}
+
+.member:hover {
+  background: #35373c;
+}
+
+.member-avatar {
+  position: relative;
+}
+
+.member-avatar img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status-dot {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 3px solid #2b2d31;
+}
+
+.status-dot.online {
+  background: #23a55a;
+}
+
+.status-dot.idle {
+  background: #f0b232;
+}
+
+.status-dot.dnd {
+  background: #f23f43;
+}
+
+.status-dot.offline {
+  background: #80848e;
+}
+
+.member-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.member-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #f2f3f5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.member-activity {
+  font-size: 12px;
+  color: #b5bac1;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Scrollbar */
+.members-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.members-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.members-list::-webkit-scrollbar-thumb {
+  background: #1e1f22;
+  border-radius: 4px;
+}
+
+.members-list::-webkit-scrollbar-thumb:hover {
+  background: #232428;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .discord-widget {
+    max-width: 100%;
+    margin: 0 8px;
+  }
+
+  .server-header {
+    padding: 12px;
+  }
+
+  .members-section {
+    padding: 12px;
+  }
+}

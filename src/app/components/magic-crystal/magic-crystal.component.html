@@ -1,0 +1,54 @@
+<div class="magic-crystal-overlay">
+  <div class="crystal-container">
+    <!-- Cristal principal -->
+    <div class="crystal-main" [style.transform]="'translateY(' + crystalY + 'px) rotate(' + crystalRotation + 'deg)'">
+      <!-- Cuerpo del cristal -->
+      <div class="crystal-body" [style.opacity]="crystalOpacity" [style.transform]="'scale(' + crystalScale + ')'">
+      </div>
+
+      <!-- Facetas del cristal -->
+      <div class="crystal-facet facet-1" [style.opacity]="facetOpacity1"></div>
+      <div class="crystal-facet facet-2" [style.opacity]="facetOpacity2"></div>
+      <div class="crystal-facet facet-3" [style.opacity]="facetOpacity3"></div>
+
+      <!-- Brillo interno -->
+      <div class="crystal-glow" [style.transform]="'scale(' + glowScale + ')'" [style.opacity]="glowOpacity"></div>
+    </div>
+
+    <!-- Base del cristal -->
+    <div class="crystal-base" [style.transform]="'scaleX(' + baseScaleX + ')'" [style.opacity]="baseOpacity"></div>
+
+    <!-- Pulsos de energía -->
+    <div class="energy-pulse pulse-1" [style.transform]="'scale(' + pulse1Scale + ')'" [style.opacity]="pulse1Opacity">
+    </div>
+    <div class="energy-pulse pulse-2" [style.transform]="'scale(' + pulse2Scale + ')'" [style.opacity]="pulse2Opacity">
+    </div>
+    <div class="energy-pulse pulse-3" [style.transform]="'scale(' + pulse3Scale + ')'" [style.opacity]="pulse3Opacity">
+    </div>
+
+    <!-- Partículas mágicas -->
+    <div class="magic-particles">
+      <div *ngFor="let particle of particles; trackBy: trackParticle" class="particle"
+        [style.transform]="'translate(' + particle.x + 'px, ' + particle.y + 'px) scale(' + particle.scale + ')'"
+        [style.opacity]="particle.opacity">
+      </div>
+    </div>
+
+    <!-- Rayos de luz -->
+    <div class="light-rays">
+      <div *ngFor="let ray of lightRays; let i = index" class="light-ray"
+        [style.transform]="'rotate(' + (i * 60) + 'deg) scaleY(' + ray.scaleY + ')'" [style.opacity]="ray.opacity">
+      </div>
+    </div>
+
+    <!-- Aura cristalina -->
+    <div class="crystal-aura" [style.transform]="'scale(' + auraScale + ')'" [style.opacity]="auraOpacity"></div>
+  </div>
+
+  <!-- Texto -->
+  <div class="loading-text" [style.opacity]="textOpacity" [style.transform]="'translateY(' + textY + 'px)'">
+    <h2 class="loading-title">Connecting to Terra</h2>
+    <p class="loading-subtitle">Validating your identity...</p>
+
+  </div>
+</div>

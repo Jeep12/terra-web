@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './components/auth/login/login.component';
-import { RegisterComponent } from './components/auth/register/register.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { authGuard } from './guards/auth.guard';
 
 
 export const routes: Routes = [
     {
         path: '',
-        loadComponent: () => import('./components/auth/login/login.component').then(m => m.LoginComponent)
+        loadComponent: () => import('./components/public/website/website.component').then(m => m.WebsiteComponent),
+        children: [
+            { path: '', redirectTo: 'home', pathMatch: 'full' },
+            { path: 'home', loadComponent: () => import('./components/public/home/home.component').then(m => m.HomeComponent) },
+            { path: 'gallery', loadComponent: () => import('./components/public/gallery/gallery.component').then(m => m.GalleryComponent) },
+
+        ]
     },
     {
         path: 'login',

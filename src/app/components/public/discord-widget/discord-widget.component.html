@@ -1,0 +1,64 @@
+<div class="container-discord">
+
+  <div class="discord-widget">
+    <!-- Loading -->
+    <div *ngIf="isLoading" class="widget-state">
+      <div class="loading-spinner"></div>
+      <p>Loading Discord...</p>
+    </div>
+
+    <!-- Error -->
+    <div *ngIf="error && !isLoading" class="widget-state error">
+      <div class="error-icon">⚠️</div>
+      <h3>Error loading widget</h3>
+      <p>{{ error }}</p>
+      <button class="retry-btn" (click)="refreshWidget()">Try Again</button>
+    </div>
+
+    <!-- Content -->
+    <div *ngIf="widgetData && !isLoading && !error" class="widget-content">
+      <!-- Header -->
+      <div class="server-header">
+        <div class="server-info">
+          <div class="server-icon">
+            {{ widgetData.name.charAt(0).toUpperCase() }}
+          </div>
+          <div>
+            <h2>{{ widgetData.name }}</h2>
+            <p class="online-count">🟢 {{ widgetData.presence_count }} Online</p>
+            
+          </div>
+        </div>
+        <button class="join-btn" (click)="openInvite(getServerInvite())">
+          Join Server
+        </button>
+      </div>
+
+      <!-- Members -->
+      <div class="members-section">
+        <h3>Members — {{ widgetData.members.length }}</h3>
+
+        <div *ngIf="widgetData.members.length === 0" class="empty-members">
+          <p>No members visible</p>
+        </div>
+
+        <div class="members-list">
+          <div *ngFor="let member of widgetData.members" class="member">
+            <div class="member-avatar">
+              <img [src]="member.avatar_url || 'https://cdn.discordapp.com/embed/avatars/0.png'" [alt]="member.username"
+                (error)="onImageError($event)">
+              <div class="status-dot" [class]="member.status"></div>
+            </div>
+            <div class="member-info">
+              <div class="member-name">{{ member.username }}</div>
+              <div *ngIf="member.game" class="member-activity">
+                Playing {{ member.game.name }}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

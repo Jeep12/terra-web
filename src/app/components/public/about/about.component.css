@@ -1,0 +1,247 @@
+.terra-about-wrapper {
+    background: linear-gradient(to bottom, #000000, #0c0f20);
+    padding: 2rem 1rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.container.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.content-card {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 3rem 2rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.header-section {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.main-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.terra-accent {
+    color: #746535;
+    font-family: l2font;
+    font-size: 4rem;
+}
+
+.separator {
+    width: 80%;
+    max-width: 400px;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #746535, transparent);
+    margin: 0 auto;
+    opacity: 0.7;
+}
+
+.content-section {
+    color: #e0e0e0;
+    line-height: 1.8;
+}
+
+.intro-paragraph {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.intro-paragraph strong {
+    color: white;
+    font-weight: 600;
+}
+
+.content-paragraph {
+    font-size: 1.1rem;
+    margin-bottom: 1.5rem;
+    text-align: justify;
+}
+
+.highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin: 2.5rem 0;
+}
+
+.highlight-card {
+    background: rgba(116, 101, 53, 0.1);
+    border: 1px solid rgba(116, 101, 53, 0.3);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.highlight-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(116, 101, 53, 0.2);
+}
+
+.highlight-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.highlight-title {
+    color: #746535;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.highlight-description {
+    color: #c0c0c0;
+    font-size: 1rem;
+}
+
+.developer-name {
+    color: #746535;
+    font-weight: 600;
+}
+
+.developer-role {
+    color: #a0a0a0;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.closing-message {
+    text-align: center;
+    margin: 2.5rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, rgba(116, 101, 53, 0.1), rgba(160, 140, 74, 0.1));
+    border-radius: 15px;
+    border: 1px solid rgba(116, 101, 53, 0.2);
+}
+
+.final-paragraph {
+    font-size: 1.3rem;
+    font-weight: 600;
+    background: linear-gradient(45deg, #746535, #a08c4a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.cta-section {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.cta-button {
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+    min-width: 180px;
+}
+
+.cta-button.primary {
+    background: linear-gradient(135deg, #746535, #a08c4a);
+    color: white;
+}
+
+.cta-button.primary:hover {
+    background: linear-gradient(135deg, #a08c4a, #746535);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(116, 101, 53, 0.4);
+}
+
+.cta-button.secondary {
+    background: transparent;
+    color: #746535;
+    border: 2px solid #746535;
+}
+
+.cta-button.secondary:hover {
+    background: rgba(116, 101, 53, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(116, 101, 53, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .terra-about-wrapper {
+        padding: 1rem 0.5rem;
+    }
+
+    .content-card {
+        padding: 2rem 1.5rem;
+    }
+
+    .main-title {
+        font-size: 2.5rem;
+    }
+
+    .terra-accent {
+        font-size: 3rem;
+    }
+
+    .highlights-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cta-section {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .content-paragraph {
+        text-align: left;
+    }
+}
+
+/* Animation for highlight cards */
+.highlight-card {
+    animation: fadeInUp 0.6s ease-out forwards;
+}
+
+.highlight-card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.highlight-card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.highlight-card:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

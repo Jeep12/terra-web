@@ -1,0 +1,172 @@
+<nav class="navbar-container gradient1">
+    <div class="navbar-content">
+
+        <!-- Logo -->
+        <a routerLink="/" class="logo">
+            <div class="logo-icon">
+                <span><img src="assets/images/logot.png" height="60px" width="40px" ></span>
+            </div>
+
+        </a>
+
+        <!-- Desktop Navigation -->
+        <div class="desktop-nav">
+            <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
+            </a>
+            <a routerLink="/downloads" routerLinkActive="active-link" class="nav-link">
+                <i class="fas fa-download"></i>
+                <span>Downloads</span>
+            </a>
+            <a routerLink="/statistics" routerLinkActive="active-link" class="nav-link">
+                <i class="fas fa-chart-bar"></i>
+                <span>Statistics</span>
+            </a>
+            <a routerLink="/information" routerLinkActive="active-link" class="nav-link">
+                <i class="fas fa-info-circle"></i>
+                <span>Information</span>
+            </a>
+            <a routerLink="/gallery" routerLinkActive="active-link" class="nav-link">
+                <i class="fas fa-images"></i>
+                <span>Gallery</span>
+            </a>
+        </div>
+
+        <!-- Desktop Social Links -->
+        <div class="desktop-social">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram"
+                class="social-link">
+                <i class="fab fa-instagram"></i>
+            </a>
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" title="Facebook"
+                class="social-link">
+                <i class="fa-brands fa-facebook-f"></i>
+            </a>
+            <a href="https://discord.gg/Sqeu8yrnJB" target="_blank" rel="noopener noreferrer" title="Discord"
+                class="social-link">
+                <i class="fab fa-discord"></i>
+            </a>
+            <a href="https://discord.com" target="_blank" rel="noopener noreferrer" title="Youtube" class="social-link">
+                <i class="fab fa-youtube"></i>
+            </a>
+        </div>
+
+        <!-- Desktop Auth Buttons -->
+        <div class="desktop-auth">
+            <ng-container *ngIf="isLoggedIn$ | async; else authButtons">
+                <a routerLink="/dashboard" class="btn btn-primary">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Go to Dashboard</span>
+                </a>
+            </ng-container>
+
+            <ng-template #authButtons>
+                <a routerLink="/login" class="btn btn-secondary">
+                    <i class="fas fa-sign-in-alt"></i>
+                    <span>Login</span>
+                </a>
+                <a routerLink="/register" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Register</span>
+                </a>
+            </ng-template>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button (click)="toggleMenu()" class="mobile-menu-btn">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+
+    <!-- Mobile Menu Overlay -->
+    <div *ngIf="isMenuOpen" class="mobile-overlay" (click)="closeMenu()"></div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu gradient1" [class.open]="isMenuOpen">
+        <div class="mobile-menu-content">
+            <button (click)="toggleMenu()" class="mobile-menu-btn">
+                <i class="fas" [ngClass]="isMenuOpen ? 'fa-times' : 'fa-bars'"></i>
+            </button>
+            <!-- Mobile Navigation Links -->
+            <div class="mobile-nav-section">
+                <a routerLink="/" (click)="closeMenu()" routerLinkActive="active-mobile-link"
+                    [routerLinkActiveOptions]="{exact: true}" class="mobile-nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </a>
+                <a routerLink="/downloads" (click)="closeMenu()" routerLinkActive="active-mobile-link"
+                    class="mobile-nav-link">
+                    <i class="fas fa-download"></i>
+                    <span>Downloads</span>
+                </a>
+                <a routerLink="/statistics" (click)="closeMenu()" routerLinkActive="active-mobile-link"
+                    class="mobile-nav-link">
+                    <i class="fas fa-chart-bar"></i>
+                    <span>Statistics</span>
+                </a>
+                <a routerLink="/information" (click)="closeMenu()" routerLinkActive="active-mobile-link"
+                    class="mobile-nav-link">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Information</span>
+                </a>
+                <a routerLink="/gallery" (click)="closeMenu()" routerLinkActive="active-mobile-link"
+                    class="mobile-nav-link">
+                    <i class="fas fa-images"></i>
+                    <span>Gallery</span>
+                </a>
+            </div>
+
+            <!-- Mobile Social Links -->
+            <div class="mobile-social-section">
+                <p class="section-title">Follow us</p>
+                <div class="mobile-social-links">
+                    <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" (click)="closeMenu()"
+                        title="Instagram" class="mobile-social-link">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" (click)="closeMenu()"
+                        title="Facebook" class="mobile-social-link">
+                        <i class="fa-brands fa-facebook-f"></i> </a>
+                    <a href="https://discord.gg/Sqeu8yrnJB" target="_blank" rel="noopener noreferrer"
+                        (click)="closeMenu()" title="Discord" class="mobile-social-link">
+                        <i class="fab fa-discord"></i>
+                    </a>
+                    <a href="https://discord.com" target="_blank" rel="noopener noreferrer" title="Youtube"
+                        class="mobile-social-link">
+                        <i class="fab fa-youtube"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Mobile Auth Buttons -->
+            <div class="mobile-auth-section">
+                <ng-container *ngIf="isLoggedIn$ | async; else mobileAuthButtons">
+                    <a routerLink="/dashboard" (click)="closeMenu()" class="btn btn-primary full-width">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Go to Dashboard</span>
+                    </a>
+                </ng-container>
+
+                <ng-template #mobileAuthButtons>
+                    <div class="mobile-auth-buttons">
+                        <a routerLink="/register" (click)="closeMenu()" class="btn btn-primary full-width">
+                            <i class="fas fa-user-plus"></i>
+                            <span>Register</span>
+                        </a>
+                        <a routerLink="/login" (click)="closeMenu()" class="btn btn-secondary full-width">
+                            <i class="fas fa-sign-in-alt"></i>
+                            <span>Login</span>
+                        </a>
+                    </div>
+                </ng-template>
+            </div>
+
+
+        </div>
+    </div>
+</nav>
+
+<div class="container-website">
+    <router-outlet></router-outlet>
+</div>

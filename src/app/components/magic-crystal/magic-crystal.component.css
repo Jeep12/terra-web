@@ -1,0 +1,307 @@
+.magic-crystal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.crystal-container {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.crystal-main {
+  position: relative;
+  width: 96px;
+  height: 128px;
+  transition: transform 0.1s ease-out;
+}
+
+.crystal-body {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(218, 190, 100, 0.8), rgba(218, 190, 100, 0.6), rgba(218, 190, 100, 0.4));
+  clip-path: polygon(50% 0%, 80% 25%, 80% 75%, 50% 100%, 20% 75%, 20% 25%);
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+}
+
+.crystal-facet {
+  position: absolute;
+  background: rgba(218, 190, 100, 0.3);
+  top: 25%;
+  width: 20%;
+  height: 50%;
+  clip-path: polygon(0% 0%, 100% 20%, 100% 80%, 0% 100%);
+  transition: opacity 0.1s ease-out;
+}
+
+.facet-1 {
+  left: 20%;
+}
+
+.facet-2 {
+  left: 40%;
+}
+
+.facet-3 {
+  left: 60%;
+}
+
+.crystal-glow {
+  position: absolute;
+  inset: 16px;
+  background: radial-gradient(circle, #dabe64 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(4px);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.crystal-base {
+  position: absolute;
+  bottom: -16px;
+  left: 50%;
+  width: 64px;
+  height: 12px;
+  background: rgba(218, 190, 100, 0.4);
+  border-radius: 50%;
+  filter: blur(4px);
+  transform: translateX(-50%);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.energy-pulse {
+  position: absolute;
+  inset: 0;
+  border: 2px solid rgba(218, 190, 100, 0.4);
+  border-radius: 50%;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.magic-particles {
+  position: absolute;
+  inset: 0;
+}
+
+.particle {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 4px;
+  height: 4px;
+  background: #dabe64;
+  border-radius: 50%;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.light-rays {
+  position: absolute;
+  inset: 0;
+}
+
+.light-ray {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2px;
+  height: 80px;
+  background: linear-gradient(to top, rgba(218, 190, 100, 0.6), transparent);
+  transform-origin: 0 40px;
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.crystal-aura {
+  position: absolute;
+  inset: -48px;
+  background: radial-gradient(circle, rgba(218, 190, 100, 0.2) 0%, transparent 70%);
+  border-radius: 50%;
+  filter: blur(20px);
+  transition: transform 0.1s ease-out, opacity 0.1s ease-out;
+}
+
+.loading-text {
+  position: absolute;
+  bottom: 80px;
+  text-align: center;
+  transition: opacity 0.1s ease-out, transform 0.1s ease-out;
+}
+
+.loading-title {
+  color: #dabe64;
+  font-size: 32px;
+  font-weight: bold;
+  margin: 0 0 8px 0;
+  text-shadow: 0 0 10px rgba(218, 190, 100, 0.5);
+}
+
+.loading-subtitle {
+  color: rgba(156, 163, 175, 1);
+  font-size: 16px;
+  margin: 0;
+}
+
+/* Animaciones de respaldo para navegadores que no soporten las transiciones suaves */
+@keyframes crystalFloat {
+  0%,
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+}
+
+@keyframes crystalPulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.2);
+  }
+}
+
+@keyframes energyPulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(0, 0) scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--particle-x, 60px), var(--particle-y, 60px)) scale(1);
+    opacity: 0;
+  }
+}
+
+@keyframes rayFlash {
+  0% {
+    transform: scaleY(0);
+    opacity: 0;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0;
+  }
+}
+
+@keyframes textFloat {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: translateY(0px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-5px);
+  }
+}
+
+/* Fallback para navegadores sin soporte de animaciones JavaScript */
+@media (prefers-reduced-motion: reduce) {
+  .crystal-main {
+    animation: crystalFloat 4s ease-in-out infinite;
+  }
+
+  .crystal-body {
+    animation: crystalPulse 2s ease-in-out infinite;
+  }
+
+  .crystal-glow {
+    animation: glowPulse 3s ease-in-out infinite;
+  }
+
+  .energy-pulse {
+    animation: energyPulse 3s ease-out infinite;
+  }
+
+  .particle {
+    animation: particleFloat 2s ease-out infinite;
+  }
+
+  .light-ray {
+    animation: rayFlash 2s ease-out infinite;
+  }
+
+  .loading-text {
+    animation: textFloat 2s ease-in-out infinite;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .crystal-container {
+    width: 150px;
+    height: 150px;
+  }
+
+  .crystal-main {
+    width: 72px;
+    height: 96px;
+  }
+
+  .loading-title {
+    font-size: 24px;
+  }
+
+  .loading-subtitle {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .crystal-container {
+    width: 120px;
+    height: 120px;
+  }
+
+  .crystal-main {
+    width: 60px;
+    height: 80px;
+  }
+
+  .loading-title {
+    font-size: 20px;
+  }
+
+  .loading-subtitle {
+    font-size: 12px;
+  }
+}
