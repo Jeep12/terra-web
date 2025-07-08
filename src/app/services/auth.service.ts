@@ -75,7 +75,6 @@ export class AuthService {
       tap(() => this.loggedIn = true),
       map(() => true),
       catchError((error) => {
-        console.warn('[isLoggedIn] Error:', error);
 
         if (error.status === 401 && error.error?.code === "2FA_REQUIRED_NO_DEVICE") {
           this.router.navigate(['/two-factor-step']);
