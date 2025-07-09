@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { DiscordWidgetComponent } from "../discord-widget/discord-widget.component";
 
 @Component({
   selector: 'app-about',
-  imports: [CommonModule],
+  imports: [CommonModule, DiscordWidgetComponent],
   templateUrl: './about.component.html',
   styleUrl: './about.component.css'
 })

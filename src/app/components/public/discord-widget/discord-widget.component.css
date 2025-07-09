@@ -1,22 +1,20 @@
 .container-discord {
   background: linear-gradient(to bottom, #000000, #0c0f20);
   height: 100dvh;
-  display: flex;
-  justify-content: end;
-  gap: 10px;
+
 }
 
 .discord-widget {
   width: 100%;
-  max-width: 340px;
+  height: 100%;
   background: #2b2d31;
-  max-height: 500px;
   border-radius: 8px;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
   font-family: "Segoe UI", sans-serif;
   overflow: hidden;
   color: #f2f3f5;
   margin-right: 50px;
+  overflow-y: scroll;
 }
 
 /* Loading & Error States */
@@ -274,4 +272,28 @@
   .members-section {
     padding: 12px;
   }
+}
+
+@media (max-width: 1024px) {
+  .discord-widget {
+  }
+}
+.discord-widget::-webkit-scrollbar,
+.members-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.discord-widget::-webkit-scrollbar-thumb,
+.members-list::-webkit-scrollbar-thumb {
+  background: #2b2d31; /* mismo color que el fondo */
+}
+
+.discord-widget::-webkit-scrollbar-track,
+.members-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.discord-widget::-webkit-scrollbar-thumb:hover,
+.members-list::-webkit-scrollbar-thumb:hover {
+  background: #383a40; /* apenas más claro para hover */
 }

@@ -21,12 +21,12 @@
       <div class="server-header">
         <div class="server-info">
           <div class="server-icon">
-            {{ widgetData.name.charAt(0).toUpperCase() }}
+            <i class="fa-brands fa-discord"></i>
           </div>
           <div>
             <h2>{{ widgetData.name }}</h2>
             <p class="online-count">🟢 {{ widgetData.presence_count }} Online</p>
-            
+
           </div>
         </div>
         <button class="join-btn" (click)="openInvite(getServerInvite())">

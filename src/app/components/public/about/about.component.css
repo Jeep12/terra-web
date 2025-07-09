@@ -2,10 +2,11 @@
     background: linear-gradient(to bottom, #000000, #0c0f20);
     padding: 2rem 1rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    min-height: 100vh;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 95%;
     margin: 0 auto;
     opacity: 0;
     transform: translateY(30px);
@@ -15,6 +16,26 @@
 .container.visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+/* Main layout with columns */
+.columns-wrapper {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.side-column {
+    flex: 0 0 30%;
+    min-height: 500px;
+    position: sticky;
+    top: 2rem;
 }
 
 .content-card {
@@ -78,7 +99,7 @@
 
 .highlights-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 1.5rem;
     margin: 2.5rem 0;
 }
@@ -90,6 +111,7 @@
     padding: 1.5rem;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeInUp 0.6s ease-out forwards;
 }
 
 .highlight-card:hover {
@@ -185,7 +207,63 @@
     box-shadow: 0 8px 20px rgba(116, 101, 53, 0.2);
 }
 
+/* Discord Widget Container */
+.discord-widget-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.highlight-card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.highlight-card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.highlight-card:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
 /* Responsive Design */
+@media (max-width: 1024px) {
+    .columns-wrapper {
+        flex-direction: column;
+    }
+
+    .side-column {
+        flex: 1;
+        min-height: 400px;
+        position: relative;
+        width: 100%;
+    }
+
+    .main-content {
+        flex: 1;
+    }
+}
+
 @media (max-width: 768px) {
     .terra-about-wrapper {
         padding: 1rem 0.5rem;
@@ -215,33 +293,22 @@
     .content-paragraph {
         text-align: left;
     }
-}
 
-/* Animation for highlight cards */
-.highlight-card {
-    animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.highlight-card:nth-child(1) {
-    animation-delay: 0.2s;
-}
-
-.highlight-card:nth-child(2) {
-    animation-delay: 0.4s;
-}
-
-.highlight-card:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
+    .columns-wrapper {
+        gap: 1rem;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .side-column {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .side-column {
+        min-height: 250px;
+    }
+
+    .discord-widget-container {
+        padding: 0.5rem;
     }
 }
