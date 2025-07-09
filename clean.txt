@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# CONFIG
+REPO_URL="https://github.com/Jeep12/terra-web.git"
+NEW_DIR="terra-web-clean"
+
+echo "📦 Clonando el repo actual en modo normal..."
+git clone "$REPO_URL" "$NEW_DIR"
+cd "$NEW_DIR" || exit 1
+
+echo "🧹 Creando rama huérfana sin historial..."
+git checkout --orphan clean-main
+
+echo "🧼 Borrando archivos del historial anterior..."
+git rm -rf . > /dev/null 2>&1
+
+echo "📥 Agregando estado actual..."
+git add .
+git commit -m "🔄 Historial limpio – estado actual sin environments"
+
+echo "🧹 Borrando rama anterior y renombrando..."
+git branch -D main 2>/dev/null
+git branch -m main
+
+echo "☁️ Pusheando al repo remoto con --force..."
+git push --force origin main
+
+echo "✅ ¡Listo! El repo ahora tiene solo un commit con el estado actual."
