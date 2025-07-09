@@ -4,7 +4,8 @@
 /tmp
 /out-tsc
 /bazel-out
-/app/environments/*
+/src/app/environments/
+
 # Node
 /node_modules
 npm-debug.log
