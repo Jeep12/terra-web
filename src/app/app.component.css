@@ -1,0 +1,41 @@
+.button-assistant {
+    position: fixed;
+    bottom: 10%;
+    right: 50px;
+    z-index: 999;
+
+    width: 60px;
+    height: 60px;
+    padding: 10px;
+
+    font-size: 24px;
+    background: linear-gradient(to right, #746535, #dabe64);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.2s ease;
+}
+
+.button-assistant:hover {
+    transform: scale(1.05);
+    padding: 15px;
+    /* solo para ver si se aplica */
+
+
+
+}
+
+.chatbot-container {
+    background: linear-gradient(to bottom, #0c0f20, #000000);
+
+}
+
+.offcanvas-title {
+    color: #dabe64;
+}

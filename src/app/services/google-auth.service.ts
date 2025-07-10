@@ -56,7 +56,7 @@ export class GoogleAuthService {
       await this.http.post(
         `${environment.apiUrl}api/auth/google/login`,
         { idToken },
-        { withCredentials: true }
+        { withCredentials: false }
       ).toPromise();
 
       return result.user;

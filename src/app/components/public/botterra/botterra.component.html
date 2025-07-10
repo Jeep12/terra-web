@@ -1,0 +1,44 @@
+<div class="chatbot-container">
+  <div class="messages-container">
+    
+    <!-- Mensaje de bienvenida -->
+    <div *ngIf="messages.length === 0" class="welcome-message">
+  <i class="fa-solid fa-circle-info"></i>    ¿How can I help you today?
+    </div>
+
+    <!-- Lista de mensajes -->
+    <div *ngFor="let message of messages" class="message"
+         [ngClass]="{ 'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot' }">
+      <div class="message-content">
+<div [innerHTML]="message.text"></div>
+        <div class="message-time">{{ message.timestamp | date: 'shortTime' }}</div>
+      </div>
+    </div>
+
+    <!-- Indicador de carga -->
+    <div *ngIf="isLoading" class="loading-message">
+      <div class="typing-indicator">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Área de entrada -->
+  <div class="input-container">
+    <input
+      [(ngModel)]="msg"
+      (keyup.enter)="sendMessage()"
+      [disabled]="isLoading"
+      placeholder="Type your message..."
+      class="message-input"
+      name="message"
+    />
+
+    <button (click)="sendMessage()" [disabled]="!msg.trim() || isLoading" class="send-button">
+      <span *ngIf="!isLoading"><i class="fa-solid fa-paper-plane"></i></span>
+      <span *ngIf="isLoading">Sending...</span>
+    </button>
+  </div>
+</div>

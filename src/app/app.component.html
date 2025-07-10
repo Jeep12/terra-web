@@ -1,2 +1,19 @@
-
 <router-outlet></router-outlet>
+
+<!-- Botón para abrir -->
+<button class="button-assistant" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasChat"
+    aria-controls="offCanvasChat">
+    <i class="fa-solid fa-robot" style="pointer-events: none;"></i>
+</button>
+
+<!-- Acá sí el offcanvas envuelve al componente -->
+<div class="offcanvas offcanvas-end chatbot-container" tabindex="-1" id="offCanvasChat"
+    aria-labelledby="offCanvasChatLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offCanvasChatLabel"> <i class="fa-solid fa-robot"></i> Terra Assistant</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+    </div>
+    <div class="offcanvas-body p-0">
+        <app-botterra></app-botterra>
+    </div>
+</div>

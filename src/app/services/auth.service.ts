@@ -26,8 +26,8 @@ export class AuthService {
   logout() {
     return this.http.post(`${environment.apiUrl}api/auth/logout`, {}, { withCredentials: true }).pipe(
       tap(() => {
-        this.loggedIn = false; 
-        this.router.navigate(['/login']); 
+        this.loggedIn = false;
+        this.router.navigate(['/login']);
       })
     );
   }
@@ -51,12 +51,12 @@ export class AuthService {
           if (error.status === 401) {
             if (error.error?.message?.includes('2FA requerido')) {
               this.router.navigate(['/two-factor-step']);
-              return throwError(() => new Error('2FA required'));
+
+              console.log("error")
             }
             if (error.error.code === "2FA_REQUIRED_UNTRUSTED_DEVICE") {
               this.router.navigate(['/two-factor-step']);
-              return throwError(() => new Error('2FA required'));
-
+              console.log(error)
 
             }
           }
