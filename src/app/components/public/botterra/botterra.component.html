@@ -1,44 +1,63 @@
 <div class="chatbot-container">
-  <div class="messages-container">
-    
-    <!-- Mensaje de bienvenida -->
+  <div class="messages-container" #messagesContainer>
+    <!-- Welcome message -->
     <div *ngIf="messages.length === 0" class="welcome-message">
-  <i class="fa-solid fa-circle-info"></i>    ¿How can I help you today?
+
+      <h3>Hello! 👋</h3>
+      <p>How can I help you today?</p>
     </div>
 
-    <!-- Lista de mensajes -->
-    <div *ngFor="let message of messages" class="message"
-         [ngClass]="{ 'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot' }">
-      <div class="message-content">
-<div [innerHTML]="message.text"></div>
-        <div class="message-time">{{ message.timestamp | date: 'shortTime' }}</div>
+    <!-- Messages list -->
+    <div *ngFor="let message of messages; trackBy: trackByMessage" 
+         class="message-wrapper"
+         [ngClass]="{ 'user-wrapper': message.sender === 'user', 'bot-wrapper': message.sender === 'bot' }">
+      <div class="message"
+           [ngClass]="{ 'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot' }">
+        <div class="message-content">
+          <div class="message-text" [innerHTML]="message.text"></div>
+          <div class="message-time">{{ message.timestamp | date: 'shortTime' }}</div>
+        </div>
       </div>
     </div>
 
-    <!-- Indicador de carga -->
-    <div *ngIf="isLoading" class="loading-message">
-      <div class="typing-indicator">
-        <span></span>
-        <span></span>
-        <span></span>
+    <!-- Loading indicator -->
+    <div *ngIf="isLoading" class="loading-wrapper">
+      <div class="loading-message">
+        <div class="typing-indicator">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <span class="typing-text">Typing...</span>
       </div>
     </div>
   </div>
 
-  <!-- Área de entrada -->
+  <!-- Input area -->
   <div class="input-container">
-    <input
-      [(ngModel)]="msg"
-      (keyup.enter)="sendMessage()"
-      [disabled]="isLoading"
-      placeholder="Type your message..."
-      class="message-input"
-      name="message"
-    />
-
-    <button (click)="sendMessage()" [disabled]="!msg.trim() || isLoading" class="send-button">
-      <span *ngIf="!isLoading"><i class="fa-solid fa-paper-plane"></i></span>
-      <span *ngIf="isLoading">Sending...</span>
-    </button>
+    <div class="input-wrapper">
+      <input 
+        #messageInput
+        [(ngModel)]="msg" 
+        (keypress)="onKeyPress($event)"
+        [disabled]="isLoading" 
+        placeholder="Type your message..."
+        class="message-input" 
+        name="message"
+        autocomplete="off" />
+      
+      <button 
+        (click)="sendMessage()" 
+        [disabled]="!msg.trim() || isLoading" 
+        class="send-button"
+        [class.loading]="isLoading">
+        <span *ngIf="!isLoading" class="send-icon">
+          <i class="fa-solid fa-paper-plane"></i>
+        </span>
+        <span *ngIf="isLoading" class="loading-spinner">
+          <i class="fa-solid fa-circle-notch fa-spin"></i>
+        </span>
+      </button>
+    </div>
   </div>
 </div>

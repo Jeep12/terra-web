@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, ChangeDetectorRef, Pipe, PipeTransform } from '@angular/core';
+import { Component, inject, ChangeDetectorRef, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ChatbotService } from '../../../services/chatbot.service';
@@ -17,14 +17,25 @@ interface ChatMessage {
   templateUrl: './botterra.component.html',
   styleUrl: './botterra.component.css'
 })
-export class BotterraComponent {
+export class BotterraComponent implements AfterViewChecked {
+  @ViewChild('messagesContainer', { static: false }) messagesContainer!: ElementRef;
+  @ViewChild('messageInput', { static: false }) messageInput!: ElementRef;
+
   msg = "";
   messages: ChatMessage[] = [];
   isLoading = false;
+  private shouldScrollToBottom = false;
 
   private chatbotService = inject(ChatbotService);
   private cdRef = inject(ChangeDetectorRef);
   private sanitizer = inject(DomSanitizer);
+
+  ngAfterViewChecked() {
+    if (this.shouldScrollToBottom) {
+      this.scrollToBottom();
+      this.shouldScrollToBottom = false;
+    }
+  }
 
   async sendMessage() {
     const messageText = this.msg.trim();
@@ -33,6 +44,12 @@ export class BotterraComponent {
     this.addMessage(messageText, 'user');
     this.msg = "";
     this.isLoading = true;
+    this.shouldScrollToBottom = true;
+
+    // Focus back to input after sending
+    setTimeout(() => {
+      this.messageInput?.nativeElement?.focus();
+    }, 100);
 
     try {
       const response = await this.chatbotService.sendMessageAsync(messageText);
@@ -45,8 +62,15 @@ export class BotterraComponent {
       console.error('Error:', error);
     } finally {
       this.isLoading = false;
+      this.shouldScrollToBottom = true;
       this.forceViewUpdate();
-      this.scrollToBottom();
+    }
+  }
+
+  onKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      this.sendMessage();
     }
   }
 
@@ -63,17 +87,17 @@ export class BotterraComponent {
         timestamp: new Date()
       }
     ];
+    this.shouldScrollToBottom = true;
     this.cdRef.detectChanges();
   }
 
   private extractBotResponse(response: any): string {
-    // Más opciones para extraer la respuesta del webhook
     return response?.output ||
       response?.reply ||
       response?.message ||
       response?.data?.message ||
       response?.result ||
-      JSON.stringify(response) || // Si no hay formato específico, mostrar todo
+      JSON.stringify(response) ||
       "Recibí tu mensaje";
   }
 
@@ -82,11 +106,13 @@ export class BotterraComponent {
   }
 
   private scrollToBottom() {
-    setTimeout(() => {
-      const container = document.querySelector('.messages-container');
-      if (container) {
-        container.scrollTop = container.scrollHeight;
-      }
-    }, 100);
+    if (this.messagesContainer?.nativeElement) {
+      const container = this.messagesContainer.nativeElement;
+      container.scrollTop = container.scrollHeight;
+    }
+  }
+
+  trackByMessage(index: number, message: ChatMessage): number {
+    return index;
   }
 }
