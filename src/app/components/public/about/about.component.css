@@ -3,7 +3,19 @@
     padding: 2rem 1rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100%;
+    max-height: 100%;
 }
+
+.discord-widget-container {
+    height: 100%;
+    min-height: 0;
+    display: block;
+}
+
 
 .container {
     max-width: 95%;
@@ -15,7 +27,6 @@
 
 .container.visible {
     opacity: 1;
-    transform: translateY(0);
 }
 
 /* Main layout with columns */
@@ -36,15 +47,14 @@
     min-height: 500px;
     position: sticky;
     top: 2rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .content-card {
-    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 3rem 2rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .header-section {
@@ -105,7 +115,6 @@
 }
 
 .highlight-card {
-    background: rgba(116, 101, 53, 0.1);
     border: 1px solid rgba(116, 101, 53, 0.3);
     border-radius: 12px;
     padding: 1.5rem;
@@ -207,18 +216,153 @@
     box-shadow: 0 8px 20px rgba(116, 101, 53, 0.2);
 }
 
+/* Vote Section */
+.vote-section {
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+
+
+.vote-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+
+
+
+.vote-section-title {
+    color: #746535;
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.vote-description {
+    color: #c0c0c0;
+    font-size: 0.9rem;
+    margin: 0;
+    opacity: 0.8;
+}
+
+.vote-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.vote-button-container {
+    width: 100%;
+}
+
+.vote-link {
+    display: block;
+    text-decoration: none;
+    background: linear-gradient(135deg, rgba(116, 101, 53, 0.1), rgba(160, 140, 74, 0.1));
+    border: 1px solid rgba(116, 101, 53, 0.3);
+    border-radius: 15px;
+    padding: 1.2rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.vote-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s ease;
+}
+
+.vote-link:hover::before {
+    left: 100%;
+}
+
+.vote-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(116, 101, 53, 0.3);
+    border-color: rgba(116, 101, 53, 0.5);
+    background: linear-gradient(135deg, rgba(116, 101, 53, 0.15), rgba(160, 140, 74, 0.15));
+}
+
+.vote-button-content {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+}
+
+.vote-button-image {
+    width: 120px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+
+.vote-banner {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+
+.vote-button-text {
+    flex: 1;
+    text-align: left;
+}
+
+.vote-button-title {
+    display: block;
+    color: #746535;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.vote-button-subtitle {
+    display: block;
+    color: #c0c0c0;
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+/* L2JBrasil specific styling */
+.vote-button-container.l2jbrasil .vote-button-image {
+    /* Sin bordes específicos */
+}
+
+/* Hopzone specific styling */
+.vote-button-container.hopzone .vote-button-image {
+    /* Sin bordes específicos */
+}
+
+/* Hover effects for banners */
+.vote-link:hover .vote-banner {
+    transform: scale(1.05);
+}
+
 /* Discord Widget Container */
 .discord-widget-container {
     width: 100%;
-    height: 100%;
+    flex: 1;
+    min-height: 400px;
     display: flex;
     flex-direction: column;
-    background: rgba(0, 0, 0, 0.3);
     backdrop-filter: blur(10px);
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 /* Animations */
@@ -257,10 +401,57 @@
         min-height: 400px;
         position: relative;
         width: 100%;
+        display: flex;
+        flex-direction: column;
     }
 
     .main-content {
         flex: 1;
+    }
+
+    /* Vote section responsive adjustments */
+    .vote-section {
+        padding: 1.5rem;
+        margin-bottom: 1.2rem;
+    }
+
+    .vote-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .vote-icon i {
+        font-size: 1.3rem;
+    }
+
+    .vote-section-title {
+        font-size: 1.2rem;
+        margin-bottom: 0.4rem;
+    }
+
+    .vote-description {
+        font-size: 0.85rem;
+    }
+
+    .vote-buttons {
+        gap: 0.8rem;
+    }
+
+    .vote-link {
+        padding: 1rem;
+    }
+
+    .vote-button-image {
+        width: 100px;
+        height: 70px;
+    }
+
+    .vote-button-title {
+        font-size: 1rem;
+    }
+
+    .vote-button-subtitle {
+        font-size: 0.8rem;
     }
 }
 
@@ -300,15 +491,194 @@
 
     .side-column {
         min-height: 300px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Vote section mobile adjustments */
+    .vote-section {
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+    }
+
+    .vote-icon {
+        width: 45px;
+        height: 45px;
+    }
+
+    .vote-icon i {
+        font-size: 1.2rem;
+    }
+
+    .vote-section-title {
+        font-size: 1.1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .vote-description {
+        font-size: 0.8rem;
+    }
+
+    .vote-buttons {
+        gap: 0.6rem;
+    }
+
+    .vote-link {
+        padding: 0.9rem;
+    }
+
+    .vote-button-image {
+        width: 85px;
+        height: 60px;
+    }
+
+    .vote-button-title {
+        font-size: 0.95rem;
+    }
+
+    .vote-button-subtitle {
+        font-size: 0.75rem;
     }
 }
 
 @media (max-width: 480px) {
     .side-column {
         min-height: 250px;
+        display: flex;
+        flex-direction: column;
     }
 
     .discord-widget-container {
-        padding: 0.5rem;
+        /* Sin padding para mantener el mismo ancho que vote-section */
+    }
+
+    /* Vote section small mobile adjustments */
+    .vote-section {
+        padding: 1rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .vote-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .vote-icon i {
+        font-size: 1.1rem;
+    }
+
+    .vote-section-title {
+        font-size: 1rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .vote-description {
+        font-size: 0.75rem;
+    }
+
+    .vote-buttons {
+        gap: 0.5rem;
+    }
+
+    .vote-link {
+        padding: 0.8rem;
+    }
+
+    .vote-button-image {
+        width: 70px;
+        height: 50px;
+    }
+
+    .vote-button-title {
+        font-size: 0.9rem;
+    }
+
+    .vote-button-subtitle {
+        font-size: 0.7rem;
+    }
+}
+
+/* Portrait orientation fixes */
+@media (orientation: portrait) and (min-height: 1000px) {
+    .side-column {
+        min-height: 90vh;
+        height: 90vh;
+    }
+
+    .discord-widget-container {
+        min-height: 70vh;
+        height: 70vh;
+        flex: 1;
+    }
+}
+
+@media (orientation: portrait) and (max-height: 999px) and (min-height: 800px) {
+    .side-column {
+        min-height: 85vh;
+        height: 85vh;
+    }
+
+    .discord-widget-container {
+        min-height: 65vh;
+        height: 65vh;
+        flex: 1;
+    }
+}
+
+@media (orientation: portrait) and (max-height: 799px) {
+    .side-column {
+        min-height: 80vh;
+        height: 80vh;
+    }
+
+    .discord-widget-container {
+        min-height: 60vh;
+        height: 60vh;
+        flex: 1;
+    }
+}
+
+/* Height-based responsive adjustments */
+@media (min-height: 1200px) {
+    .side-column {
+        min-height: 600px;
+    }
+
+    .discord-widget-container {
+        min-height: 500px;
+    }
+}
+
+@media (max-height: 600px) and (orientation: landscape) {
+    .side-column {
+        min-height: 400px;
+    }
+
+    .discord-widget-container {
+        min-height: 300px;
+    }
+
+    .vote-section {
+        margin-bottom: 1rem;
+        padding: 1rem;
+    }
+}
+
+/* Force full height for discord widget */
+@media (orientation: portrait) {
+    .side-column {
+        display: flex;
+        flex-direction: column;
+        height: calc(100vh - 130px);
+    }
+
+    .vote-section {
+        flex-shrink: 0;
+    }
+
+    .discord-widget-container {
+        flex: 1;
+        height: auto;
+        min-height: 0;
     }
 }

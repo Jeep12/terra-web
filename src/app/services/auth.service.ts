@@ -48,18 +48,27 @@ export class AuthService {
     return this.http.get<AccountMaster>(`${environment.apiUrl}api/auth/me`, { withCredentials: true })
       .pipe(
         catchError((error: any) => {
+          // Manejar errores silenciosos del interceptor
+          if (error.name === 'SilentAuthError') {
+            return throwError(() => error);
+          }
+          
+          // No mostrar errores en consola para usuarios no autenticados
+          if (error.status === 401 || error.status === 403) {
+            // Silenciar errores de autenticación no autorizada
+            return throwError(() => error);
+          }
+          
+          // Solo mostrar errores para casos específicos de 2FA
           if (error.status === 401) {
             if (error.error?.message?.includes('2FA requerido')) {
               this.router.navigate(['/two-factor-step']);
-
-              console.log("error")
             }
             if (error.error.code === "2FA_REQUIRED_UNTRUSTED_DEVICE") {
               this.router.navigate(['/two-factor-step']);
-              console.log(error)
-
             }
           }
+          
           return throwError(() => error);
         })
       );
@@ -75,6 +84,17 @@ export class AuthService {
       tap(() => this.loggedIn = true),
       map(() => true),
       catchError((error) => {
+        // Manejar errores silenciosos del interceptor
+        if (error.name === 'SilentAuthError') {
+          this.loggedIn = false;
+          return of(false);
+        }
+        
+        // Manejar silenciosamente errores de autenticación
+        if (error.status === 401 || error.status === 403) {
+          this.loggedIn = false;
+          return of(false);
+        }
 
         if (error.status === 401 && error.error?.code === "2FA_REQUIRED_NO_DEVICE") {
           this.router.navigate(['/two-factor-step']);

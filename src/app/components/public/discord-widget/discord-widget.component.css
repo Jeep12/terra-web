@@ -1,21 +1,20 @@
-.container-discord {
-  background: linear-gradient(to bottom, #000000, #0c0f20);
-  height: 100dvh;
-
-}
-
+/* En lugar de esto ⛔ */
 .discord-widget {
-  width: 100%;
-  height: 100%;
-  background: #2b2d31;
-  border-radius: 8px;
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.24);
-  font-family: "Segoe UI", sans-serif;
-  overflow: hidden;
-  color: #f2f3f5;
-  margin-right: 50px;
-  overflow-y: scroll;
+  height: 100dvh;
 }
+
+/* Usá esto ✅ */
+.discord-widget {
+  flex: 1 1 auto;
+  height: auto;
+  min-height:0;
+  display: flex;
+  flex-direction: column;
+  background: #2b2d31;
+  border-radius: 12px;
+
+}
+
 
 /* Loading & Error States */
 .widget-state {
@@ -275,9 +274,9 @@
 }
 
 @media (max-width: 1024px) {
-  .discord-widget {
-  }
+  .discord-widget {}
 }
+
 .discord-widget::-webkit-scrollbar,
 .members-list::-webkit-scrollbar {
   width: 8px;
@@ -285,7 +284,8 @@
 
 .discord-widget::-webkit-scrollbar-thumb,
 .members-list::-webkit-scrollbar-thumb {
-  background: #2b2d31; /* mismo color que el fondo */
+  background: #2b2d31;
+  /* mismo color que el fondo */
 }
 
 .discord-widget::-webkit-scrollbar-track,
@@ -295,5 +295,6 @@
 
 .discord-widget::-webkit-scrollbar-thumb:hover,
 .members-list::-webkit-scrollbar-thumb:hover {
-  background: #383a40; /* apenas más claro para hover */
+  background: #383a40;
+  /* apenas más claro para hover */
 }

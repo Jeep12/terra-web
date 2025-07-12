@@ -1,88 +1,102 @@
-<div class="carousel-hero">
-    <div class="filter">
-    </div>
-    <div class="flame-container flame-top">
-        <img src="/assets/images/footer-corner.webp" alt="Flame decoration" class="flame-image flame-top-img">
+<div class="carousel-hero" role="banner" aria-label="Terra Server Hero Section">
+    <div class="filter" aria-hidden="true"></div>
+    
+    <!-- Flame decorations -->
+    <div class="flame-container flame-top" aria-hidden="true">
+        <img src="/assets/images/footer-corner.webp" alt="" class="flame-image flame-top-img">
     </div>
 
-    <div class="carousel-wrapper">
+    <!-- Main carousel -->
+    <div class="carousel-wrapper" role="region" aria-label="Hero Images Carousel">
         <div class="slider">
-            <div *ngFor="let slide of slides" class="slide-item">
-                <img [src]="slide.img" [alt]="slide.alt" class="slide-image" />
-                <div class="slide-overlay"></div>
+            <div *ngFor="let slide of slides; let i = index" class="slide-item" role="img" [attr.aria-label]="slide.alt">
+                <img [src]="slide.img" [alt]="slide.alt" class="slide-image" loading="lazy" />
+                <div class="slide-overlay" aria-hidden="true"></div>
             </div>
         </div>
     </div>
 
-    <div class="content-carrousel">
-
-        <div class="events">
-            <ul class="list-events">
-                <li class="events-item">
-                    <div class="feature-item">
-                        <i class="fa-solid fa-khanda"></i>
+    <!-- Main content -->
+    <div class="content-carrousel" role="main">
+        <!-- Events section -->
+        <section class="events" aria-labelledby="events-title">
+            <h2 id="events-title" class="sr-only">Server Events</h2>
+            <ul class="list-events" role="list">
+                <li class="events-item" role="listitem" tabindex="0">
+                    <div class="feature-item" aria-hidden="true">
+                        <i class="fa-solid fa-khanda" aria-hidden="true"></i>
                     </div>
                     <div class="font-beaufort-bold text-event">
                         Daily Events
                     </div>
                 </li>
-                <li class="events-item">
-                    <div class="feature-item">
-                        <i class="fa-brands fa-fort-awesome"></i>
+                <li class="events-item" role="listitem" tabindex="0">
+                    <div class="feature-item" aria-hidden="true">
+                        <i class="fa-brands fa-fort-awesome" aria-hidden="true"></i>
                     </div>
                     <div class="font-beaufort-bold text-event">
                         Sieges
                     </div>
                 </li>
-                <li class="events-item">
-                    <div class="feature-item">
-                        <i class="fa-solid fa-crown"></i>
+                <li class="events-item" role="listitem" tabindex="0">
+                    <div class="feature-item" aria-hidden="true">
+                        <i class="fa-solid fa-crown" aria-hidden="true"></i>
                     </div>
                     <div class="font-beaufort-bold text-event">
                         Olympics
                     </div>
                 </li>
-                <li class="events-item">
-                    <div class="feature-item">
-                        <i class="fa-solid fa-location-crosshairs"></i>
+                <li class="events-item" role="listitem" tabindex="0">
+                    <div class="feature-item" aria-hidden="true">
+                        <i class="fa-solid fa-location-crosshairs" aria-hidden="true"></i>
                     </div>
                     <div class="font-beaufort-bold text-event">
                         Epic Raid Boss
                     </div>
                 </li>
             </ul>
-        </div>
+        </section>
 
-        <div class="presentation">
-            <img src="assets/images/lineage2Terra_blanco.webp" alt="Terra Logo" class="logoTerra">
-            <br>
-            <img src="assets/images/title_bottom_bg.png" alt="" class="divider-top">
-            <p class="font-din-normal">
-                <i style="color: yellow;" class="fa-solid fa-triangle-exclamation"></i> &nbsp;
-                The server and website are under development, but they are online. Your feedback/opinions are
-                welcome as
-                we work to improve the experience.
-            </p>
-            <p class="font-din-bold">
-                We want to build a solid community, so any opinion counts.
-            </p>
-            <img src="assets/images/title_bottom_bg.png" alt="" class="divider-bottom">
-
-            <button class="play-button">
-                <i class="fa-solid fa-gamepad"></i>
-                Start Playing
+        <!-- Presentation section -->
+        <section class="presentation" aria-labelledby="presentation-title">
+            <h1 id="presentation-title" class="sr-only">Terra Server</h1>
+            <img src="assets/images/lineage2Terra_blanco.webp" alt="Terra Server Logo" class="logoTerra">
+            <img src="assets/images/title_bottom_bg.png" alt="" class="divider-top" aria-hidden="true">
+            
+            <div class="presentation-text">
+                <p class="font-din-normal">
+                    <i style="color: yellow;" class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> &nbsp;
+                    The server and website are under development, but they are online. Your feedback/opinions are
+                    welcome as we work to improve the experience.
+                </p>
+                <p class="font-din-bold">
+                    We want to build a solid community, so any opinion counts.
+                </p>
+            </div>
+            
+            <img src="assets/images/title_bottom_bg.png" alt="" class="divider-bottom" aria-hidden="true">
+            
+            <button class="play-button" type="button" aria-label="Start playing Terra Server">
+                <i class="fa-solid fa-gamepad" aria-hidden="true"></i>
+                <span>Start Playing</span>
             </button>
-        </div>
+        </section>
 
-        <div class="information">
+        <!-- Information section -->
+        <section class="information" aria-labelledby="server-info-title">
+            <h2 id="server-info-title" class="sr-only">Server Information</h2>
+            
             <img src="assets/images/classic.png" class="logoInterlude" alt="Interlude Logo">
-            <div class="status-sv">
+            
+            <div class="status-sv" role="status" aria-live="polite">
                 <span class="font-beaufort-bold">
                     STATUS
                 </span>
-                <img class="rotating" src="assets/images/marker_green_icon.png" alt="Online Status">
+                <img class="rotating" src="assets/images/marker_green_icon.png" alt="Online Status Indicator">
             </div>
-            <div class="rates-sv">
+            
+            <div class="rates-sv" role="region" aria-labelledby="rates-title">
+                <h3 id="rates-title" class="sr-only">Server Rates</h3>
                 <div class="header-rates-sv">
                     <img src="assets/images/tn1bZ9rL7z8g3W75oqTy7QMPhYeBEVkA8yfUkY3Y.png" alt="Rates Icon">
                     <span>
@@ -92,22 +106,36 @@
                     </span>
                 </div>
                 <div class="rates">
-                    <img src="assets/images/title_bottom_bg.png" alt=""
-                        style="width: 100%;height: 10px; margin-top: -10px;">
-                    <ul>
-                        <li class="font-beaufort-regular">EXP <span class="colorRate">X3</span></li>
-                        <li class="font-beaufort-regular">SP <span class="colorRate">X3</span></li>
-                        <li class="font-beaufort-regular">DROP <span class="colorRate">X2</span></li>
-                        <li class="font-beaufort-regular">ADENA <span class="colorRate">X2</span></li>
-                        <li class="font-beaufort-regular">SPOIL <span class="colorRate">X2</span></li>
+                    <img src="assets/images/title_bottom_bg.png" alt="" style="width: 100%;height: 10px; margin-top: -10px;" aria-hidden="true">
+                    <ul role="list">
+                        <li class="font-beaufort-regular" role="listitem">EXP <span class="colorRate">X3</span></li>
+                        <li class="font-beaufort-regular" role="listitem">SP <span class="colorRate">X3</span></li>
+                        <li class="font-beaufort-regular" role="listitem">DROP <span class="colorRate">X2</span></li>
+                        <li class="font-beaufort-regular" role="listitem">ADENA <span class="colorRate">X2</span></li>
+                        <li class="font-beaufort-regular" role="listitem">SPOIL <span class="colorRate">X2</span></li>
                     </ul>
                 </div>
             </div>
-        </div>
-
+        </section>
     </div>
 
-    <div class="flame-container flame-bottom">
-        <img src="/assets/images/footer-corner.webp" alt="Flame decoration" class="flame-image flame-bottom-img">
+    <!-- Bottom flame decoration -->
+    <div class="flame-container flame-bottom" aria-hidden="true">
+        <img src="/assets/images/footer-corner.webp" alt="" class="flame-image flame-bottom-img">
     </div>
 </div>
+
+<!-- Screen reader only text -->
+<style>
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+</style>

@@ -1,14 +1,15 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, lastValueFrom } from 'rxjs';
+import { environment } from '../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatbotService {
-  private readonly WEBHOOK_URL = 'https://n8n.l2terra.online/webhook/48cb067e-63a7-42be-b22e-a015e1e8cded';
-  private readonly AUTH_USERNAME = 'ak4n1';
-  private readonly AUTH_PASSWORD = '1234567890';
+  private readonly WEBHOOK_URL = environment.WEBHOOK_URL_N8N;
+  private readonly AUTH_USERNAME = environment.AUTH_USERNAME_N8N;
+  private readonly AUTH_PASSWORD = environment.AUTH_PASSWORD_N8N;
 
   constructor(private http: HttpClient) { }
 

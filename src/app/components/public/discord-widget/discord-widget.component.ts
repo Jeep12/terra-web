@@ -1,5 +1,6 @@
 import { CommonModule } from "@angular/common"
 import { Component, type OnInit } from "@angular/core"
+import { environment } from "../../../environments/environment"
 
 interface DiscordMember {
   id: string
@@ -29,8 +30,9 @@ interface DiscordWidget {
   templateUrl: "./discord-widget.component.html",
   styleUrls: ["./discord-widget.component.css"],
 })
+
 export class DiscordWidgetComponent implements OnInit {
-  guildId = "1391560036911812780"
+  guildId = environment.API_KEY_DISCORD
   widgetData: DiscordWidget | null = null
   error: string | null = null
   isLoading = true
