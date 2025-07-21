@@ -55,8 +55,6 @@ export class BotterraComponent implements AfterViewChecked {
       const response = await this.chatbotService.sendMessageAsync(messageText);
       const botResponse = this.extractBotResponse(response);
       this.addMessage(botResponse, 'bot');
-      console.log('Respuesta del bot:', botResponse);
-      console.log('Respuesta completa:', response);
     } catch (error) {
       this.addMessage("Error al conectar con el servicio", 'bot');
       console.error('Error:', error);

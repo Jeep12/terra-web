@@ -8,11 +8,10 @@
     </div>
 
     <!-- Messages list -->
-    <div *ngFor="let message of messages; trackBy: trackByMessage" 
-         class="message-wrapper"
-         [ngClass]="{ 'user-wrapper': message.sender === 'user', 'bot-wrapper': message.sender === 'bot' }">
+    <div *ngFor="let message of messages; trackBy: trackByMessage" class="message-wrapper"
+      [ngClass]="{ 'user-wrapper': message.sender === 'user', 'bot-wrapper': message.sender === 'bot' }">
       <div class="message"
-           [ngClass]="{ 'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot' }">
+        [ngClass]="{ 'user-message': message.sender === 'user', 'bot-message': message.sender === 'bot' }">
         <div class="message-content">
           <div class="message-text" [innerHTML]="message.text"></div>
           <div class="message-time">{{ message.timestamp | date: 'shortTime' }}</div>
@@ -36,20 +35,10 @@
   <!-- Input area -->
   <div class="input-container">
     <div class="input-wrapper">
-      <input 
-        #messageInput
-        [(ngModel)]="msg" 
-        (keypress)="onKeyPress($event)"
-        [disabled]="isLoading" 
-        placeholder="Type your message..."
-        class="message-input" 
-        name="message"
-        autocomplete="off" />
-      
-      <button 
-        (click)="sendMessage()" 
-        [disabled]="!msg.trim() || isLoading" 
-        class="send-button"
+      <input #messageInput [(ngModel)]="msg" (keypress)="onKeyPress($event)" [disabled]="isLoading"
+        placeholder="Type your message..." class="message-input" name="message" autocomplete="off" />
+
+      <button (click)="sendMessage()" [disabled]="!msg.trim() || isLoading" class="send-button"
         [class.loading]="isLoading">
         <span *ngIf="!isLoading" class="send-icon">
           <i class="fa-solid fa-paper-plane"></i>

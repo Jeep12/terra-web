@@ -50,16 +50,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const authContainer = document.querySelector('.auth-container');
-    const savedTheme = localStorage.getItem('theme');
 
-    if (authContainer) {
-      if (savedTheme === 'dark') {
-        this.renderer.addClass(authContainer, 'dark-mode');
-      } else {
-        this.renderer.removeClass(authContainer, 'dark-mode');
-      }
-    }
+
   }
 
   goToNextStep(): void {

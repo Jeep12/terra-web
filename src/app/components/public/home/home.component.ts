@@ -34,16 +34,13 @@ export class HomeComponent {
 
   onLogin() {
     // Handle login logic
-    console.log('Login clicked');
   }
 
   onRegister() {
     // Handle register logic
-    console.log('Register clicked');
   }
 
   onDashboard() {
     // Handle dashboard navigation
-    console.log('Dashboard clicked');
   }
 }

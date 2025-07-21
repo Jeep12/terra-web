@@ -16,9 +16,15 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  login(credentials: { email: string; password: string }) {
-    return this.http.post(`${environment.apiUrl}api/auth/login`, credentials, { withCredentials: true });
-  }
+login(credentials: { email: string; password: string }) {
+  return this.http.post(`${environment.apiUrl}api/auth/login`, credentials, { withCredentials: true }).pipe(
+    tap(() => {
+      this.setEmail(credentials.email); 
+      this.loggedIn = true;
+    })
+  );
+}
+
   register(userData: { email: string; password: string }): Observable<any> {
     return this.http.post(`${environment.apiUrl}api/auth/register`, userData);
   }
@@ -84,13 +90,11 @@ export class AuthService {
       tap(() => this.loggedIn = true),
       map(() => true),
       catchError((error) => {
-        // Manejar errores silenciosos del interceptor
         if (error.name === 'SilentAuthError') {
           this.loggedIn = false;
           return of(false);
         }
         
-        // Manejar silenciosamente errores de autenticación
         if (error.status === 401 || error.status === 403) {
           this.loggedIn = false;
           return of(false);

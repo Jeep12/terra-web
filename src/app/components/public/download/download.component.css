@@ -1,0 +1,496 @@
+.dashboard-home-container {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #dabe64;
+  width: 100vw;
+  min-width: 100vw;
+  max-width: 100vw;
+  margin: 0;
+  font-size: 14px;
+  background-image: url('/assets/images/dragonterra2.png');
+  min-height: 100vh;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.dashboard-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.filter {
+  background: linear-gradient(to bottom,
+      rgba(0, 0, 0, 1) 0%,
+      rgba(0, 0, 0, 1) 10%,
+      rgba(0, 0, 0, 0) 100%);
+
+  width: 100%;
+  height: 100%;
+}
+
+.page-title {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+  color: #dabe64;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.page-title-icon {
+  font-size: 2rem;
+  color: #dabe64;
+}
+
+.page-subtitle {
+  font-size: 1rem;
+  color: #575757;
+  margin: 0;
+}
+
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  align-items: end;
+  justify-content: space-around;
+}
+
+
+.character-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0px 0px 15px #000000;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(218, 190, 100, 0.2);
+  position: relative;
+  width: 90%;
+  margin: auto;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #dabe64;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.card-icon {
+  font-size: 1.3rem;
+  color: #dabe64;
+}
+
+.status-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.status-active {
+  background: linear-gradient(45deg, #27ae60, #2ecc71);
+  color: white;
+}
+
+.status-inactive {
+  background: linear-gradient(45deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-help {
+  color: #a0a0a0;
+  font-size: 0.95rem;
+  margin-bottom: 1rem;
+}
+
+.account-meta {
+  background: rgba(218, 190, 100, 0.05);
+  padding: 1rem;
+  border-radius: 8px;
+  border-left: 4px solid #dabe64;
+}
+
+.account-meta p {
+  margin: 0.5rem 0;
+  color: #a0a0a0;
+}
+
+.btn {
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: linear-gradient(45deg, #746535, #998648);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(45deg, #998648, #746535);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+  background: linear-gradient(45deg, #2c3e50, #34495e);
+  color: white;
+}
+
+.btn-secondary:hover {
+  background: linear-gradient(45deg, #34495e, #2c3e50);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn-full {
+  width: 100%;
+}
+
+.installation-card {
+  grid-column: 1 / -1;
+}
+
+.instructions-section,
+.requirements-section {
+  margin-bottom: 1.5rem;
+}
+
+.instructions-title,
+.requirements-title {
+  color: #dabe64;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.instructions-list,
+.requirements-list {
+  padding-left: 1.5rem;
+  color: #a0a0a0;
+  line-height: 1.6;
+}
+
+.instructions-list li,
+.requirements-list li {
+  margin-bottom: 0.5rem;
+}
+
+.requirements-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.requirements-list li i {
+  color: #dabe64;
+  width: 16px;
+}
+
+/* Status colors */
+.text-danger {
+  color: #e74c3c !important;
+}
+
+.text-success {
+  color: #27ae60 !important;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .dashboard-home-container {
+    padding: 1rem;
+    font-size: 13px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .character-card {
+    padding: 1.25rem;
+  }
+
+  .page-title {
+    font-size: 1.75rem;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .dashboard-home-container {
+    font-size: 12px;
+    padding: 0.75rem;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .character-card {
+    padding: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Additional hover effects for download cards */
+.settings-card:hover .btn-primary {
+  box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
+}
+
+/* Icon colors for different download methods */
+.fa-server {
+  color: #27ae60;
+}
+
+.fa-google-drive {
+  color: #4285f4;
+}
+
+.fa-cloud-upload-alt {
+  color: #e74c3c;
+}
+
+.fa-file-archive {
+  color: #f39c12;
+}
+
+.fa-info-circle {
+  color: #3498db;
+}
+
+.download-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.install-block {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2.5rem;
+}
+
+.install-card {
+  background: transparent;
+  border-radius: 18px;
+  box-shadow: 0 4px 32px #000a;
+  padding: 2.5rem 2rem;
+  max-width: 600px;
+  width: 100%;
+  color: #dabe64;
+  margin: 0 auto;
+}
+
+.install-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.install-icon {
+  font-size: 2.5rem;
+  color: #3498db;
+}
+
+.install-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dabe64;
+}
+
+.install-content {
+  color: #fff;
+}
+
+.downloads-flex {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 2rem;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.download-card {
+  background: transparent;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px #0008;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  min-width: 220px;
+  max-width: 270px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  color: #fff;
+  border: none;
+}
+
+.download-card .btn {
+  margin-top: 1rem;
+}
+
+.download-icon {
+  font-size: 2.7rem;
+  margin-bottom: 0.7rem;
+  color: #dabe64;
+}
+
+.download-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.3rem;
+  color: #dabe64;
+  text-align: center;
+}
+
+.download-status {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.7rem;
+  text-align: center;
+  border-radius: 12px;
+  padding: 0.2rem 0.7rem;
+  display: inline-block;
+}
+
+.download-status.available {
+  background: linear-gradient(45deg, #27ae60, #2ecc71);
+  color: #fff;
+}
+
+.download-status.unavailable {
+  background: linear-gradient(45deg, #e74c3c, #c0392b);
+  color: #fff;
+}
+
+.download-meta {
+  font-size: 0.95rem;
+  color: #a0a0a0;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .install-card {
+    padding: 1.5rem 0.7rem;
+    max-width: 98vw;
+  }
+
+  .downloads-flex {
+    gap: 1.2rem;
+  }
+
+  .download-card {
+    min-width: 180px;
+    max-width: 98vw;
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .downloads-flex {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+  }
+
+  .install-card {
+    padding: 1rem 0.2rem;
+  }
+
+  .download-card {
+    min-width: 90vw;
+    max-width: 98vw;
+    padding: 1rem 0.2rem 0.7rem 0.2rem;
+  }
+}
+
+.btn[disabled],
+.btn:disabled {
+  background: #23232a !important;
+  color: #888 !important;
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.btn[disabled] i,
+.btn:disabled i {
+  opacity: 0.5;
+}
+
+.download-card .btn-secondary:not([disabled]) {
+  background: linear-gradient(45deg, #4285f4, #27ae60);
+  color: #fff;
+  box-shadow: 0 2px 8px #27ae6040;
+  font-weight: 700;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+
+.download-card .btn-secondary:not([disabled]):hover {
+  background: linear-gradient(45deg, #27ae60, #4285f4);
+  box-shadow: 0 4px 16px #27ae6040;
+  transform: translateY(-2px) scale(1.04);
+}
+
+.download-btn-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #dabe64;
+  margin-bottom: 0.5rem;
+  text-align: center;
+  letter-spacing: 1px;
+}

@@ -219,7 +219,6 @@
 /* Vote Section */
 .vote-section {
     border-radius: 20px;
-    padding: 2rem;
     margin-bottom: 1.5rem;
     position: relative;
     overflow: hidden;
@@ -680,5 +679,105 @@
         flex: 1;
         height: auto;
         min-height: 0;
+    }
+}
+
+.vote-section,
+.discord-widget-container {
+    font-family: 'DIN Next W1G', sans-serif;
+    font-weight: normal;
+}
+
+.vote-section-title,
+.vote-button-title {
+    font-family: 'Beaufort', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.vote-button-subtitle,
+.vote-description {
+    font-family: 'DIN Next W1G', sans-serif;
+    font-weight: normal;
+}
+
+/* Discord widget header y miembros */
+.discord-widget-container .server-header h2,
+.discord-widget-container .server-header,
+.discord-widget-container .members-section h3 {
+    font-family: 'Beaufort', sans-serif;
+    font-weight: 700;
+}
+
+.discord-widget-container,
+.discord-widget-container * {
+    font-family: 'DIN Next W1G', sans-serif;
+    font-weight: normal;
+}
+
+/* Branding especial si hay */
+.vote-section .l2font,
+.discord-widget-container .l2font {
+    font-family: 'l2font', serif;
+    font-weight: normal;
+}
+
+.vote-section-title,
+.discord-widget-container .server-header h2 {
+    font-size: 1.5rem;
+}
+
+.vote-button-title,
+.discord-widget-container .members-section h3 {
+    font-size: 1.15rem;
+}
+
+.vote-description,
+.vote-button-subtitle,
+.discord-widget-container .member-name {
+    font-size: 1rem;
+}
+
+.vote-button-subtitle,
+.vote-description {
+    opacity: 0.85;
+}
+
+/* Responsive font sizes */
+@media (max-width: 1024px) {
+
+    .vote-section-title,
+    .discord-widget-container .server-header h2 {
+        font-size: 1.25rem;
+    }
+
+    .vote-button-title,
+    .discord-widget-container .members-section h3 {
+        font-size: 1.05rem;
+    }
+
+    .vote-description,
+    .vote-button-subtitle,
+    .discord-widget-container .member-name {
+        font-size: 0.95rem;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .vote-section-title,
+    .discord-widget-container .server-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .vote-button-title,
+    .discord-widget-container .members-section h3 {
+        font-size: 0.95rem;
+    }
+
+    .vote-description,
+    .vote-button-subtitle,
+    .discord-widget-container .member-name {
+        font-size: 0.9rem;
     }
 }

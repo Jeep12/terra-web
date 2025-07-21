@@ -43,11 +43,9 @@ export class AboutComponent implements OnInit {
 
   onJoinCommunity() {
     // Add your community join logic here
-    console.log('Joining Terra community...');
   }
 
   onLearnMore() {
     // Add navigation or modal logic here
-    console.log('Learning more about Terra...');
   }
 }

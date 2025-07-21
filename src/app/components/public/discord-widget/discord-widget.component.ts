@@ -52,8 +52,6 @@ export class DiscordWidgetComponent implements OnInit {
       }
       this.widgetData = await res.json()
 
-      // Debug: ver qué datos recibimos
-      console.log("Discord widget data:", this.widgetData)
     } catch (e: any) {
       this.error = e.message || "Error loading widget"
     } finally {

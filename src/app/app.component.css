@@ -39,3 +39,29 @@
 .offcanvas-title {
     color: #dabe64;
 }
+
+/* Sobrescribir el color de la "X" del botón cerrar offcanvas */
+.btn-close {
+    filter: none !important;
+    /* Para evitar que el filtro por defecto de Bootstrap afecte */
+    background-image: none !important;
+    /* Remueve el ícono SVG por defecto */
+    color: #dabe64 !important;
+    /* Color deseado */
+    font-size: 1.5rem;
+    /* Ajusta el tamaño si quieres */
+    position: relative;
+}
+
+/* Agregar la "X" con CSS puro */
+.btn-close::before {
+    content: '×';
+    /* Símbolo de multiplicación como X */
+    color: #dabe64;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 2.5rem;
+}

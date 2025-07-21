@@ -1,0 +1,384 @@
+<div class="dashboard-home-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1 class="page-title">
+            <i class="fas fa-store page-title-icon"></i>
+            Offline Market
+        </h1>
+        <p class="page-subtitle">Offline player stores</p>
+    </div>
+
+    <!-- Stats Overview -->
+    <div class="stats-overview">
+        <div class="stat-card">
+            <i class="fas fa-store stat-icon"></i>
+            <div class="stat-number">{{ totalStores }}</div>
+            <div class="stat-label">Active Stores</div>
+        </div>
+
+        <div class="stat-card">
+            <i class="fas fa-box stat-icon"></i>
+            <div class="stat-number">{{ totalItems }}</div>
+            <div class="stat-label">Available Items</div>
+        </div>
+
+        <div class="stat-card">
+            <i class="fas fa-coins stat-icon"></i>
+            <div class="stat-number">{{ formatPrice(averagePrice) }}</div>
+            <div class="stat-label">Average Price</div>
+        </div>
+    </div>
+
+    <!-- Main Content Area -->
+    <div class="marketplace-container">
+        <!-- Left Side - Results -->
+        <div class="results-section">
+
+
+         <!-- Results Header -->
+         <div class="results-header">
+            <div class="results-info">
+                <span class="results-count">{{ filteredStores.length }} stores found</span>
+                <span class="results-sort">
+                    <i class="fas fa-sort"></i>
+                    Sort by:
+                    <select class="sort-select" [(ngModel)]="sortBy" (change)="onFilterChange()">
+                        <option value="time">Latest</option>
+                        <option value="price">Price</option>
+                        <option value="name">Name</option>
+                        <option value="enchant">Enchant Level</option>
+                    </select>
+                </span>
+            </div>
+        </div>
+
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search by store, title or item..."
+                    [(ngModel)]="searchTerm" (input)="onFilterChange()">
+            </div>
+
+   
+
+            <!-- Loading State -->
+            <div *ngIf="loading" class="loading-container">
+                <i class="fas fa-spinner fa-spin loading-icon"></i>
+                <p class="loading-text">Loading stores...</p>
+            </div>
+
+            <!-- Error State -->
+            <div *ngIf="error && !loading" class="error-container">
+                <i class="fas fa-exclamation-triangle error-icon"></i>
+                <p class="error-text">{{ error }}</p>
+                <button class="retry-btn" (click)="loadMarketData()">
+                    <i class="fas fa-refresh"></i>
+                    Retry
+                </button>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!loading && !error && filteredStores.length === 0" class="empty-state">
+                <i class="fas fa-store-slash empty-icon"></i>
+                <h3 class="empty-title">No stores available</h3>
+                <p class="empty-text">No stores matched the applied filters.</p>
+            </div>
+
+            <!-- Market Stores Grid -->
+            <div *ngIf="!loading && !error && filteredStores.length > 0" class="characters-grid">
+                <div *ngFor="let store of getPagedStores()" class="character-card">
+                    <!-- Store Type Ribbon -->
+                    <div class="ribbon ribbon-top-left">
+                        <span>{{ getStoreTypeText(store.type) }}</span>
+                    </div>
+
+                    <!-- Store Header -->
+                    <div class="card-header">
+                        <div class="card-title">
+                            <div class="character-name">{{ store.char_name }}</div>
+                            <div *ngIf="store.title" class="character-account">{{ store.title }}</div>
+                        </div>
+                        <div class="character-status">
+                            <span class="status-badge" [ngClass]="getStoreTypeClass(store.type)">
+                                <i class="fas" [ngClass]="store.type === 1 ? 'fa-shopping-cart' : 'fa-coins'"></i>
+                                {{ getStoreTypeText(store.type) }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Store Info -->
+                    <div class="character-info">
+                        <div class="info-section">
+                            <div class="info-row">
+                                <span class="info-label">
+                                    <i class="fas fa-clock"></i>
+                                    Last updated:
+                                </span>
+                                <span class="info-value">{{ formatTime(store.time) }}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">
+                                    <i class="fas fa-box"></i>
+                                    Items in stock:
+                                </span>
+                                <span class="info-value level-badge">{{ store.items.length }}</span>
+                            </div>
+                        </div>
+
+                        <!-- Store Items -->
+                        <div class="section-title">Items for sale</div>
+                        <div class="market-items">
+                            <div *ngFor="let item of store.items" class="market-item">
+                                <div class="item-header">
+                                    <div class="item-icon">
+                                        <img *ngIf="item.attributes?.icon"
+                                            [src]="'assets/icon/' + item.attributes?.icon + '.png'"
+                                            class="item-image">
+
+                                        <div *ngIf="item.enchantLevel > 0" class="enchant-badge">+{{ item.enchantLevel }}</div>
+                                    </div>
+                                    <div class="item-info">
+                                        <div class="item-name">{{ item.name }}</div>
+                                        <div class="item-type">{{ item.type }}</div>
+                                    </div>
+                                </div>
+
+                                <div class="item-details">
+                                    <div class="item-detail">
+                                        <span class="detail-label">Count:</span>
+                                        <span class="detail-value">{{ item.count }}</span>
+                                    </div>
+                                    <div class="item-detail">
+                                        <span class="detail-label">Price:</span>
+                                        <span class="detail-value price-value">{{ formatPrice(item.price) }} adena</span>
+                                    </div>
+                                    <div *ngIf="item.enchantLevel > 0" class="item-detail">
+                                        <span class="detail-label">Enchant:</span>
+                                        <span class="detail-value enchant-value">+{{ item.enchantLevel }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pagination -->
+            <div *ngIf="filteredStores.length > itemsPerPage" class="pagination-container">
+                <button class="page-btn" [disabled]="currentPage === 1" (click)="goToPage(currentPage - 1)">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+
+                <button *ngFor="let page of getPageNumbers()" class="page-btn" [ngClass]="{'active': page === currentPage}"
+                    (click)="goToPage(page)">
+                    {{ page }}
+                </button>
+
+                <span *ngIf="totalPages > 5 && currentPage < totalPages - 2" class="page-dots">...</span>
+
+                <button class="page-btn" [disabled]="currentPage === totalPages" (click)="goToPage(currentPage + 1)">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Right Side - Filters -->
+        <div class="filters-sidebar">
+            <div class="filters-header">
+                <h3 class="filters-title">
+                    <i class="fas fa-filter"></i>
+                    Filters
+                </h3>
+                <button class="clear-filters-btn" (click)="resetFilters()">
+                    <i class="fas fa-undo"></i>
+                    Clear All
+                </button>
+            </div>
+
+            <div class="filters-content">
+                <!-- Operation Type Filter -->
+                <div class="filter-section">
+                    <h4 class="filter-section-title">
+                        <i class="fas fa-exchange-alt"></i>
+                        Operation Type
+                    </h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="radio" name="operationType" value="all" [(ngModel)]="selectedOperationType" (change)="onFilterChange()">
+                            <span class="option-label">All operations</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="operationType" value="1" [(ngModel)]="selectedOperationType" (change)="onFilterChange()">
+                            <span class="option-label">Sell</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="operationType" value="3" [(ngModel)]="selectedOperationType" (change)="onFilterChange()">
+                            <span class="option-label">Buy</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Item Type Filter -->
+                <div class="filter-section">
+                    <h4 class="filter-section-title">
+                        <i class="fas fa-tag"></i>
+                        Item Type
+                    </h4>
+                    <select class="filter-select" [(ngModel)]="selectedType" (change)="onFilterChange()">
+                        <option value="all">All types</option>
+                        <option *ngFor="let type of getItemTypes()" [value]="type">{{ type }}</option>
+                    </select>
+                </div>
+
+                <!-- Price Range Filter -->
+                <div class="filter-section">
+                    <h4 class="filter-section-title">
+                        <i class="fas fa-coins"></i>
+                        Price Range (Adena)
+                    </h4>
+                    <div class="price-range">
+                        <div class="range-input-group">
+                            <input type="number" class="range-input" placeholder="Min" [(ngModel)]="minPrice"
+                                (input)="onFilterChange()" min="0">
+                            <span class="range-separator">to</span>
+                            <input type="number" class="range-input" placeholder="Max" [(ngModel)]="maxPrice"
+                                (input)="onFilterChange()" min="0">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enchant Level Filter -->
+                <div class="filter-section accordion" [class.collapsed]="accordionStates.enchant">
+                    <h4 class="filter-section-title" (click)="toggleAccordion('enchant')">
+                        <i class="fas fa-magic"></i>
+                        Enchant Level
+                    </h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="radio" name="enchantFilter" value="all" [(ngModel)]="enchantFilter" (change)="onFilterChange()">
+                            <span class="option-label">Any level</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="enchantFilter" value="0" [(ngModel)]="enchantFilter" (change)="onFilterChange()">
+                            <span class="option-label">No enchant</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="enchantFilter" value="1-3" [(ngModel)]="enchantFilter" (change)="onFilterChange()">
+                            <span class="option-label">+1 to +3</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="enchantFilter" value="4-7" [(ngModel)]="enchantFilter" (change)="onFilterChange()">
+                            <span class="option-label">+4 to +7</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="enchantFilter" value="8-10" [(ngModel)]="enchantFilter" (change)="onFilterChange()">
+                            <span class="option-label">+8 to +10</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="enchantFilter" value="11-15" [(ngModel)]="enchantFilter" (change)="onFilterChange()">
+                            <span class="option-label">+11 to +15</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="enchantFilter" value="16+" [(ngModel)]="enchantFilter" (change)="onFilterChange()">
+                            <span class="option-label">+16 or higher</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Stock Filter -->
+                <div class="filter-section accordion" [class.collapsed]="accordionStates.stock">
+                    <h4 class="filter-section-title" (click)="toggleAccordion('stock')">
+                        <i class="fas fa-boxes"></i>
+                        Stock Filter
+                    </h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="radio" name="stockFilter" value="all" [(ngModel)]="stockFilter" (change)="onFilterChange()">
+                            <span class="option-label">Any stock</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="stockFilter" value="1" [(ngModel)]="stockFilter" (change)="onFilterChange()">
+                            <span class="option-label">Single item</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="stockFilter" value="2-5" [(ngModel)]="stockFilter" (change)="onFilterChange()">
+                            <span class="option-label">2-5 items</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="stockFilter" value="6-10" [(ngModel)]="stockFilter" (change)="onFilterChange()">
+                            <span class="option-label">6-10 items</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="stockFilter" value="10+" [(ngModel)]="stockFilter" (change)="onFilterChange()">
+                            <span class="option-label">10+ items</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Crystal Type Filter -->
+                <div class="filter-section accordion" [class.collapsed]="accordionStates.crystal">
+                    <h4 class="filter-section-title" (click)="toggleAccordion('crystal')">
+                        <i class="fas fa-gem"></i>
+                        Crystal Type
+                    </h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="radio" name="crystalFilter" value="all" [(ngModel)]="crystalFilter" (change)="onFilterChange()">
+                            <span class="option-label">All crystals</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="crystalFilter" value="D" [(ngModel)]="crystalFilter" (change)="onFilterChange()">
+                            <span class="option-label">D-grade</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="crystalFilter" value="C" [(ngModel)]="crystalFilter" (change)="onFilterChange()">
+                            <span class="option-label">C-grade</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="crystalFilter" value="B" [(ngModel)]="crystalFilter" (change)="onFilterChange()">
+                            <span class="option-label">B-grade</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="crystalFilter" value="A" [(ngModel)]="crystalFilter" (change)="onFilterChange()">
+                            <span class="option-label">A-grade</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="crystalFilter" value="S" [(ngModel)]="crystalFilter" (change)="onFilterChange()">
+                            <span class="option-label">S-grade</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Time Filter -->
+                <div class="filter-section accordion" [class.collapsed]="accordionStates.time">
+                    <h4 class="filter-section-title" (click)="toggleAccordion('time')">
+                        <i class="fas fa-clock"></i>
+                        Time Filter
+                    </h4>
+                    <div class="filter-options">
+                        <label class="filter-option">
+                            <input type="radio" name="timeFilter" value="all" [(ngModel)]="timeFilter" (change)="onFilterChange()">
+                            <span class="option-label">Any time</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="timeFilter" value="1h" [(ngModel)]="timeFilter" (change)="onFilterChange()">
+                            <span class="option-label">Last hour</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="timeFilter" value="24h" [(ngModel)]="timeFilter" (change)="onFilterChange()">
+                            <span class="option-label">Last 24h</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="timeFilter" value="7d" [(ngModel)]="timeFilter" (change)="onFilterChange()">
+                            <span class="option-label">Last 7 days</span>
+                        </label>
+                        <label class="filter-option">
+                            <input type="radio" name="timeFilter" value="30d" [(ngModel)]="timeFilter" (change)="onFilterChange()">
+                            <span class="option-label">Last 30 days</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

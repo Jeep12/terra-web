@@ -1,0 +1,56 @@
+// src/app/models/character.model.ts
+
+export interface Character {
+  charId: number;
+  accountName: string;
+  charName: string;
+  level: number;
+  maxHp: number;
+  curHp: number;
+  maxCp: number;
+  curCp: number;
+  maxMp: number;
+  curMp: number;
+  face: number;
+  hairStyle: number;
+  hairColor: number;
+  sex: number;
+  heading: number;
+  x: number;
+  y: number;
+  z: number;
+  exp: number;
+  expBeforeDeath: number;
+  sp: number;
+  reputation: number;
+  fame: number;
+  raidbossPoints: number;
+  pvpkills: number;
+  pkkills: number;
+  clanid: number;
+  race: number;
+  classid: number;
+  baseClass: number;
+  deleteTime: number;
+  canCraft: number;
+  title: string;
+  titleColor: number;
+  online: number;
+  onlineTime: number;
+  lastAccess: number;
+  clanPrivs: number;
+  wantsPeace: number;
+  powerGrade: number;
+  nobless: number;
+  subPledge: number;
+  lvlJoinedAcademy: number;
+  apprentice: number;
+  sponsor: number;
+  clanJoinExpiryTime: number;
+  clanCreateExpiryTime: number;
+  bookmarkSlot: number;
+  vitalityPoints: number;
+  createDate: string; // Podés usar `Date` si lo parseás luego
+  faction: number;
+  pcCafePoints: number;
+}

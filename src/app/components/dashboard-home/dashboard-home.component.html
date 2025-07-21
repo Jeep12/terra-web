@@ -1,8 +1,471 @@
-<br>
-<br>
-<br>
-<div class="container-dashboard-home">
-
-    <h1 style="    font-family: 'Segoe UI';text-transform: uppercase;color: #dabe64;width: 100%;text-align: center;">Home Dashboard</h1>
-    <img class="logoTerra" style="display: block;margin: 20px auto;" src="assets/images/dwarfsite-dev.png" width="50%" height="700px">
+|<!-- Loading State -->
+<div *ngIf="loading" class="dashboard-home-container">
+    <div class="loading-container">
+        <div class="loading-icon">
+            <i class="fas fa-sword fa-spin"></i>
+        </div>
+        <p class="loading-text">Loading characters...</p>
+    </div>
 </div>
+
+<!-- Error State -->
+<div *ngIf="error && !loading" class="dashboard-home-container">
+    <div class="error-container">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <p class="error-text">{{ error }}</p>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div *ngIf="!loading && !error" class="dashboard-home-container">
+    <!-- Header -->
+    <div class="dashboard-header">
+        <h1 class="page-title">
+            <i class="fas fa-crown page-title-icon"></i>
+            Home Dashboard
+        </h1>
+        <p class="page-subtitle">Manage your Lineage 2 characters</p>
+    </div>
+
+    <!-- Stats Carrusel universal -->
+    <div class="stats-carousel-universal">
+        <button class="carousel-arrow" (click)="prevStats()" [disabled]="carouselIndex === 0">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="stats-cards-row">
+            <div class="stat-card" *ngFor="let stat of visibleStats">
+                <div class="stat-icon"><i [ngClass]="stat.icon"></i></div>
+                <div class="stat-number">{{ stat.value }}</div>
+                <div class="stat-label">{{ stat.label }}</div>
+            </div>
+        </div>
+        <button class="carousel-arrow" (click)="nextStats()" [disabled]="carouselIndex + visibleStatsCount >= statsArray.length">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Filters Container -->
+    <div class="filters-container">
+        <!-- Barra de búsqueda -->
+        <div class="search-bar">
+            <i class="fas fa-search search-icon"></i>
+            <input type="text" [(ngModel)]="searchTerm" (input)="applyFilters()" placeholder="Type to search..."
+                class="search-input">
+        </div>
+
+        <!-- Filtros avanzados -->
+        <div class="advanced-filters">
+            <div class="filter-group">
+                <label class="filter-label">Account:</label>
+                <select [(ngModel)]="selectedAccount" (change)="applyFilters()" class="filter-select">
+                    <option [ngValue]="null">All Accounts</option>
+                    <option *ngFor="let accountGame of accountsGames" [ngValue]="accountGame">{{ accountGame }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label class="filter-label">Race:</label>
+                <select [(ngModel)]="selectedRace" (change)="applyFilters()" class="filter-select">
+                    <option [ngValue]="null">All Races</option>
+                    <option *ngFor="let race of races" [ngValue]="race.id">{{ race.name }}</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Class:</label>
+                <select [(ngModel)]="selectedClass" (change)="applyFilters()" class="filter-select">
+                    <option [ngValue]="null">All Classes</option>
+                    <option *ngFor="let cls of classes" [ngValue]="cls.id">{{ cls.name }}</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Status:</label>
+                <select [(ngModel)]="onlineStatus" (change)="applyFilters()" class="filter-select">
+                    <option [ngValue]="null">All Statuses</option>
+                    <option *ngFor="let opt of onlineOptions" [ngValue]="opt.value">{{ opt.label }}</option>
+                </select>
+            </div>
+
+            <div class="filter-group">
+                <label class="filter-label">Level Range:</label>
+                <div class="level-range">
+                    <input type="number" [(ngModel)]="minLevel" (change)="applyFilters()" placeholder="Min"
+                        class="level-input">
+                    <span class="range-separator">-</span>
+                    <input type="number" [(ngModel)]="maxLevel" (change)="applyFilters()" placeholder="Max"
+                        class="level-input">
+                </div>
+            </div>
+
+            <button (click)="resetFilters()" class="reset-btn">
+                <i class="fas fa-redo"></i> Reset Filters
+            </button>
+        </div>
+    </div>
+
+    <h3 class="page-title">
+        <i class="fa-solid fa-users-between-lines"></i>
+        Characters
+    </h3>
+
+
+    <!-- Pagination -->
+    <div class="pagination-container" *ngIf="totalPages > 1">
+        <button class="page-btn" [disabled]="!hasPrevious" (click)="previousPage()">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <ng-container *ngFor="let page of getPageNumbers()">
+            <button *ngIf="page !== -1" class="page-btn" [class.active]="page === currentPage"
+                (click)="changePage(page)">
+                {{ page + 1 }}
+            </button>
+            <span *ngIf="page === -1" class="page-dots">...</span>
+        </ng-container>
+
+        <button class="page-btn" [disabled]="!hasNext" (click)="nextPage()">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <br>
+
+    <!-- Characters Info -->
+    <div class="characters-info" *ngIf="filteredCharacters.length !== 0">
+        <p class="characters-count">
+            Showing {{ filteredCharacters.length }} of {{ getTotalCharacters() }} characters
+            <span *ngIf="totalPages > 1">(Page {{ currentPage + 1 }} of {{ totalPages }})</span>
+            <span *ngIf="pageLoading" class="loading-indicator">
+                <i class="fas fa-spinner fa-spin"></i> Loading...
+            </span>
+        </p>
+    </div>
+
+    <!-- Characters Grid -->
+    <div class="characters-grid" [class.loading-content]="pageLoading">
+
+        <div *ngFor="let character of filteredCharacters; trackBy: trackByCharId" class="character-card"
+            [ngClass]="{ 'dead-character': character.curHp === 0 }">
+            <div *ngIf="character.curHp===0" class="ribbon ribbon-top-left"><span> &nbsp; &nbsp; &nbsp; DEAD <i
+                        class="fa-solid fa-skull-crossbones"></i></span></div>
+
+            <div class="card-header">
+                <h3 class="card-title">
+
+                    <span class="character-name">
+                        <i class="fa-regular fa-user"></i>
+                        {{ character.charName }}
+
+                    </span>
+                    <span class="character-account">
+                        <i class="fa-solid fa-user-tag"></i>
+                        {{character.accountName}}
+                    </span>
+
+                </h3>
+                <div class="character-status">
+                    <span class="status-badge" [class.status-active]="character.online === 1"
+                        [class.status-inactive]="character.online === 0">
+                        <i class="fas fa-circle"></i> {{ character.online === 1 ? 'Online' : 'Offline' }}
+                    </span>
+                </div>
+            </div>
+            <br>
+
+            <div class="character-info">
+                <!-- Basic Info -->
+                <div class="info-section">
+                    <div class="info-row"><span class="info-label">Level:</span><span class="info-value level-badge">{{
+                            character.level }}</span></div>
+                    <div class="info-row"><span class="info-label">Race:</span><span class="info-value">{{
+                            getRaceName(character.race) }}</span></div>
+                    <div class="info-row"><span class="info-label">Class:</span><span class="info-value">{{
+                            getClassName(character.classid) }}</span></div>
+                    <div class="info-row"><span class="info-label">Gender:</span><span class="info-value">{{
+                            character.sex === 0 ? 'Male' : 'Female' }}</span></div>
+                </div>
+
+                <!-- Stats Bars -->
+                <div class="stats-section">
+                    <h4 class="section-title">Stats</h4>
+                    <div class="stat-bars">
+                        <div class="stat-bar">
+                            <div class="stat-bar-header">
+                                <span class="stat-name">HP</span>
+                                <span class="stat-values">{{ character.curHp }} / {{ character.maxHp }}</span>
+                            </div>
+                            <div class="stat-bar-bg">
+                                <div class="stat-bar-fill hp-bar"
+                                    [style.width.%]="(character.curHp/character.maxHp)*100"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-header">
+                                <span class="stat-name">MP</span>
+                                <span class="stat-values">{{ character.curMp }} / {{ character.maxMp }}</span>
+                            </div>
+                            <div class="stat-bar-bg">
+                                <div class="stat-bar-fill mp-bar"
+                                    [style.width.%]="(character.curMp/character.maxMp)*100"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-header">
+                                <span class="stat-name">CP</span>
+                                <span class="stat-values">{{ character.curCp }} / {{ character.maxCp }}</span>
+                            </div>
+                            <div class="stat-bar-bg">
+                                <div class="stat-bar-fill cp-bar"
+                                    [style.width.%]="(character.curCp/character.maxCp)*100"></div>
+                            </div>
+                        </div>
+                        <div class="stat-bar">
+                            <div class="stat-bar-header">
+                                <span class="stat-name">EXP</span>
+                                <span class="stat-values">{{ getExpProgressPercentage(character) }}%</span>
+                            </div>
+                            <div class="stat-bar-bg">
+                                <div class="stat-bar-fill exp-bar"
+                                    [style.width.%]="getExpProgressPercentage(character)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="inventory-section">
+                    <button class="btn-inventory" (click)="openInventoryModal(character)">
+                        <i class="fas fa-boxes-stacked"></i> Inventory
+                    </button>
+                    <button class="btn-inventory" (click)="openWarehouseModal(character)">
+                        <i class="fas fa-warehouse"></i> Warehouse
+                    </button>
+                </div>
+
+                <div class="see-more-toggle">
+                    <button class="btn-toggle" (click)="toggleSeeMore(character.charId)">
+                        <i class="fas" [ngClass]="isSeeMore(character.charId) ? 'fa-eye-slash' : 'fa-eye'"
+                            style="margin-right: 6px;"></i>
+                        {{ isSeeMore(character.charId) ? 'See less' : 'See more' }}
+                    </button>
+                </div>
+
+                <div class="expandable-wrapper" [ngClass]="{ 'open': seeMoreMap[character.charId] }">
+                    <div class="combat-section">
+                        <h4 class="section-title">Combat Stats</h4>
+                        <div class="combat-stats">
+                            <div class="combat-stat">
+                                <div class="combat-stat-icon pvp-icon"><i class="fas fa-crosshairs"></i></div>
+                                <div class="combat-stat-info">
+                                    <div class="combat-stat-value">{{ character.pvpkills }}</div>
+                                    <div class="combat-stat-label">PvP Kills</div>
+                                </div>
+                            </div>
+                            <div class="combat-stat">
+                                <div class="combat-stat-icon pk-icon">
+                                    <i class="fas fa-skull"></i>
+                                </div>
+                                <div class="combat-stat-info">
+                                    <div class="combat-stat-value">{{ character.pkkills }}</div>
+                                    <div class="combat-stat-label">PK Kills</div>
+                                </div>
+                            </div>
+                            <div class="combat-stat">
+                                <div class="combat-stat-icon karma-icon"><i class="fa-solid fa-fire"></i>
+                                </div>
+                                <div class="combat-stat-info">
+                                    <div class="combat-stat-value">{{ character.reputation }}</div>
+
+                                    <div class="combat-stat-label">Karma</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Info -->
+                    <div class="additional-info">
+                        <div class="info-grid">
+
+                            <div class="info-item">
+                                <i class="fas fa-clock"></i>
+                                <span class="info-value">{{ formatSecondsToHM(character.onlineTime) }}</span>
+                                <div class="tooltip">Online Time</div>
+                            </div>
+
+                            <div class="info-item">
+                                <i class="fas fa-calendar"></i>
+                                <span class="info-value">{{ formatDate(character.createDate) }}</span>
+                                <div class="tooltip">Creation Date</div>
+                            </div>
+
+                            <div class="info-item">
+                                <i class="fa-solid fa-dragon"></i> &nbsp;
+                                <span class="info-value">{{ character.raidbossPoints }}</span>
+                                <div class="tooltip">Raid Boss Points</div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <br>
+
+                    <!-- Clan Info - Compact Design -->
+                    <div class="clan-compact-section" *ngIf="character.clanid">
+                        <div class="clan-header">
+                            <i class="fa-solid fa-khanda"></i>
+                            <span class="clan-title">{{ getClanById(character.clanid)?.clanName || 'Loading...' }}</span>
+                            <span *ngIf="!isClanLoaded(character.clanid)" class="clan-loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </div>
+                        
+                        <div class="clan-details">
+                            <div class="clan-badge">
+                                <span class="clan-level">Lv {{getClanById(character.clanid)?.clanLevel || 0}}</span>
+                                <span class="clan-war-status" [class.war-active]="getClanById(character.clanid)?.hasWar">
+                                    <i class="fa-solid" [ngClass]="getClanById(character.clanid)?.hasWar ? 'fa-bomb' : 'fa-dove'"></i>
+                                </span>
+                            </div>
+                            
+                            <div class="clan-stats">
+                                <div class="clan-stat">
+                                    <i class="fas fa-crown"></i>
+                                    <span>{{getClanById(character.clanid)?.leaderName || 'Unknown'}}</span>
+                                </div>
+                                <div class="clan-stat">
+                                    <i class="fa-solid fa-users"></i>
+                                    <span>{{ getClanById(character.clanid)?.totalMembers || 0 }} members</span>
+                                </div>
+                                <div class="clan-stat">
+                                    <i class="fa-solid fa-medal"></i>
+                                    <span>{{getClanById(character.clanid)?.reputationScore || 0}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container" *ngIf="totalPages > 1">
+        <button class="page-btn" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+
+        <ng-container *ngFor="let page of getPageNumbers()">
+            <button *ngIf="page !== -1" class="page-btn" [class.active]="page === currentPage"
+                (click)="changePage(page)">
+                {{ page }}
+            </button>
+            <span *ngIf="page === -1" class="page-dots">...</span>
+        </ng-container>
+
+        <button class="page-btn" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+    <!-- Empty State -->
+    <div *ngIf="characters.length === 0" class="empty-state">
+        <div class="empty-icon"><i class="fas fa-users-slash"></i></div>
+        <h3 class="empty-title">No Characters</h3>
+        <p class="empty-text">It looks like you haven't created any characters yet.</p>
+    </div>
+
+
+
+</div>
+<!-- COLOCA ESTE BLOQUE AL FINAL DEL ARCHIVO, FUERA DE CUALQUIER OTRO CONTENEDOR -->
+<div class="inventory-modal-overlay" *ngIf="showInventoryModal && selectedCharacter" (click)="showInventoryModal = false; selectedCharacter = null; detailSelected = null;">
+  <div class="inventory-warehouse-container" (click)="$event.stopPropagation()">
+    <div class="inventory-modal-header">
+      <span class="inventory-modal-title">
+        <i class="fas fa-boxes-stacked"></i>
+        {{ selectedCharacter.charName }}'s Inventory
+      </span>
+      <button class="offcanvas-close" (click)="showInventoryModal = false; selectedCharacter = null; detailSelected = null;">&times;</button>
+    </div>
+    <!-- Equipped Section -->
+    <div class="inventory-section-title"><i class="fas fa-user-shield"></i> Equipped</div>
+    <div class="equipped-row">
+      <div *ngFor="let slot of getEquippedSlots(); let i = index" class="equipped-slot" [ngClass]="{ 'empty': !slot, 'has-item': slot }">
+        <div *ngIf="slot" class="slot-content tooltip-container"
+             (mouseenter)="hoveredItem = slot" (mouseleave)="hoveredItem = null"
+             (click)="selectDetailItem(slot)">
+          <img [src]="slot.icon" [alt]="slot.name" class="item-icon inventory-icon" />
+          <span *ngIf="slot.count > 1" class="item-count">{{ slot.count }}</span>
+          <span *ngIf="slot.enchantLevel > 0" class="enchant-level">+{{ slot.enchantLevel }}</span>
+          <span class="custom-tooltip" *ngIf="hoveredItem === slot">{{ slot.name }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- Inventory Section -->
+    <div class="inventory-section-title"><i class="fas fa-boxes-stacked"></i> Inventory</div>
+    <div class="inventory-grid reinvented inventory-scroll">
+      <div *ngFor="let slot of getInventorySlots(); let i = index" class="inventory-slot reinvented-slot" [ngClass]="{ 'empty': !slot, 'has-item': slot }">
+        <div *ngIf="slot" class="slot-content tooltip-container"
+             (mouseenter)="hoveredItem = slot" (mouseleave)="hoveredItem = null"
+             (click)="selectDetailItem(slot)">
+          <img [src]="slot.icon" [alt]="slot.name" class="item-icon inventory-icon" />
+          <span *ngIf="slot.count > 1" class="item-count">{{ slot.count }}</span>
+          <span *ngIf="slot.enchantLevel > 0" class="enchant-level">+{{ slot.enchantLevel }}</span>
+          <span class="custom-tooltip" *ngIf="hoveredItem === slot">{{ slot.name }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="item-offcanvas" [class.open]="!!detailSelected">
+      <button class="offcanvas-close" (click)="detailSelected = null">&times;</button>
+      <ng-container *ngIf="detailSelected">
+        <div class="item-details-header">
+          <img [src]="detailSelected.icon" [alt]="detailSelected.name" class="item-details-icon">
+          <div class="item-details-info">
+            <h3 class="item-details-name">{{ detailSelected.name || 'Unknown Item' }}</h3>
+            <p class="item-details-type">{{ detailSelected.type || 'No Type' }}</p>
+            <div class="item-details-badges">
+              <span *ngIf="detailSelected.location === 'PAPERDOLL'" class="badge equipped-badge">
+                <i class="fas fa-shield-alt"></i> EQUIPPED
+              </span>
+              <span *ngIf="detailSelected.count > 1" class="badge count-badge">
+                <i class="fas fa-layer-group"></i> Count: {{ formatNumber(detailSelected.count) }}
+              </span>
+              <span *ngIf="detailSelected.enchantLevel > 0" class="badge enchant-badge">
+                <i class="fas fa-star"></i> +{{ detailSelected.enchantLevel }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="hasStats(detailSelected)" class="item-details-section">
+          <h4 class="section-title"><i class="fas fa-chart-bar"></i> Stats</h4>
+          <div class="stats-grid">
+            <div *ngFor="let stat of getStatsArray(detailSelected.stats)" class="stat-item">
+              <span class="stat-label">{{ stat.name }}</span>
+              <span class="stat-value">{{ stat.value }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="hasAttributes(detailSelected)" class="item-details-section">
+          <h4 class="section-title"><i class="fas fa-cogs"></i> Attributes</h4>
+          <div class="attributes-grid">
+            <div *ngFor="let attr of getAttributesArray(detailSelected.attributes)" class="attribute-item">
+              <span class="attribute-label">{{ attr.name }}</span>
+              <span class="attribute-value">{{ attr.value }}</span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!hasStats(detailSelected) && !hasAttributes(detailSelected)" class="item-details-section">
+          <h4 class="section-title"><i class="fas fa-info-circle"></i> Basic Information</h4>
+          <div class="info-grid">
+            <div class="info-item"><span class="info-label">Item ID</span><span class="info-value">{{ detailSelected.itemId }}</span></div>
+            <div class="info-item"><span class="info-label">Count</span><span class="info-value">{{ formatNumber(detailSelected.count) }}</span></div>
+            <div class="info-item"><span class="info-label">Location</span><span class="info-value">{{ detailSelected.location }}</span></div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
+<!-- END INVENTORY/WAREHOUSE MODAL OVERLAY -->

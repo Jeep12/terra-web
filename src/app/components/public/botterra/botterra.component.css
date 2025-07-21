@@ -1,9 +1,8 @@
-
 .chatbot-container {
   display: flex;
   flex-direction: column;
   height: 100%;
-  background: linear-gradient(135deg, #0a0e1a 0%, #1a1f2e 50%, #000000 100%);
+  background: linear-gradient(to bottom, #0c0f20, #000000);
   border-radius: 16px;
   overflow: hidden;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
@@ -306,6 +305,7 @@
     opacity: 0;
     transform: translateY(15px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -313,10 +313,14 @@
 }
 
 @keyframes typing {
-  0%, 60%, 100% {
+
+  0%,
+  60%,
+  100% {
     transform: translateY(0);
     opacity: 0.5;
   }
+
   30% {
     transform: translateY(-8px);
     opacity: 1;
@@ -324,9 +328,12 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: scale(1);
   }
+
   50% {
     transform: scale(1.05);
   }
@@ -337,25 +344,25 @@
   .chatbot-container {
     border-radius: 12px;
   }
-  
+
   .messages-container {
     padding: 16px;
   }
-  
+
   .message {
     max-width: 85%;
     padding: 12px 16px;
   }
-  
+
   .input-container {
     padding: 16px;
   }
-  
+
   .message-input {
     padding: 12px 16px;
     font-size: 14px;
   }
-  
+
   .send-button {
     width: 46px;
     height: 46px;

@@ -11,6 +11,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', loadComponent: () => import('./components/public/home/home.component').then(m => m.HomeComponent) },
             { path: 'gallery', loadComponent: () => import('./components/public/gallery/gallery.component').then(m => m.GalleryComponent) },
+            { path: 'downloads', loadComponent: () => import('./components/public/download/download.component').then(m => m.DownloadComponent) },
 
         ]
     },
@@ -54,7 +55,7 @@ export const routes: Routes = [
             {
                 path: '',
                 pathMatch: 'full',
-                redirectTo: 'create-account-game' // Ruta por defecto
+                redirectTo: 'home-dashboard' // Ruta por defecto
             },
             {
                 path: 'home-dashboard', // <- ¡Sin "dashboard/"!
@@ -84,8 +85,8 @@ export const routes: Routes = [
             }
             ,
             {
-                path: 'download',
-                loadComponent: () => import('./components/game/download/download.component').then(m => m.DownloadComponent)
+                path: 'offline-market',
+                loadComponent: () => import('./components/game/offline-market/offline-market.component').then(m => m.OfflineMarketComponent)
             },
             {
                 path: 'setting-account-master', // <- ¡Sin "dashboard/"!
