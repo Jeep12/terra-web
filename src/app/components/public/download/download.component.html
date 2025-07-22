@@ -1,87 +1,93 @@
-<div class="dashboard-home-container download-bg-gradient download-centered">
-  <div class="filter">
-    
-    <div class="dashboard-header">
-      <h1 class="page-title">
-        <span class="page-title-icon">
-          <i class="fas fa-download"></i>
-        </span>
-        LINEAGE 2 CLIENT DOWNLOAD
+<div class="download-fachero-bg">
+  <div class="container-flame">
+    <img src="/assets/images/footer-corner.webp" alt="" class="flame-image flame-top-img">
+  </div>
+  <video class="background-video" autoplay loop muted playsinline>
+    <source src="/assets/images/alrevez_V2.mp4" type="video/mp4">
+  </video>
+  <div class="download-overlay"></div>
+  <div class="download-content ultra-clean-layout">
+    <header class="download-header">
+      <h1 class="download-title">
+        <i class="fas fa-download download-title-icon"></i>
+        Lineage 2 Client Download
       </h1>
-      <p class="page-subtitle">Download the client from our official Google Drive link</p>
-    </div>
-
-    <div class="install-block">
-      <div class="install-card">
-        <div class="install-header">
-          <i class="fas fa-info-circle install-icon"></i>
-          <span class="install-title">Installation Instructions</span>
+      <p class="download-subtitle">Start your adventure on Terra Lineage 2!</p>
+      <div class="support-link-row">
+        <span class="support-link-text">Need help?</span>
+        <a href="#" class="support-link" onclick="document.getElementById('supportModal').style.display='flex';return false;">Support</a>
+      </div>
+    </header>
+    <div class="download-flex-main">
+      <div class="download-info-block">
+        <div class="info-section">
+          <div class="info-title"><i class="fas fa-info-circle"></i> Installation</div>
+          <ol class="info-list">
+            <li>Download the client from any available link below.</li>
+            <li>Extract the .rar file.</li>
+            <li>Open the “system” folder.</li>
+            <li>Run l2.exe.</li>
+          </ol>
         </div>
-        <div class="install-content">
-          <div class="instructions-section">
-            <h3 class="instructions-title">Installation Steps:</h3>
-            <ol class="instructions-list">
-              <li>Download the client using one of the links below</li>
-              <li>Run the installer executable</li>
-              <li>Follow the on-screen instructions</li>
-              <li>After installation, run the Lineage 2 launcher</li>
-              <li>Login with your account credentials</li>
-            </ol>
-          </div>
-          <div class="requirements-section">
-            <h3 class="requirements-title">System Requirements:</h3>
-            <ul class="requirements-list">
-              <li><i class="fas fa-desktop"></i> Windows 7/8/10 (32-bit)</li>
-              <li><i class="fas fa-microchip"></i> Intel Pentium&#64; 4 3.0 GHz o equivalente</li>
-              <li><i class="fas fa-memory"></i> 1 GB RAM</li>
-              <li><i class="fas fa-tv"></i> GeForce 6600 GT o Radeon X1600</li>
-              <li><i class="fas fa-hdd"></i> ~20 GB libres</li>
-              <li><i class="fab fa-windows"></i> DirectX 9.0c o superior</li>
-            </ul>
-          </div>
+        <div class="info-section">
+          <div class="info-title"><i class="fas fa-cogs"></i> Requirements</div>
+          <ul class="info-list">
+            <li><i class="fas fa-desktop"></i> Windows 7/8/10 (32-bit)</li>
+            <li><i class="fas fa-microchip"></i> 2 GB RAM</li>
+            <li><i class="fas fa-memory"></i> Pentium® 4 3.0 GHz</li>
+            <li><i class="fas fa-tv"></i> GeForce 6600 GT</li>
+            <li><i class="fas fa-hdd"></i> ~20 GB free space</li>
+            <li><i class="fab fa-windows"></i> DirectX 9.0c+</li>
+          </ul>
         </div>
       </div>
+      <div class="download-links-block">
+        <div class="download-links-grid">
+          <div class="download-link-item disabled">
+            <div class="download-link-icon"><i class="fas fa-download"></i></div>
+            <div class="download-link-title">Direct Download</div>
+            <div class="download-link-status unavailable"><i class="fa-solid fa-triangle-exclamation"></i> Not available</div>
+            <button class="download-btn ultra-clean-btn" disabled><i class="fas fa-download"></i> via Direct</button>
+          </div>
+          <div class="download-link-item">
+            <div class="download-link-icon"><i class="fab fa-google-drive"></i></div>
+            <div class="download-link-title">Google Drive</div>
+            <div class="download-link-status available"><i class="fa-solid fa-circle-check"></i> Available</div>
+            <a href="https://drive.google.com/file/d/1_S9uPh-92r3wzT9Rgs68itT1voq8lPHA/view?usp=sharing" class="download-btn gold ultra-clean-btn" target="_blank" rel="noopener">
+              via Drive
+            </a>
+          </div>
+          <div class="download-link-item disabled">
+            <div class="download-link-icon"><i class="fas fa-cloud-download-alt"></i></div>
+            <div class="download-link-title">MegaUpload</div>
+            <div class="download-link-status unavailable"><i class="fa-solid fa-triangle-exclamation"></i> Not available</div>
+            <button class="download-btn ultra-clean-btn" disabled><i class="fas fa-cloud-download-alt"></i> via Mega</button>
+          </div>
+          <div class="download-link-item disabled">
+            <div class="download-link-icon"><i class="fas fa-magnet"></i></div>
+            <div class="download-link-title">Torrent</div>
+            <div class="download-link-status unavailable"><i class="fa-solid fa-triangle-exclamation"></i> Not available</div>
+            <button class="download-btn ultra-clean-btn" disabled><i class="fas fa-magnet"></i> via Torrent</button>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <div class="downloads-flex">
-      <div class="download-card download-disabled">
-        <div class="download-icon"><i class="fas fa-server"></i></div>
-        <div class="download-title">Direct Download</div>
-        <div class="download-status unavailable"><i class="fa-solid fa-triangle-exclamation"></i> Unavailable</div>
-        <div class="download-meta">Version: -<br>Size: -</div>
-        <button class="btn btn-primary btn-full" disabled style="cursor: not-allowed;">
-          <i class="fas fa-download"></i> Download Now
-        </button>
-      </div>
-      <div class="download-card">
-        <div class="download-icon"><i class="fab fa-google-drive"></i></div>
-        <div class="download-title">Google Drive</div>
-        <div class="download-status available"><i class="fa-solid fa-circle-check"></i> Link Available</div>
-        <div class="download-meta">Version: (Latest)<br>Size: 10.37 GB</div>
-        <div class="download-btn-title">Download</div>
-        <a href="https://drive.google.com/file/d/1_S9uPh-92r3wzT9Rgs68itT1voq8lPHA/view?usp=sharing"
-          class="btn btn-secondary btn-full" target="_blank" rel="noopener">
-          via Google Drive
-        </a>
-      </div>
-      <div class="download-card download-disabled">
-        <div class="download-icon"><i class="fas fa-cloud-upload-alt"></i></div>
-        <div class="download-title">MegaUpload</div>
-        <div class="download-status unavailable"><i class="fa-solid fa-triangle-exclamation"></i> Unavailable</div>
-        <div class="download-meta">Version: -<br>Size: -</div>
-        <button class="btn btn-secondary btn-full" disabled style="cursor: not-allowed;">
-          <i class="fas fa-bolt"></i> Download via MegaUpload
-        </button>
-      </div>
-      <div class="download-card download-disabled">
-        <div class="download-icon"><i class="fas fa-file-archive"></i></div>
-        <div class="download-title">Torrent Download</div>
-        <div class="download-status unavailable"><i class="fa-solid fa-triangle-exclamation"></i> Unavailable</div>
-        <div class="download-meta">Version: -<br>Size: -</div>
-        <button class="btn btn-secondary btn-full" disabled style="cursor: not-allowed;">
-          <i class="fas fa-magnet"></i> Download via Torrent
-        </button>
+    <div id="supportModal" class="support-modal" style="display:none;">
+      <div class="support-modal-content">
+        <span class="support-modal-title"><i class="fas fa-user-lock"></i> Support Access</span>
+        <p class="support-modal-message">
+          To access the support section, you need to have an account and be logged in.<br>
+          Please create an account or log in to continue.
+        </p>
+        <button class="download-btn gold ultra-clean-btn support-modal-close" onclick="document.getElementById('supportModal').style.display='none';">Close</button>
       </div>
     </div>
   </div>
+
+</div>
+<div class="nk-page-border">
+  <div class="nk-page-border-t"></div>
+  <div class="nk-page-border-r"></div>
+  <div class="nk-page-border-b"></div>
+  <div class="nk-page-border-l"></div>
 </div>

@@ -206,3 +206,126 @@ body.dark-mode {
     font-weight: bold;
     font-size: 12px;
 }
+
+.nk-page-border .nk-page-border-t,
+.nk-page-border .nk-page-border-r,
+.nk-page-border .nk-page-border-b,
+.nk-page-border .nk-page-border-l {
+  position: fixed;
+  z-index: 2000;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  user-drag: none;
+  pointer-events: none;
+  background-size: 100% 100%;
+}
+
+.nk-page-border .nk-page-border-t,
+.nk-page-border .nk-page-border-b {
+  left: 0;
+  width: 100%;
+}
+
+
+
+.nk-page-border .nk-page-border-b {
+  bottom: 0;
+  background-image: url("/assets/images/border-bottom.png");
+}
+
+.nk-page-border .nk-page-border-r,
+.nk-page-border .nk-page-border-l {
+  top: 0;
+  height: 100%;
+}
+
+.nk-page-border .nk-page-border-r {
+  right: 0;
+  background-image: url("/assets/images/border-right.png");
+}
+.nk-page-border .nk-page-border-l {
+  left: 0;
+  background-image: url("/assets/images/border-left.png");
+}
+
+.nk-page-border .nk-page-border-t,
+.nk-page-border .nk-page-border-b {
+  height: 100px;
+}
+
+.nk-page-border .nk-page-border-r,
+.nk-page-border .nk-page-border-l {
+  width: 100px;
+}
+
+@media (max-width: 543px) {
+
+  .nk-page-border .nk-page-border-t,
+  .nk-page-border .nk-page-border-b {
+    height: 50px;
+  }
+
+  .nk-page-border .nk-page-border-r,
+  .nk-page-border .nk-page-border-l {
+    width: 50px;
+  }
+}
+
+/* Scrollbar fachera global */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 8px;
+  background: linear-gradient(to bottom, #000000, #111111f5);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #dabe64 60%, #bfa23a 100%);
+  border-radius: 8px;
+  box-shadow: 0 0 8px #dabe6440;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #fff2b0 60%, #dabe64 100%);
+  box-shadow: 0 0 16px #dabe64a0;
+}
+::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, #000000, #111111f5);
+  border-radius: 8px;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #dabe64 #111111f5;
+}
+
+/* Opcional: para que el body nunca muestre scrollbars gruesas en ningún navegador */
+body {
+  scrollbar-width: thin;
+}
+
+/* Scrollbar invisible pero funcional */
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: none;
+  scrollbar-color: transparent transparent;
+}
+body {
+  scrollbar-width: none;
+}
