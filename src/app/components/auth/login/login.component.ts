@@ -8,11 +8,12 @@ import { AuthService } from "../../../services/auth.service"
 import { NgOptimizedImage } from '@angular/common';
 import { GoogleAuthService } from "../../../services/google-auth.service"
 import { MagicCrystalComponent } from "../../magic-crystal/magic-crystal.component";
+import { PreloadComponent } from '../../public/preload/preload.component';
 
 @Component({
   selector: "app-login",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage, RouterModule, MagicCrystalComponent],
+  imports: [CommonModule, ReactiveFormsModule, NgOptimizedImage, RouterModule, MagicCrystalComponent, PreloadComponent],
   templateUrl: "./login.component.html",
   styleUrls: ["./login.component.css"],
 })

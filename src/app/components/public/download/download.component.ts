@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
+import { PreloadComponent } from '../preload/preload.component';
 
 @Component({
   selector: 'app-download',
-  imports: [],
+  imports: [PreloadComponent],
   templateUrl: './download.component.html',
   styleUrl: './download.component.css'
 })

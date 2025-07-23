@@ -12,13 +12,14 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { GoogleAuthService } from "../../../services/google-auth.service"
 import { MagicCrystalComponent } from '../../magic-crystal/magic-crystal.component';
+import { PreloadComponent } from '../../public/preload/preload.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,MagicCrystalComponent],
+  imports: [CommonModule, ReactiveFormsModule,MagicCrystalComponent, PreloadComponent],
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.css'],
 })

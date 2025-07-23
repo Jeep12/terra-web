@@ -5,10 +5,11 @@ import { CarrouselHomeComponent } from "../carrousel-home/carrousel-home.compone
 import { AboutComponent } from "../about/about.component";
 import { DiscordWidgetComponent } from "../discord-widget/discord-widget.component";
 import { StreamersSectionComponent } from "../streamers-section/streamers-section.component";
+import { PreloadComponent } from '../preload/preload.component';
 
 @Component({
   selector: 'app-home',
-  imports: [RouterModule, CommonModule, AboutComponent, CarrouselHomeComponent, StreamersSectionComponent,],
+  imports: [RouterModule, CommonModule, AboutComponent, CarrouselHomeComponent, StreamersSectionComponent, PreloadComponent],
   standalone: true,
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'

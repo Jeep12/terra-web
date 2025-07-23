@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { DiscordWidgetComponent } from "../discord-widget/discord-widget.component";
+import { PreloadComponent } from '../preload/preload.component';
 
 @Component({
   selector: 'app-about',
-  imports: [CommonModule, DiscordWidgetComponent],
+  standalone: true,
+  imports: [PreloadComponent, CommonModule, DiscordWidgetComponent],
   templateUrl: './about.component.html',
-  styleUrl: './about.component.css'
+  styleUrls: ['./about.component.css']
 })
 export class AboutComponent implements OnInit {
 

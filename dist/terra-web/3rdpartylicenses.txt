@@ -41,6 +41,11 @@ License: "Apache-2.0"
 
 
 --------------------------------------------------------------------------------
+Package: gsap
+License: "Standard 'no charge' license: https://gsap.com/standard-license."
+
+
+--------------------------------------------------------------------------------
 Package: @angular/forms
 License: "MIT"
 
