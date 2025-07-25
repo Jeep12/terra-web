@@ -6,7 +6,7 @@ import { MiniAk4n1Component } from "./components/public/mini-ak4n1/mini-ak4n1.co
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, BotterraComponent],
+  imports: [RouterOutlet, BotterraComponent, SpriteBotComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
