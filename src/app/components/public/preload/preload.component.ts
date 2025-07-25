@@ -14,6 +14,8 @@ export class PreloadComponent implements AfterViewInit {
   @ViewChild('preloaderBG', { static: true }) preloaderBGRef!: ElementRef;
   @ViewChild('skipBtn', { static: true }) skipBtnRef!: ElementRef;
   @ViewChild('content', { static: true }) contentRef!: ElementRef;
+  @ViewChild('preloadLogo') preloadLogo!: ElementRef<HTMLImageElement>;
+  @ViewChild('preloadAnim') preloadAnim!: ElementRef<HTMLDivElement>;
 
   constructor(private renderer: Renderer2, private host: ElementRef) {}
 
@@ -52,7 +54,7 @@ export class PreloadComponent implements AfterViewInit {
     }
 
     // Fade out del preloader y contenido
-    function fadeOutPreloader(cb: () => void) {
+    function fadeOutPreloader(cb?: () => void) {
       TweenMax.to([content, skipBtn], 0.3, {
         y: -20,
         opacity: 0,
@@ -68,25 +70,6 @@ export class PreloadComponent implements AfterViewInit {
       });
     }
 
-    // Cerrar preloader (animación color)
-    function closePreloader(cb?: () => void) {
-      prepareImage(closeSprites, closeFrames);
-      preloaderBG.style.backgroundColor = 'transparent';
-      animateBG(closeFrames, closeSpeed, 0, 100, function() {
-        fadeOutPreloader(cb || (() => {}));
-      });
-    }
-
-    // Abrir preloader (animación BW)
-    function openPreloader(cb?: () => void) {
-      preloader.style.opacity = 1;
-      preloader.style.display = 'block';
-      prepareImage(openSprites, openFrames);
-      preloaderBG.style.backgroundColor = 'transparent';
-      animateBG(openFrames, openSpeed, 100, 0, cb || (() => {}));
-      TweenMax.set([content, skipBtn], {y: 0, opacity: 1, display: 'block'});
-    }
-
     // Mostrar BW al inicio
     prepareImage(openSprites, openFrames);
     preloader.style.opacity = 1;
@@ -95,14 +78,50 @@ export class PreloadComponent implements AfterViewInit {
 
     // Al cargar el componente, animar a color y ocultar
     setTimeout(() => {
-      closePreloader();
+      this.closePreloader(preloader, preloaderBG, skipBtn, content, closeSprites, closeFrames, closeSpeed, prepareImage, animateBG, fadeOutPreloader);
     }, 500); // Puedes ajustar el tiempo si quieres que dure más/menos
 
     // Botón saltar
     if (skipBtn) {
       this.renderer.listen(skipBtn, 'click', () => {
-        closePreloader();
+        this.closePreloader(preloader, preloaderBG, skipBtn, content, closeSprites, closeFrames, closeSpeed, prepareImage, animateBG, fadeOutPreloader);
       });
     }
+  }
+
+  // Nueva versión como método de clase
+  private closePreloader(
+    preloader: HTMLElement,
+    preloaderBG: HTMLElement,
+    skipBtn: HTMLElement,
+    content: HTMLElement,
+    closeSprites: string,
+    closeFrames: number,
+    closeSpeed: number,
+    prepareImage: (img: string, frames: number) => void,
+    animateBG: (frames: number, speed: number, from: number, to: number, cb: () => void) => void,
+    fadeOutPreloader: (cb?: () => void) => void,
+    cb?: () => void
+  ) {
+    // Fade out rápido SOLO del logo y la animación (0.05s = 50ms)
+    if (this.preloadLogo && this.preloadLogo.nativeElement) {
+      TweenMax.to(this.preloadLogo.nativeElement, 0.05, {
+        opacity: 0,
+        display: 'none',
+        force3D: true
+      });
+    }
+    if (this.preloadAnim && this.preloadAnim.nativeElement) {
+      TweenMax.to(this.preloadAnim.nativeElement, 1, {
+        opacity: 0,
+        display: 'none',
+        force3D: true
+      });
+    }
+    prepareImage(closeSprites, closeFrames);
+    preloaderBG.style.backgroundColor = 'transparent';
+    animateBG(closeFrames, closeSpeed, 0, 100, function() {
+      fadeOutPreloader(cb || (() => {}));
+    });
   }
 }

@@ -3,11 +3,12 @@ import { Component, OnInit, Renderer2 } from "@angular/core";
 import { FormBuilder, type FormGroup, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { AuthService } from "../../../services/auth.service";
+import { PreloadComponent } from "../../public/preload/preload.component";
 
 @Component({
   selector: "app-forgot-password",
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,PreloadComponent],
   templateUrl: "./forgot-password.component.html",
   styleUrls: ["./forgot-password.component.css"],
 })

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Página 3</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navegación simple para probar el preloader -->
+    <nav style="position:fixed;top:10px;left:10px;z-index:4000;">
+        <a href="index.html">Inicio</a> |
+        <a href="page2.html">Página 2</a> |
+        <a href="page3.html">Página 3</a>
+    </nav>
+    <!-- END navegación -->
+    <div class="nk-preloader">
+        <div class="nk-preloader-bg" style="background-color: #000;" data-close-frames="23" data-close-speed="1.2" data-close-sprites="preloader-bg.png" data-open-frames="23" data-open-speed="1.2" data-open-sprites="preloader-bg-bw.png">
+        </div>
+        <div class="nk-preloader-content">
+            <div>
+                <div class="nk-preloader-animation"></div>
+            </div>
+        </div>
+        <div class="nk-preloader-skip">Saltar</div>
+    </div>
+    <!-- END: Page Preloader -->
+    <main style="margin-top:80px;text-align:center;color:white;">
+        <h1>Página 3</h1>
+        <p>Este es el contenido de la página 3. Usa los enlaces para navegar y probar el preloader.</p>
+    </main>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/plugins/EasePack.min.js"></script>
+    <script src="nuestro_preload.js"></script>
+</body>
+</html> 

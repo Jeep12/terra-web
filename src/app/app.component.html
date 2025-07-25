@@ -1,10 +1,6 @@
 <router-outlet></router-outlet>
 
-<!-- Botón para abrir -->
-<button class="button-assistant" type="button" data-bs-toggle="offcanvas" data-bs-target="#offCanvasChat"
-    aria-controls="offCanvasChat">
-    <i class="fa-solid fa-robot" style="pointer-events: none;"></i>
-</button>
+
 
 <!-- Acá sí el offcanvas envuelve al componente -->
 <div class="offcanvas offcanvas-end chatbot-container" tabindex="-1" id="offCanvasChat"
@@ -20,3 +16,6 @@
         <app-botterra></app-botterra>
     </div>
 </div>
+
+<app-sprite-bot data-bs-toggle="offcanvas" data-bs-target="#offCanvasChat"
+    aria-controls="offCanvasChat"></app-sprite-bot>

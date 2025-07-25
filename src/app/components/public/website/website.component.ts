@@ -1,8 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, HostListener, OnInit, OnDestroy } from "@angular/core";
-import { RouterModule } from "@angular/router";
-import { Observable, Subject } from "rxjs";
+import { NavigationStart, NavigationEnd, Router, RouterModule, ActivatedRoute, RouterEvent } from '@angular/router';
+import { filter, Observable, Subject } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
+import { PreloaderService } from "../../../services/preloader.service";
 
 @Component({
   selector: "app-website",
@@ -16,8 +17,14 @@ export class WebsiteComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   isMenuOpen = false;
 
-  constructor(private authService: AuthService) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute,
+    public preloadService: PreloaderService
+  ) {
     this.isLoggedIn$ = this.authService.isLoggedIn();
+
   }
 
   ngOnInit(): void { }

@@ -3,13 +3,14 @@ import { Component, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { PreloadComponent } from '../../public/preload/preload.component';
 
 declare var bootstrap: any;
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule,PreloadComponent],
   templateUrl: './reset-password.component.html',
   styleUrls: ['./reset-password.component.css']
 })

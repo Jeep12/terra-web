@@ -3,13 +3,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../services/auth.service';
+import { PreloadComponent } from '../../public/preload/preload.component';
 
 @Component({
   standalone: true,
   selector: 'app-resend-email-verification',
   templateUrl: './resend-email-verification.component.html',
   styleUrls: ['./resend-email-verification.component.css'],
-  imports: [CommonModule, FormsModule]
+  imports: [CommonModule, FormsModule,PreloadComponent]
 })
 export class ResendEmailVerificationComponent implements OnInit {
   email: string = '';

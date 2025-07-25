@@ -1,0 +1,22 @@
+<div class="sprite-bot-container" #container>
+  <div class="box">
+    <!-- Selector de personaje -->
+
+    <!-- Sprite activo -->
+    <img 
+      [src]="spriteUrl" 
+      [ngStyle]="spriteStyle" 
+      alt="Sprite Bot" 
+      (mouseenter)="onHover()" 
+      (mouseleave)="onLeave()" 
+      (click)="onClick()"
+      tabindex="0"
+      aria-label="Caballero animado interactivo"
+    />
+    <div *ngIf="dialogMessage" class="sprite-dialog"
+      [ngStyle]="{ left: x + '%', bottom: '90px', transform: 'translateX(-50%)' }">
+      {{ dialogMessage }}
+      <div class="sprite-dialog-triangle"></div>
+    </div>
+  </div>
+</div>

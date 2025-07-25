@@ -95,8 +95,7 @@
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
-                <a routerLink="/downloads" (click)="closeMenu()" routerLinkActive="active-mobile-link"
-                    class="mobile-nav-link">
+                <a routerLink="/downloads" routerLinkActive="active-mobile-link" class="mobile-nav-link">
                     <i class="fas fa-download"></i>
                     <span>Downloads</span>
                 </a>
@@ -167,6 +166,4 @@
     </div>
 </nav>
 
-<div class="container-website">
-    <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>

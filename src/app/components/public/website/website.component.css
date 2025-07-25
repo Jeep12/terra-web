@@ -129,11 +129,12 @@
 }
 
 .logo-icon {
-  width: 50px;
+  width: 40px;
   height: 32px;
   display: flex;
-  align-items: center;
+  align-items: end;
   justify-content: center;
+  filter: drop-shadow(0px 0px 15px white);
 }
 
 .logo-icon img {
@@ -165,8 +166,24 @@
   text-decoration: none;
   color: white;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: bolder;
   transition: color 0.2s;
+  font-family: "Marcellus SC";
+  letter-spacing: 1px;
+  cursor: pointer;
+  text-shadow: 0px 0px 15px #dabe64;
+  font-style: oblique;
+}
+
+.nav-link i {
+  color: #dabe64;
+}
+
+.nav-link span::first-letter {
+  font-size: 15px;
+  font-weight: 1000;
+  color: #dabe64;
+
 }
 
 .nav-link:hover,
@@ -200,6 +217,8 @@
   text-decoration: none;
   border: none;
   cursor: pointer;
+  font-family: "Marcellus SC";
+
 }
 
 .btn-primary {
@@ -423,4 +442,25 @@
   .desktop-social {
     display: flex;
   }
+}
+
+.preload-black-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #000;
+  z-index: 2999;
+  pointer-events: none;
+}
+
+app-preload-open {
+  z-index: 3000;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  pointer-events: none;
 }
