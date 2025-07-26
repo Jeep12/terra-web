@@ -53,7 +53,7 @@ export class BotSpriteComponent {
   config = {
     // ===== CONFIGURACIÓN DE ANIMACIÓN =====
     assetBasePath: 'https://assets.l2terra.online/sprites/Skeleton_Crusader_1/PNG/PNG%20Sequences/',
-    defaultFrameRate: 24,
+    defaultFrameRate: 12,
 
     // ===== CONFIGURACIÓN DE MOVIMIENTO =====
     movementSpeed: 1.5,
@@ -154,6 +154,7 @@ export class BotSpriteComponent {
   private _frameTime = 0;
   private _lastFrameTimestamp = performance.now();
   private _animationFrameId: any;
+  private _imageCache: Map<string, HTMLImageElement> = new Map();
 
   // Variables de posición y movimiento
   currentX = this.config.initialX;
@@ -235,6 +236,9 @@ export class BotSpriteComponent {
     // Aplicar configuración CSS
     this.applyCSSConfig();
 
+    // Precargar imágenes para mejor rendimiento
+    this.preloadImages();
+
     this.startAnimation();
     this.startMovement();
 
@@ -298,6 +302,26 @@ export class BotSpriteComponent {
       element.style.transition = 'none';
       element.style.zIndex = '1000';
     }
+  }
+
+  private preloadImages() {
+    // Precargar las primeras imágenes de cada animación para mejor rendimiento
+    const animations = Object.keys(this.config.animations) as AnimationKey[];
+    
+    animations.forEach(animKey => {
+      const anim = this.config.animations[animKey];
+      if (anim) {
+        // Precargar solo los primeros 3 frames de cada animación
+        for (let i = 0; i < Math.min(3, anim.frames); i++) {
+          const frameNumber = i.toString().padStart(3, '0');
+          const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
+          
+          const img = new Image();
+          img.src = src;
+          this._imageCache.set(src, img);
+        }
+      }
+    });
   }
 
   startAnimation() {
@@ -594,10 +618,11 @@ export class BotSpriteComponent {
     const frameNumber = this.currentFrame.toString().padStart(3, '0');
     const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
     
-    // Debug: log the source URL
-    console.log(`🎮 [getFrameSrc] Animation: ${this.animation}, Frame: ${frameNumber}, Src: ${src}`);
+    // Debug: log the source URL (solo en desarrollo)
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      console.log(`🎮 [getFrameSrc] Animation: ${this.animation}, Frame: ${frameNumber}, Src: ${src}`);
+    }
     
-    // Try without encoding first to see if that's the issue
     return src;
   }
 
@@ -777,8 +802,11 @@ export class BotSpriteComponent {
 
   onImageError(event: Event) {
     const img = event.target as HTMLImageElement;
-    console.error(`❌ Error cargando imagen: ${img.src}`);
-    console.error('🎮 Verificar CORS o ruta del asset');
+    // Solo mostrar errores en desarrollo
+    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+      console.error(`❌ Error cargando imagen: ${img.src}`);
+      console.error('🎮 Verificar CORS o ruta del asset');
+    }
   }
 
   die() {
