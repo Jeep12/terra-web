@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { BotterraComponent } from './components/public/botterra/botterra.component';
-import { SpriteBotComponent } from './components/public/sprite-bot/sprite-bot.component';
-import { MiniAk4n1Component } from "./components/public/mini-ak4n1/mini-ak4n1.component";
+import { BotSpriteComponent } from "./components/public/bot-sprite/bot-sprite.component";
+
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, BotterraComponent, SpriteBotComponent],
+  imports: [RouterOutlet, BotterraComponent, BotSpriteComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

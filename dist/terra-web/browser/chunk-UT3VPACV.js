@@ -1,1 +1,0 @@
-import{$a as n,Gb as a,rb as o,sb as l}from"./chunk-TAN2J6X4.js";var p=class t{static \u0275fac=function(e){return new(e||t)};static \u0275cmp=n({type:t,selectors:[["app-gallery"]],decls:2,vars:0,template:function(e,i){e&1&&(o(0,"p"),a(1,"gallery works!"),l())},encapsulation:2})};export{p as GalleryComponent};
