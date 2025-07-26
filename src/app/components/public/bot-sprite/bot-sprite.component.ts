@@ -52,14 +52,14 @@ export class BotSpriteComponent {
   // Configuración del personaje
   config = {
     // ===== CONFIGURACIÓN DE ANIMACIÓN =====
-    assetBasePath: 'https://assets.l2terra.online/sprites/Skeleton_Crusader_1/PNG/PNG%20Sequences/',
-    defaultFrameRate: 12,
+    assetBasePath: 'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/',
+    defaultFrameRate: 18,
 
     // ===== CONFIGURACIÓN DE MOVIMIENTO =====
     movementSpeed: 1.5,
     dragSmooth: 1.12,
-    movementSmooth: 0.04,
-    idleSmooth: 0.95,
+    movementSmooth: 0.08,
+    idleSmooth: 1.95,
 
     // ===== CONFIGURACIÓN DE FÍSICA =====
     gravity: 3,
@@ -101,9 +101,9 @@ export class BotSpriteComponent {
     enableJump: true,
 
     // ===== CONFIGURACIÓN DE TIMING =====
-    autoWalkInterval: 6000,
-    autoBlinkInterval: 4000,
-    randomDialogInterval: 6000,
+    autoWalkInterval: 4000,
+    autoBlinkInterval: 3000,
+    randomDialogInterval: 5000,
     blinkDuration: 600,
     fallAnimationDuration: 800,
     deathAnimationDuration: 1500,
@@ -170,6 +170,7 @@ export class BotSpriteComponent {
   // Estados del personaje
   state: CharacterState = 'idle';
   isLoaded = false;
+  isImagesLoaded = false;
   isFalling = false;
   fallSpeed = 0;
   isJumping = false;
@@ -237,7 +238,6 @@ export class BotSpriteComponent {
     this.applyCSSConfig();
 
     // Precargar imágenes para mejor rendimiento
-    this.preloadImages();
 
     this.startAnimation();
     this.startMovement();
@@ -255,6 +255,9 @@ export class BotSpriteComponent {
     if (this.config.enableAutoWalk) {
       this.startAutoWalk();
     }
+
+    this.preloadAllImages();
+
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -304,26 +307,91 @@ export class BotSpriteComponent {
     }
   }
 
-  private preloadImages() {
-    // Precargar las primeras imágenes de cada animación para mejor rendimiento
+  private preloadAllImages() {
+    console.log('🎮 Iniciando precarga completa de todas las imágenes...');
+
     const animations = Object.keys(this.config.animations) as AnimationKey[];
-    
+    let totalImages = 0;
+    let loadedImages = 0;
+    let failedImages = 0;
+
+    // Contar total de imágenes
     animations.forEach(animKey => {
       const anim = this.config.animations[animKey];
       if (anim) {
-        // Precargar solo los primeros 3 frames de cada animación
-        for (let i = 0; i < Math.min(3, anim.frames); i++) {
+        totalImages += anim.frames;
+      }
+    });
+
+    console.log(`🎮 Total de imágenes a cargar: ${totalImages}`);
+
+    // Precargar TODAS las imágenes de cada animación
+    animations.forEach(animKey => {
+      const anim = this.config.animations[animKey];
+      if (anim) {
+        for (let i = 0; i < anim.frames; i++) {
           const frameNumber = i.toString().padStart(3, '0');
           const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
-          
+
           const img = new Image();
+          img.onload = () => {
+            loadedImages++;
+            this._imageCache.set(src, img);
+
+            // Log progreso cada 10 imágenes
+            if (loadedImages % 10 === 0) {
+              console.log(`🎮 Progreso: ${loadedImages}/${totalImages} imágenes cargadas`);
+            }
+
+            // Si todas las imágenes están cargadas, iniciar el sprite
+            if (loadedImages + failedImages === totalImages) {
+              this.onAllImagesLoaded();
+            }
+          };
+
+          img.onerror = () => {
+            failedImages++;
+            console.log(`❌ Error cargando: ${src}`);
+
+            // Si todas las imágenes están procesadas, iniciar el sprite
+            if (loadedImages + failedImages === totalImages) {
+              this.onAllImagesLoaded();
+            }
+          };
+
           img.src = src;
-          this._imageCache.set(src, img);
         }
       }
     });
   }
 
+  private onAllImagesLoaded() {
+    console.log(`🎮 Precarga completada! ${this._imageCache.size} imágenes en cache`);
+
+    this.isImagesLoaded = true;
+    this.isLoaded = true;
+
+    // Aplicar configuración CSS
+    this.applyCSSConfig();
+
+    // Iniciar animación y movimiento
+    this.startAnimation();
+    this.startMovement();
+
+    // Mostrar diálogo inicial
+    this.setDialog(this.config.defaultDialog, 3000);
+
+    // Inicializar características según configuración
+    if (this.config.enableAutoBlink) {
+      this.startAutoBlink();
+    }
+    if (this.config.enableRandomDialog) {
+      this.startRandomDialog();
+    }
+    if (this.config.enableAutoWalk) {
+      this.startAutoWalk();
+    }
+  }
   startAnimation() {
     if (this._animationFrameId) {
       cancelAnimationFrame(this._animationFrameId);
@@ -345,7 +413,7 @@ export class BotSpriteComponent {
   }
 
   update() {
-    if (!this.isLoaded) return;
+    if (!this.isImagesLoaded) return;
 
     const anim = this.config.animations[this.animation];
     if (!anim) {
@@ -617,12 +685,17 @@ export class BotSpriteComponent {
 
     const frameNumber = this.currentFrame.toString().padStart(3, '0');
     const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
-    
+
+    // Usar imagen del cache si está disponible
+    const cachedImg = this._imageCache.get(src);
+    if (cachedImg) {
+      return cachedImg.src;
+    }
     // Debug: log the source URL (solo en desarrollo)
     if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
       console.log(`🎮 [getFrameSrc] Animation: ${this.animation}, Frame: ${frameNumber}, Src: ${src}`);
     }
-    
+
     return src;
   }
 
