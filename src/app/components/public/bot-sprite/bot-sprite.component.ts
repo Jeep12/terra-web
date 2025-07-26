@@ -594,8 +594,11 @@ export class BotSpriteComponent {
     const frameNumber = this.currentFrame.toString().padStart(3, '0');
     const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
     
-    // Encode the URL to handle spaces properly
-    return encodeURI(src);
+    // Debug: log the source URL
+    console.log(`🎮 [getFrameSrc] Animation: ${this.animation}, Frame: ${frameNumber}, Src: ${src}`);
+    
+    // Try without encoding first to see if that's the issue
+    return src;
   }
 
   // ===== EVENT HANDLERS PARA DRAG & DROP CORREGIDOS =====
@@ -774,7 +777,8 @@ export class BotSpriteComponent {
 
   onImageError(event: Event) {
     const img = event.target as HTMLImageElement;
-    // Error silencioso - la imagen no se pudo cargar
+    console.error(`❌ Error cargando imagen: ${img.src}`);
+    console.error('🎮 Verificar CORS o ruta del asset');
   }
 
   die() {
