@@ -55,10 +55,16 @@ export class BotSpriteComponent {
     assetBasePath: 'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/',
     defaultFrameRate: 18,
 
+    // ===== CONFIGURACIÓN DE CARGA DE IMÁGENES =====
+    enableProgressiveLoading: true,  // Carga progresiva por prioridades
+    enableLazyLoading: false,        // Solo cargar cuando se necesite
+    loadingBatchSize: 3,             // Cuántas animaciones cargar por lote
+    loadingDelay: 50,                // ms entre cargas para no bloquear UI
+
     // ===== CONFIGURACIÓN DE MOVIMIENTO =====
-    movementSpeed: 1.5,
+    movementSpeed: 0.5,
     dragSmooth: 1.12,
-    movementSmooth: 0.08,
+    movementSmooth: 0.1,
     idleSmooth: 1.95,
 
     // ===== CONFIGURACIÓN DE FÍSICA =====
@@ -130,7 +136,7 @@ export class BotSpriteComponent {
       fallingDown: { folder: 'Falling Down', frames: 6 },
       hurt: { folder: 'Hurt', frames: 12 },
       idle: { folder: 'Idle', frames: 18 },
-      idleBlinking: { folder: 'Idle Blinking', frames: 18 },
+      idleBlinking: { folder: 'Idle Blinking', frames: 18 },  
       jumpLoop: { folder: 'Jump Loop', frames: 6 },
       jumpStart: { folder: 'Jump Start', frames: 6 },
       kicking: { folder: 'Kicking', frames: 12 },
@@ -237,10 +243,8 @@ export class BotSpriteComponent {
     // Aplicar configuración CSS
     this.applyCSSConfig();
 
-    // Precargar imágenes para mejor rendimiento
-
-    this.startAnimation();
-    this.startMovement();
+    // ✅ CAMBIO PRINCIPAL: Iniciar inmediatamente con animación básica
+    this.startBasicMode();
 
     // Mostrar diálogo inicial
     this.setDialog(this.config.defaultDialog, 3000);
@@ -256,8 +260,10 @@ export class BotSpriteComponent {
       this.startAutoWalk();
     }
 
-    this.preloadAllImages();
-
+    // ✅ Precargar en segundo plano sin bloquear
+    if (this.config.enableProgressiveLoading) {
+      this.preloadImagesInBackground();
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -307,91 +313,119 @@ export class BotSpriteComponent {
     }
   }
 
-  private preloadAllImages() {
-    console.log('🎮 Iniciando precarga completa de todas las imágenes...');
+  // ✅ NUEVOS MÉTODOS OPTIMIZADOS PARA CARGA
 
+  private startBasicMode() {
+    console.log('🎮 Iniciando en modo básico mientras se cargan las imágenes...');
+    
+    // Solo precargar las imágenes de la animación idle para empezar
+    this.preloadAnimation('idle').then(() => {
+      this.isImagesLoaded = true;
+      this.startAnimation();
+      this.startMovement();
+      console.log('🎮 Animación idle cargada, sprite activo!');
+    });
+  }
+
+  private async preloadAnimation(animKey: AnimationKey): Promise<void> {
+    const anim = this.config.animations[animKey];
+    if (!anim) return;
+
+    const promises: Promise<void>[] = [];
+    
+    for (let i = 0; i < anim.frames; i++) {
+      const frameNumber = i.toString().padStart(3, '0');
+      const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
+      
+      promises.push(new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          this._imageCache.set(src, img);
+          resolve();
+        };
+        img.onerror = () => {
+          console.warn(`⚠️ Error cargando frame: ${src}`);
+          resolve(); // Continuar aunque falle
+        };
+        img.src = src;
+      }));
+    }
+
+    await Promise.all(promises);
+  }
+
+  private preloadImagesInBackground() {
+    console.log('🎮 Iniciando precarga en segundo plano...');
+
+    // Usar setTimeout para no bloquear el hilo principal
+    setTimeout(() => {
+      this.preloadAllImagesAsync();
+    }, 100);
+  }
+
+  private async preloadAllImagesAsync() {
     const animations = Object.keys(this.config.animations) as AnimationKey[];
-    let totalImages = 0;
-    let loadedImages = 0;
-    let failedImages = 0;
+    
+    // Definir prioridades de carga
+    const highPriority: AnimationKey[] = ['walking', 'running', 'jumpStart', 'jumpLoop', 'kicking'];
+    const mediumPriority: AnimationKey[] = ['hurt', 'slashing', 'throwing', 'idleBlinking'];
+    const lowPriority = animations.filter(anim => 
+      !highPriority.includes(anim) && 
+      !mediumPriority.includes(anim) && 
+      anim !== 'idle' // Ya está cargada
+    );
 
-    // Contar total de imágenes
-    animations.forEach(animKey => {
-      const anim = this.config.animations[animKey];
-      if (anim) {
-        totalImages += anim.frames;
-      }
-    });
+    // Cargar por lotes para no saturar
+    await this.loadAnimationBatch(highPriority, 'alta prioridad');
+    await this.loadAnimationBatch(mediumPriority, 'media prioridad');
+    await this.loadAnimationBatch(lowPriority, 'baja prioridad');
 
-    console.log(`🎮 Total de imágenes a cargar: ${totalImages}`);
-
-    // Precargar TODAS las imágenes de cada animación
-    animations.forEach(animKey => {
-      const anim = this.config.animations[animKey];
-      if (anim) {
-        for (let i = 0; i < anim.frames; i++) {
-          const frameNumber = i.toString().padStart(3, '0');
-          const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
-
-          const img = new Image();
-          img.onload = () => {
-            loadedImages++;
-            this._imageCache.set(src, img);
-
-            // Log progreso cada 10 imágenes
-            if (loadedImages % 10 === 0) {
-              console.log(`🎮 Progreso: ${loadedImages}/${totalImages} imágenes cargadas`);
-            }
-
-            // Si todas las imágenes están cargadas, iniciar el sprite
-            if (loadedImages + failedImages === totalImages) {
-              this.onAllImagesLoaded();
-            }
-          };
-
-          img.onerror = () => {
-            failedImages++;
-            console.log(`❌ Error cargando: ${src}`);
-
-            // Si todas las imágenes están procesadas, iniciar el sprite
-            if (loadedImages + failedImages === totalImages) {
-              this.onAllImagesLoaded();
-            }
-          };
-
-          img.src = src;
-        }
-      }
-    });
+    console.log('🎮 ¡Todas las animaciones han sido precargadas!');
   }
 
-  private onAllImagesLoaded() {
-    console.log(`🎮 Precarga completada! ${this._imageCache.size} imágenes en cache`);
-
-    this.isImagesLoaded = true;
-    this.isLoaded = true;
-
-    // Aplicar configuración CSS
-    this.applyCSSConfig();
-
-    // Iniciar animación y movimiento
-    this.startAnimation();
-    this.startMovement();
-
-    // Mostrar diálogo inicial
-    this.setDialog(this.config.defaultDialog, 3000);
-
-    // Inicializar características según configuración
-    if (this.config.enableAutoBlink) {
-      this.startAutoBlink();
+  private async loadAnimationBatch(animations: AnimationKey[], priority: string) {
+    console.log(`🎮 Cargando animaciones de ${priority}...`);
+    
+    for (const animKey of animations) {
+      await this.preloadAnimation(animKey);
+      // Pequeña pausa entre animaciones para no bloquear
+      await new Promise(resolve => setTimeout(resolve, this.config.loadingDelay));
     }
-    if (this.config.enableRandomDialog) {
-      this.startRandomDialog();
-    }
-    if (this.config.enableAutoWalk) {
-      this.startAutoWalk();
+    
+    console.log(`✅ Completadas animaciones de ${priority}`);
+  }
+
+  private loadImageOnDemand(src: string) {
+    // Evitar cargas duplicadas
+    if (this._imageCache.has(src)) return;
+
+    const img = new Image();
+    img.onload = () => {
+      this._imageCache.set(src, img);
+    };
+    img.onerror = () => {
+      console.warn(`⚠️ Error cargando imagen bajo demanda: ${src}`);
+    };
+    img.src = src;
+  }
+
+  private ensureAnimationLoaded(animKey: AnimationKey) {
+    const anim = this.config.animations[animKey];
+    if (!anim) return;
+
+    // Verificar si al menos el primer frame está cargado
+    const firstFrameSrc = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_000.png`;
+    
+    if (!this._imageCache.has(firstFrameSrc)) {
+      // Cargar esta animación con alta prioridad
+      this.preloadAnimation(animKey).then(() => {
+        console.log(`🎮 Animación ${animKey} cargada bajo demanda`);
+      });
     }
   }
+
+  // ✅ MÉTODOS EXISTENTES MODIFICADOS
+
   startAnimation() {
     if (this._animationFrameId) {
       cancelAnimationFrame(this._animationFrameId);
@@ -486,28 +520,35 @@ export class BotSpriteComponent {
   private updateMovement() {
     if (this.isDragging || this.isFalling) return;
 
-    // Movimiento suave hacia el destino
-    let smooth = this.config.idleSmooth;
-
     if (this.state === 'moving') {
-      smooth = this.config.movementSmooth;
-
       const deltaX = this.targetX - this.currentX;
       const deltaY = this.targetY - this.currentY;
       const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
 
-      if (distance < 5) {
+      // Velocidad constante (ajusta el multiplicador para más o menos velocidad)
+      const speed = this.config.movementSpeed * 10; // Por ejemplo, movementSpeed=0.5 → speed=5px/frame
+
+      if (distance < speed) {
+        this.currentX = this.targetX;
+        this.currentY = this.targetY;
         this.setAnimation('idle');
         this.state = 'idle';
         if (this._moveCheckInterval) {
           clearInterval(this._moveCheckInterval);
           this._moveCheckInterval = null;
         }
+        return;
+      }
+
+      // Movimiento constante hacia el destino
+      this.currentX += (deltaX / distance) * speed;
+      this.currentY += (deltaY / distance) * speed;
+
+      // Cambia a animación de caminar si no está ya
+      if (this.animation !== 'walking' && this.animation !== 'running') {
+        this.setAnimation('walking');
       }
     }
-
-    this.currentX += (this.targetX - this.currentX) * smooth;
-    this.currentY += (this.targetY - this.currentY) * smooth;
   }
 
   startMovement() {
@@ -560,6 +601,9 @@ export class BotSpriteComponent {
       } else {
         this._blinkBackToIdle = false;
       }
+
+      // ✅ Precargar esta animación si no está en cache
+      this.ensureAnimationLoaded(animName);
     }
   }
 
@@ -691,12 +735,11 @@ export class BotSpriteComponent {
     if (cachedImg) {
       return cachedImg.src;
     }
-    // Debug: log the source URL (solo en desarrollo)
-    if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-      console.log(`🎮 [getFrameSrc] Animation: ${this.animation}, Frame: ${frameNumber}, Src: ${src}`);
-    }
 
-    return src;
+    // ✅ Si no está en cache, cargarla bajo demanda
+    this.loadImageOnDemand(src);
+    
+    return src; // Devolver la URL directamente
   }
 
   // ===== EVENT HANDLERS PARA DRAG & DROP CORREGIDOS =====
@@ -906,5 +949,69 @@ export class BotSpriteComponent {
 
   setDialogMessages(msgs: string[]) {
     this.dialogMessages = Array.isArray(msgs) ? msgs : [msgs];
+  }
+
+  // ===== MÉTODOS ADICIONALES PARA CONTROL DE CARGA =====
+
+  /**
+   * Fuerza la precarga de una animación específica
+   */
+  async forceLoadAnimation(animKey: AnimationKey): Promise<void> {
+    console.log(`🎮 Forzando carga de animación: ${animKey}`);
+    await this.preloadAnimation(animKey);
+    console.log(`✅ Animación ${animKey} cargada exitosamente`);
+  }
+
+  /**
+   * Obtiene el estado de carga de las animaciones
+   */
+  getLoadingStatus(): { [key: string]: boolean } {
+    const status: { [key: string]: boolean } = {};
+    
+    Object.keys(this.config.animations).forEach(animKey => {
+      const anim = this.config.animations[animKey as AnimationKey];
+      if (anim) {
+        const firstFrameSrc = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_000.png`;
+        status[animKey] = this._imageCache.has(firstFrameSrc);
+      }
+    });
+
+    return status;
+  }
+
+  /**
+   * Obtiene estadísticas de la cache de imágenes
+   */
+  getCacheStats(): { totalCached: number; totalAnimations: number; percentage: number } {
+    const totalAnimations = Object.keys(this.config.animations).length;
+    const loadedAnimations = Object.values(this.getLoadingStatus()).filter(loaded => loaded).length;
+    
+    return {
+      totalCached: this._imageCache.size,
+      totalAnimations,
+      percentage: Math.round((loadedAnimations / totalAnimations) * 100)
+    };
+  }
+
+  /**
+   * Limpia la cache de imágenes (útil para testing o liberación de memoria)
+   */
+  clearImageCache(): void {
+    console.log(`🎮 Limpiando cache de imágenes (${this._imageCache.size} imágenes)`);
+    this._imageCache.clear();
+  }
+
+  /**
+   * Pausa/reanuda la precarga en segundo plano
+   */
+  toggleBackgroundLoading(enable: boolean): void {
+    this.config.enableProgressiveLoading = enable;
+    
+    if (enable && this.getCacheStats().percentage < 100) {
+      console.log('🎮 Reanudando precarga en segundo plano...');
+      this.preloadImagesInBackground();
+    } else {
+      console.log('🎮 Precarga en segundo plano pausada');
+    }
   }
 }
