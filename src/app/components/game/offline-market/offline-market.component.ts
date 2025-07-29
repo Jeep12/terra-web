@@ -117,14 +117,7 @@ export class OfflineMarketComponent implements OnInit {
     });
 
 
-    this.marketService.getTest().subscribe({
-      next: (data: OfflineStoreDTO) => {
-        console.log('✅ Respuesta:', data);
-      },
-      error: (err) => {
-        console.error('❌ Error al obtener el store:', err);
-      }
-    });
+
   }
 
 
