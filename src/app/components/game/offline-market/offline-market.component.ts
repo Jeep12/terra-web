@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { OfflineMarketService } from '../../../services/offline-market.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { OfflineStoreDTO } from '../../../models/offline-store.model';
 
 interface MarketItem {
   itemId: number;
@@ -33,7 +34,7 @@ export class OfflineMarketComponent implements OnInit {
   filteredStores: MarketStore[] = [];
   loading = false;
   error = '';
-  
+
   // Filtros
   searchTerm = '';
   selectedOperationType = 'all';
@@ -53,12 +54,12 @@ export class OfflineMarketComponent implements OnInit {
     crystal: true,
     time: true
   };
-  
+
   // Paginación
   currentPage = 1;
   itemsPerPage = 6;
   totalPages = 1;
-  
+
   // Stats
   totalStores = 0;
   totalItems = 0;
@@ -70,55 +71,69 @@ export class OfflineMarketComponent implements OnInit {
     this.loadMarketData();
   }
 
-loadMarketData() {
-  this.loading = true;
-  this.error = '';
+  loadMarketData() {
+    this.loading = true;
+    this.error = '';
 
-  // IDs de items custom que requieren limpieza especial del icono
-  const CUSTOM_ICON_IDS = [29520 /*, otros ids custom si los tienes */];
+    // IDs de items custom que requieren limpieza especial del icono
+    const CUSTOM_ICON_IDS = [29520 /*, otros ids custom si los tienes */];
 
-  this.marketService.getOfflineStores().subscribe({
-    next: (stores: MarketStore[] | any) => {
-      // Limpiar prefijo de icono de cada ítem (custom o normal)
-      stores.forEach((store: MarketStore) => {
-        store.items.forEach((item: MarketItem) => {
-          if (item.attributes?.icon) {
-            let iconName = item.attributes.icon;
-            if (CUSTOM_ICON_IDS.includes(item.itemId)) {
-              iconName = iconName.split('.').pop() || iconName;
-            } else {
-              iconName = iconName.replace('icon.', '');
+    this.marketService.getOfflineStores().subscribe({
+      next: (stores: MarketStore[] | any) => {
+        // Limpiar prefijo de icono de cada ítem (custom o normal)
+        stores.forEach((store: MarketStore) => {
+          store.items.forEach((item: MarketItem) => {
+            if (item.attributes?.icon) {
+              let iconName = item.attributes.icon;
+              if (CUSTOM_ICON_IDS.includes(item.itemId)) {
+                iconName = iconName.split('.').pop() || iconName;
+              } else {
+                iconName = iconName.replace('icon.', '');
+              }
+              item.attributes.icon = iconName;
             }
-            item.attributes.icon = iconName;
-          }
+          });
         });
-      });
 
 
 
 
-      
-      this.stores = stores;
-      this.calculateStats();
-      this.applyFilters();
 
-      this.loading = false;
-    },
-    error: (err) => {
-      this.error = 'Error al cargar las tiendas offline';
-      this.loading = false;
-      console.error('Error:', err);
-    }
-  });
-}
+
+
+
+
+        this.stores = stores;
+        this.calculateStats();
+        this.applyFilters();
+
+        this.loading = false;
+      },
+      error: (err) => {
+        this.error = 'Error al cargar las tiendas offline';
+        this.loading = false;
+        console.error('Error:', err);
+      }
+    });
+
+
+    this.marketService.getTest().subscribe({
+      next: (data: OfflineStoreDTO) => {
+        console.log('✅ Respuesta:', data);
+      },
+      error: (err) => {
+        console.error('❌ Error al obtener el store:', err);
+      }
+    });
+  }
 
 
   calculateStats() {
     this.totalStores = this.stores.length;
     this.totalItems = this.stores.reduce((total, store) => total + store.items.length, 0);
-    
+
     const allPrices = this.stores.flatMap(store => store.items.map(item => item.price));
-    this.averagePrice = allPrices.length > 0 ? 
+    this.averagePrice = allPrices.length > 0 ?
       Math.round(allPrices.reduce((sum, price) => sum + price, 0) / allPrices.length) : 0;
   }
 
@@ -128,7 +143,7 @@ loadMarketData() {
     // Filtro por nombre de tienda o título
     if (this.searchTerm) {
       const term = this.searchTerm.toLowerCase();
-      filtered = filtered.filter(store => 
+      filtered = filtered.filter(store =>
         store.char_name.toLowerCase().includes(term) ||
         (store.title && store.title.toLowerCase().includes(term)) ||
         store.items.some(item => item.name.toLowerCase().includes(term))
@@ -143,7 +158,7 @@ loadMarketData() {
 
     // Filtro por tipo de item
     if (this.selectedType !== 'all') {
-      filtered = filtered.filter(store => 
+      filtered = filtered.filter(store =>
         store.items.some(item => item.type.toLowerCase() === this.selectedType.toLowerCase())
       );
     }
@@ -151,36 +166,36 @@ loadMarketData() {
     // Filtro por precio
     if (this.minPrice) {
       const min = parseInt(this.minPrice);
-      filtered = filtered.filter(store => 
+      filtered = filtered.filter(store =>
         store.items.some(item => item.price >= min)
       );
     }
 
     if (this.maxPrice) {
       const max = parseInt(this.maxPrice);
-      filtered = filtered.filter(store => 
+      filtered = filtered.filter(store =>
         store.items.some(item => item.price <= max)
       );
     }
 
     // Filtro por enchant level
     if (this.enchantFilter !== 'all') {
-      filtered = filtered.filter(store => 
+      filtered = filtered.filter(store =>
         store.items.some(item => this.checkEnchantFilter(item.enchantLevel))
       );
     }
 
     // Filtro por stock
     if (this.stockFilter !== 'all') {
-      filtered = filtered.filter(store => 
+      filtered = filtered.filter(store =>
         this.checkStockFilter(store.items.length)
       );
     }
 
     // Filtro por tipo de cristal
     if (this.crystalFilter !== 'all') {
-      filtered = filtered.filter(store => 
-        store.items.some(item => 
+      filtered = filtered.filter(store =>
+        store.items.some(item =>
           item.attributes?.crystal_type === this.crystalFilter
         )
       );
@@ -269,7 +284,7 @@ loadMarketData() {
     this.crystalFilter = 'all';
     this.timeFilter = 'all';
     this.sortBy = 'time';
-    
+
     // Reset accordion states
     this.accordionStates = {
       enchant: false,
@@ -277,7 +292,7 @@ loadMarketData() {
       crystal: false,
       time: false
     };
-    
+
     this.applyFilters();
   }
 
@@ -310,7 +325,7 @@ loadMarketData() {
 
   formatTime(timestamp: number): string {
     const date = new Date(timestamp);
-    return date.toLocaleDateString('es-ES') + ' ' + date.toLocaleTimeString('es-ES', {hour: '2-digit', minute:'2-digit'});
+    return date.toLocaleDateString('es-ES') + ' ' + date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
   }
 
   getItemTypes(): string[] {
@@ -332,7 +347,7 @@ loadMarketData() {
   }
 
   toggleAccordion(section: string) {
-    this.accordionStates[section as keyof typeof this.accordionStates] = 
+    this.accordionStates[section as keyof typeof this.accordionStates] =
       !this.accordionStates[section as keyof typeof this.accordionStates];
   }
 }

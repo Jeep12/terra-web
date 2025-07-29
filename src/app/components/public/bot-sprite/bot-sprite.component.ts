@@ -57,7 +57,7 @@ export class BotSpriteComponent {
 
     // ===== CONFIGURACIÓN DE CARGA DE IMÁGENES =====
     enableProgressiveLoading: true,  // Carga progresiva por prioridades
-    enableLazyLoading: false,        // Solo cargar cuando se necesite
+    enableLazyLoading: true,        // Solo cargar cuando se necesite
     loadingBatchSize: 3,             // Cuántas animaciones cargar por lote
     loadingDelay: 50,                // ms entre cargas para no bloquear UI
 
@@ -136,7 +136,7 @@ export class BotSpriteComponent {
       fallingDown: { folder: 'Falling Down', frames: 6 },
       hurt: { folder: 'Hurt', frames: 12 },
       idle: { folder: 'Idle', frames: 18 },
-      idleBlinking: { folder: 'Idle Blinking', frames: 18 },  
+      idleBlinking: { folder: 'Idle Blinking', frames: 18 },
       jumpLoop: { folder: 'Jump Loop', frames: 6 },
       jumpStart: { folder: 'Jump Start', frames: 6 },
       kicking: { folder: 'Kicking', frames: 12 },
@@ -317,7 +317,7 @@ export class BotSpriteComponent {
 
   private startBasicMode() {
     console.log('🎮 Iniciando en modo básico mientras se cargan las imágenes...');
-    
+
     // Solo precargar las imágenes de la animación idle para empezar
     this.preloadAnimation('idle').then(() => {
       this.isImagesLoaded = true;
@@ -332,11 +332,11 @@ export class BotSpriteComponent {
     if (!anim) return;
 
     const promises: Promise<void>[] = [];
-    
+
     for (let i = 0; i < anim.frames; i++) {
       const frameNumber = i.toString().padStart(3, '0');
       const src = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_${frameNumber}.png`;
-      
+
       promises.push(new Promise((resolve) => {
         const img = new Image();
         img.onload = () => {
@@ -365,13 +365,13 @@ export class BotSpriteComponent {
 
   private async preloadAllImagesAsync() {
     const animations = Object.keys(this.config.animations) as AnimationKey[];
-    
+
     // Definir prioridades de carga
     const highPriority: AnimationKey[] = ['walking', 'running', 'jumpStart', 'jumpLoop', 'kicking'];
     const mediumPriority: AnimationKey[] = ['hurt', 'slashing', 'throwing', 'idleBlinking'];
-    const lowPriority = animations.filter(anim => 
-      !highPriority.includes(anim) && 
-      !mediumPriority.includes(anim) && 
+    const lowPriority = animations.filter(anim =>
+      !highPriority.includes(anim) &&
+      !mediumPriority.includes(anim) &&
       anim !== 'idle' // Ya está cargada
     );
 
@@ -385,13 +385,13 @@ export class BotSpriteComponent {
 
   private async loadAnimationBatch(animations: AnimationKey[], priority: string) {
     console.log(`🎮 Cargando animaciones de ${priority}...`);
-    
+
     for (const animKey of animations) {
       await this.preloadAnimation(animKey);
       // Pequeña pausa entre animaciones para no bloquear
       await new Promise(resolve => setTimeout(resolve, this.config.loadingDelay));
     }
-    
+
     console.log(`✅ Completadas animaciones de ${priority}`);
   }
 
@@ -415,7 +415,7 @@ export class BotSpriteComponent {
 
     // Verificar si al menos el primer frame está cargado
     const firstFrameSrc = `${this.config.assetBasePath}${anim.folder}/0_Skeleton_Crusader_${anim.folder}_000.png`;
-    
+
     if (!this._imageCache.has(firstFrameSrc)) {
       // Cargar esta animación con alta prioridad
       this.preloadAnimation(animKey).then(() => {
@@ -738,12 +738,27 @@ export class BotSpriteComponent {
 
     // ✅ Si no está en cache, cargarla bajo demanda
     this.loadImageOnDemand(src);
-    
+
     return src; // Devolver la URL directamente
   }
 
-  // ===== EVENT HANDLERS PARA DRAG & DROP CORREGIDOS =====
+  // ===== EVENT HANDLERS PARA DRAG & DROP  =====
+  @HostListener('mouseenter', ['$event'])
+  onMouseHover(event: MouseEvent) {
 
+    this.pauseAutoWalk();
+    this.setAnimation("runSlashing")
+
+    this.setDialog('Dont come near', 2000);
+    setTimeout(()=>{
+      this.startAutoWalk()
+    },500);
+
+    //this.pauseAutoWalk();
+
+
+
+  }
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: MouseEvent) {
     if (!this.config.enableDragAndDrop && !this.config.enableClick) return;
@@ -967,7 +982,7 @@ export class BotSpriteComponent {
    */
   getLoadingStatus(): { [key: string]: boolean } {
     const status: { [key: string]: boolean } = {};
-    
+
     Object.keys(this.config.animations).forEach(animKey => {
       const anim = this.config.animations[animKey as AnimationKey];
       if (anim) {
@@ -985,7 +1000,7 @@ export class BotSpriteComponent {
   getCacheStats(): { totalCached: number; totalAnimations: number; percentage: number } {
     const totalAnimations = Object.keys(this.config.animations).length;
     const loadedAnimations = Object.values(this.getLoadingStatus()).filter(loaded => loaded).length;
-    
+
     return {
       totalCached: this._imageCache.size,
       totalAnimations,
@@ -1006,7 +1021,7 @@ export class BotSpriteComponent {
    */
   toggleBackgroundLoading(enable: boolean): void {
     this.config.enableProgressiveLoading = enable;
-    
+
     if (enable && this.getCacheStats().percentage < 100) {
       console.log('🎮 Reanudando precarga en segundo plano...');
       this.preloadImagesInBackground();

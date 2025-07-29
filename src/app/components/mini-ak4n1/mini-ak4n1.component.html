@@ -1,0 +1,22 @@
+<!-- bot-sprite.component.html (Actualizado) -->
+
+<div class="skeleton-wrapper">
+  <!-- Contenedor del sprite con drag manual mejorado -->
+  <div class="sprite-container" 
+       [class.dragging]="isDragging"
+       [class.selecting]="selecting"
+       [attr.data-draggable]="config.enableDragAndDrop">
+    
+    <!-- Diálogo del personaje -->
+    <div class="dialog-bubble" *ngIf="dialog">
+      {{ dialog }}
+    </div>
+    
+    <!-- Elemento sprite principal -->
+    <img #sprite 
+         class="sprite" 
+         [src]="getFrameSrc()" 
+         [alt]="animation" 
+         (error)="onImageError($event)" />
+  </div>
+</div>

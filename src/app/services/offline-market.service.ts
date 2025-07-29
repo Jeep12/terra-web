@@ -16,7 +16,7 @@ export class OfflineMarketService {
   }
 
   getTest(): Observable<OfflineStoreDTO> {
-    return this.http.post<OfflineStoreDTO>(`${environment.apiUrl}api/game/offline-market`, {});
+    return this.http.get<OfflineStoreDTO>(`${environment.apiUrl}api/game/storage/inventory`, {});
   }
 
 
