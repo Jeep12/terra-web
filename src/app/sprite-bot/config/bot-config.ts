@@ -69,7 +69,7 @@ export const BOT_CONFIG = {
   loadingDelay: 50,
 
   // ===== CONFIGURACIÓN DE MOVIMIENTO =====
-  movementSpeed: 0.15,                // Muy baja para movimientos lentos
+  movementSpeed: 2,                // Muy baja para movimientos lentos
 
   // ===== CONFIGURACIÓN DE FÍSICA =====
   gravity: 3,                    // Gravedad más suave
@@ -175,27 +175,27 @@ export const DEBUG_CONFIG = {
 export const debugLog = {
   physics: (message: string, ...args: any[]) => {
     if (DEBUG_CONFIG.enableLogs && DEBUG_CONFIG.enablePhysicsLogs) {
-      console.log(`📉 [PHYSICS] ${message}`, ...args);
+      // Physics log
     }
   },
   animation: (message: string, ...args: any[]) => {
     if (DEBUG_CONFIG.enableLogs && DEBUG_CONFIG.enableAnimationLogs) {
-      console.log(`🎮 [ANIMATION] ${message}`, ...args);
+      // Animation log
     }
   },
   drag: (message: string, ...args: any[]) => {
     if (DEBUG_CONFIG.enableLogs && DEBUG_CONFIG.enableDragLogs) {
-      console.log(`🎯 [DRAG] ${message}`, ...args);
+      // Drag log
     }
   },
   dialog: (message: string, ...args: any[]) => {
     if (DEBUG_CONFIG.enableLogs && DEBUG_CONFIG.enableDialogLogs) {
-      console.log(`💬 [DIALOG] ${message}`, ...args);
+      // Dialog log
     }
   },
   loading: (message: string, ...args: any[]) => {
     if (DEBUG_CONFIG.enableLogs && DEBUG_CONFIG.enableLoadingLogs) {
-      console.log(`📦 [LOADING] ${message}`, ...args);
+      // Loading log
     }
   },
   error: (message: string, ...args: any[]) => {

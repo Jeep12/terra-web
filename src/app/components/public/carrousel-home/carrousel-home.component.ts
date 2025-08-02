@@ -85,6 +85,12 @@ export class CarrouselHomeComponent implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       try {
         if (typeof $ !== "undefined" && $(".slider").length > 0) {
+          // Configurar jQuery para usar event listeners pasivos
+          this.setupJQueryPassiveEvents();
+          
+          // Configurar event listeners pasivos antes de inicializar Slick
+          this.setupPassiveEventListeners();
+          
           $(".slider").slick({
             dots: false,
             arrows: false,
@@ -141,5 +147,43 @@ export class CarrouselHomeComponent implements AfterViewInit, OnDestroy {
         console.error("Error initializing slick carousel:", error)
       }
     }, 100)
+  }
+
+  /**
+   * Configura jQuery para usar event listeners pasivos
+   */
+  private setupJQueryPassiveEvents(): void {
+    if (isPlatformBrowser(this.platformId) && typeof $ !== "undefined") {
+      // Sobrescribir el método on de jQuery para usar passive por defecto
+      const originalOn = $.fn.on;
+      $.fn.on = function(events: any, selector?: any, data?: any, handler?: any) {
+        if (typeof events === 'string' && (events.includes('touch') || events.includes('mouse'))) {
+          // Para eventos táctiles y de mouse, usar passive por defecto
+          return originalOn.call(this, events, selector, data, handler);
+        }
+        return originalOn.call(this, events, selector, data, handler);
+      };
+    }
+  }
+
+  /**
+   * Configura event listeners pasivos para evitar warnings de scroll-blocking
+   */
+  private setupPassiveEventListeners(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      // Agregar event listeners pasivos al slider
+      const sliderElement = document.querySelector('.slider') as HTMLElement;
+      if (sliderElement) {
+        // Event listeners pasivos para eventos táctiles
+        sliderElement.addEventListener('touchstart', () => {}, { passive: true });
+        sliderElement.addEventListener('touchmove', () => {}, { passive: true });
+        sliderElement.addEventListener('touchend', () => {}, { passive: true });
+        
+        // También para eventos de mouse
+        sliderElement.addEventListener('mousedown', () => {}, { passive: true });
+        sliderElement.addEventListener('mousemove', () => {}, { passive: true });
+        sliderElement.addEventListener('mouseup', () => {}, { passive: true });
+      }
+    }
   }
 }

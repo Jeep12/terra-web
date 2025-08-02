@@ -5,38 +5,39 @@
 
   --hover-step: #dabe64;
   --active-step: linear-gradient(to right, #746535, #dabe64);
+  --bg-color: rgba(206, 206, 206, 0);
   /* Step 1: System Requirements - Green */
-  --step-1-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-1-bg: var(--bg-color);
   --step-1-hover: var(--hover-step);
   --step-1-active: var(--active-step);
 
   /* Step 2: Download Client - Blue */
-  --step-2-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-2-bg:var(--bg-color);
   --step-2-hover: var(--hover-step);
   --step-2-active: var(--active-step);
 
   /* Step 3: Extract Client - Orange */
-  --step-3-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-3-bg:var(--bg-color);
   --step-3-hover: var(--hover-step);
   --step-3-active: var(--active-step);
 
   /* Step 4: Download Launcher - Purple */
-  --step-4-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-4-bg: var(--bg-color);
   --step-4-hover: var(--hover-step);
   --step-4-active: var(--active-step);
 
   /* Step 5: Install Launcher - Red */
-  --step-5-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-5-bg: var(--bg-color);
   --step-5-hover: var(--hover-step);
   --step-5-active: var(--active-step);
 
   /* Step 6: Configure Launcher - Teal */
-  --step-6-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-6-bg:var(--bg-color);
   --step-6-hover: var(--hover-step);
   --step-6-active: var(--active-step);
 
   /* Step 7: Play! - Gold */
-  --step-7-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-7-bg: var(--bg-color);
   --step-7-hover: var(--hover-step);
   --step-7-active: var(--active-step);
 
@@ -134,7 +135,7 @@
    STEP NAV ITEMS - SQUARE DESIGN
    ======================================== */
 .step-nav-item {
-  width: 140px;
+  width: 145px;
   min-width: 110px;
   max-width: 150px;
   text-align: center;
@@ -150,7 +151,6 @@
   border-radius: 8px;
   border: 2px solid transparent;
   position: relative;
-  z-index: 3;
 }
 
 .step-nav-item:hover {
@@ -184,12 +184,11 @@
 
 .step-nav-title {
   color: white;
-  font-size: 11px;
+  font-size: 15px;
   font-weight: 700;
-  line-height: 1.2;
   text-align: center;
-  word-wrap: break-word;
-  hyphens: auto;
+
+  letter-spacing: 1px;
 }
 
 
@@ -201,6 +200,8 @@
 /* Step 1: System Requirements */
 .step-nav-item.step-1 {
   background: var(--step-1-bg) !important;
+  border-right: 2px solid #dabe64;
+  border-left: 2px solid #dabe64;
 }
 
 .step-nav-item.step-1:hover {
@@ -215,6 +216,8 @@
 /* Step 2: Download Client */
 .step-nav-item.step-2 {
   background: var(--step-2-bg) !important;
+  border-right: 2px solid #dabe64;
+  border-left: 2px solid #dabe64;
 }
 
 .step-nav-item.step-2:hover {
@@ -229,10 +232,13 @@
 /* Step 3: Extract Client */
 .step-nav-item.step-3 {
   background: var(--step-3-bg) !important;
+  border-right: 2px solid #dabe64;
+  border-left: 2px solid #dabe64;
 }
 
 .step-nav-item.step-3:hover {
   background: var(--step-3-hover) !important;
+  
 }
 
 .step-nav-item.step-3.active {
@@ -243,6 +249,8 @@
 /* Step 4: Download Launcher */
 .step-nav-item.step-4 {
   background: var(--step-4-bg) !important;
+  border-right: 2px solid #dabe64;
+  border-left: 2px solid #dabe64;
 }
 
 .step-nav-item.step-4:hover {
@@ -257,6 +265,8 @@
 /* Step 5: Install Launcher */
 .step-nav-item.step-5 {
   background: var(--step-5-bg) !important;
+  border-right: 2px solid #dabe64;
+  border-left: 2px solid #dabe64;
 }
 
 .step-nav-item.step-5:hover {
@@ -271,6 +281,8 @@
 /* Step 6: Configure Launcher */
 .step-nav-item.step-6 {
   background: var(--step-6-bg) !important;
+  border-right: 2px solid #dabe64;
+  border-left: 2px solid #dabe64;
 }
 
 .step-nav-item.step-6:hover {
@@ -285,21 +297,19 @@
 /* Step 7: Play! */
 .step-nav-item.step-7 {
   background: var(--step-7-bg) !important;
-  transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+  border-right: 2px solid #dabe64;
+  border-left: 2px solid #dabe64;
+
 }
 
 .step-nav-item.step-7:hover {
   background: var(--step-7-hover) !important;
-  transform: scale(1.08);
-  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3);
+
 }
 
 .step-nav-item.step-7.active {
   background: var(--step-7-active) !important;
-  color: #000;
-  transform: scale(1.1);
-  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+
 }
 
 /* ========================================
@@ -638,8 +648,8 @@
 
 .recommended-badge {
   position: absolute;
-  top: -10px;
-  right: -5px;
+  top: 0px;
+  right: 0px;
   background: #28a745;
   color: white;
   font-size: 0.65rem;
@@ -652,8 +662,8 @@
 
 .disabled-badge {
   position: absolute;
-  top: -10px;
-  right: -5px;
+  top: 0px;
+  right: 0px;
   background: #6c757d;
   color: white;
   font-size: 0.65rem;
@@ -1535,4 +1545,27 @@
     font-size: 7px;
     line-height: 0.8;
   }
+}
+
+/* ========================================
+   REGISTER LINK STYLES
+   ======================================== */
+.register-link {
+  color: #dabe64;
+  text-decoration: underline;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+}
+
+.register-link:hover {
+  color: #746535;
+  border-bottom-color: #746535;
+  text-shadow: 0 0 5px rgba(218, 190, 100, 0.5);
+  text-decoration: underline;
+}
+
+.register-link:active {
+  color: #5a4d28;
 }

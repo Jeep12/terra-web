@@ -48,11 +48,9 @@ export class HomeComponent {
 
   handleBeforeDestroy(nextUrl: string) {
     this.isDestroying = true;
-    console.log('Animación de salida iniciada, esperando 1.2s');
 
     // Retraso real de 1.2 segundos (1200 ms)
     timer(1200).subscribe(() => {
-      console.log('Animación terminada, navegando a:', nextUrl);
       // Navegar manualmente después del delay
       this.router.navigateByUrl(nextUrl);
     });

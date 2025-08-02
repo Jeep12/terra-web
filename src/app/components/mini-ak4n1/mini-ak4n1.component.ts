@@ -36,7 +36,7 @@ export class MiniAk4n1Component {
 
   @Input() frameRate: number = BOT_CONFIG.defaultFrameRate;
   @Input() animation: AnimationKey = 'idle';
-
+  showButton = false; 
   // Subject para manejar la destrucción del componente
   private readonly destroy$ = new Subject<void>();
 
@@ -65,8 +65,97 @@ export class MiniAk4n1Component {
   ) { }
 
   ngOnInit(): void {
-    // No inicializar automáticamente - esperar a que se active manualmente
-    this.showComponent = false;
+    this.showComponent = false; // Skeleton is hidden initially
+    
+    // Verificar cache y activar automáticamente si todo está listo
+    this.checkAndAutoActivate();
+  }
+
+  /**
+   * Verifica si las imágenes están cacheadas y activa automáticamente el sprite
+   */
+  private async checkAndAutoActivate(): Promise<void> {
+    const criticalImages = [
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Idle/0_Skeleton_Crusader_Idle_000.png',
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Walking/0_Skeleton_Crusader_Walking_000.png',
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Running/0_Skeleton_Crusader_Running_000.png'
+    ];
+    
+    let cachedCount = 0;
+    const totalImages = criticalImages.length;
+    
+    for (const imageUrl of criticalImages) {
+      const isCached = await this.isImageCached(imageUrl);
+      if (isCached) {
+        cachedCount++;
+      }
+    }
+    
+    // SOLO activar automáticamente si TODAS las imágenes están cacheadas
+    if (cachedCount === totalImages) {
+      // Activar el sprite automáticamente
+      await this.activateSkeleton();
+      
+      // Emitir evento para ocultar el botón
+      this.emitAutoActivated();
+    }
+  }
+
+  /**
+   * Emite evento para indicar que el sprite se activó automáticamente
+   */
+  private emitAutoActivated(): void {
+    // Crear un evento personalizado para comunicar con el botón
+    const event = new CustomEvent('skeletonAutoActivated', {
+      detail: { autoActivated: true }
+    });
+    window.dispatchEvent(event);
+  }
+
+  /**
+   * Verifica si las imágenes críticas están en cache (only for logging)
+   */
+  private async checkImagesCache(): Promise<void> {
+    const criticalImages = [
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Idle/0_Skeleton_Crusader_Idle_000.png',
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Walking/0_Skeleton_Crusader_Walking_000.png',
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Running/0_Skeleton_Crusader_Running_000.png'
+    ];
+    let cachedCount = 0;
+    const totalImages = criticalImages.length;
+    
+    for (const imageUrl of criticalImages) {
+      const isCached = await this.isImageCached(imageUrl);
+      if (isCached) {
+        cachedCount++;
+      }
+    }
+  }
+
+  /**
+   * Verifica si una imagen específica está en cache
+   */
+  private async isImageCached(imageUrl: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      
+      img.onload = () => {
+        // Si se carga rápidamente, probablemente está en cache
+        resolve(true);
+      };
+      
+      img.onerror = () => {
+        resolve(false);
+      };
+      
+      // NO agregar timestamp para permitir que el cache funcione
+      img.src = imageUrl;
+      
+      // Timeout después de 1 segundo (más rápido para detectar cache)
+      setTimeout(() => {
+        resolve(false);
+      }, 1000);
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -93,9 +182,10 @@ export class MiniAk4n1Component {
   /**
    * Método público para activar la carga del skeleton
    */
-  public async activateSkeleton(): Promise<void> {
+  async activateSkeleton(): Promise<void> {
     if (this.isLoaded || this.isLoading) return;
 
+    console.log('🎮 Activando skeleton - Iniciando carga...');
     this.isLoading = true;
     this.loadProgress = 0;
 
@@ -132,10 +222,10 @@ export class MiniAk4n1Component {
       // Suscribirse a cambios de estado DESPUÉS de marcar como cargado
       this.subscribeToStateChanges();
 
-      console.log('✅ Skeleton activado exitosamente - Sprite listo!');
+      // Ocultar el botón después de cargar exitosamente
+      // this.hideSkeletonButton(); // Eliminado
 
     } catch (error) {
-      console.error('❌ Error cargando skeleton:', error);
       this.isLoading = false;
       this.showComponent = false;
     }
@@ -148,68 +238,52 @@ export class MiniAk4n1Component {
     const totalSteps = 6;
     let currentStep = 0;
 
-    console.log('🎮 Iniciando carga progresiva de recursos...');
-
     // Paso 1: Precargar animación idle (crítica)
     currentStep++;
     this.loadProgress = Math.round((currentStep / totalSteps) * 100);
-    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animación idle...`);
     await this.imagePreloader.preloadAnimation('idle');
-    console.log('✅ Animación idle cargada');
 
     // Paso 2: Precargar animaciones básicas de movimiento
     currentStep++;
     this.loadProgress = Math.round((currentStep / totalSteps) * 100);
-    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones básicas...`);
     await Promise.all([
       this.imagePreloader.preloadAnimation('walking'),
       this.imagePreloader.preloadAnimation('running')
     ]);
-    console.log('✅ Animaciones básicas cargadas');
 
     // Paso 3: Precargar animaciones de salto
     currentStep++;
     this.loadProgress = Math.round((currentStep / totalSteps) * 100);
-    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones de salto...`);
     await Promise.all([
       this.imagePreloader.preloadAnimation('jumpStart'),
       this.imagePreloader.preloadAnimation('jumpLoop')
     ]);
-    console.log('✅ Animaciones de salto cargadas');
 
     // Paso 4: Precargar animaciones de combate básicas
     currentStep++;
     this.loadProgress = Math.round((currentStep / totalSteps) * 100);
-    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones de combate...`);
     await Promise.all([
       this.imagePreloader.preloadAnimation('slashing'),
       this.imagePreloader.preloadAnimation('throwing')
     ]);
-    console.log('✅ Animaciones de combate cargadas');
 
     // Paso 5: Precargar animaciones especiales
     currentStep++;
     this.loadProgress = Math.round((currentStep / totalSteps) * 100);
-    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones especiales...`);
     await Promise.all([
       this.imagePreloader.preloadAnimation('kicking'),
       this.imagePreloader.preloadAnimation('hurt'),
       this.imagePreloader.preloadAnimation('idleBlinking')
     ]);
-    console.log('✅ Animaciones especiales cargadas');
 
     // Paso 6: Precargar resto de animaciones en segundo plano
     currentStep++;
     this.loadProgress = Math.round((currentStep / totalSteps) * 100);
-    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Finalizando carga...`);
     
     // Cargar el resto en segundo plano sin bloquear
     setTimeout(() => {
-      console.log('🔄 Cargando animaciones restantes en segundo plano...');
       this.imagePreloader.preloadAllImagesAsync();
     }, 100);
-
-    console.log('✅ Carga progresiva completada - Todas las imágenes descargadas!');
   }
 
   /**
@@ -234,7 +308,6 @@ export class MiniAk4n1Component {
   private subscribeToStateChanges(): void {
     // Solo suscribirse si el componente está cargado
     if (!this.isLoaded) {
-      console.log('🎮 Componente no cargado, no suscribiendo a cambios de estado');
       return;
     }
 
@@ -290,7 +363,7 @@ export class MiniAk4n1Component {
       }
 
     } catch (error) {
-      console.error('❌ Error en modo básico:', error);
+      // Error en modo básico
     }
   }
 

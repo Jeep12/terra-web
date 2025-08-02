@@ -1,3 +1,4 @@
+<app-preload></app-preload>
 <div class="download-container" #downloadContainer>
 
 
@@ -114,7 +115,7 @@
               </div>
               <div class="file-details">
                 <h4>{{ step.fileName }}</h4>
-                <div class="file-size">{{ step.fileSize }}</div>
+                <div style="text-align: start;" class="file-size">{{ step.fileSize }}</div>
               </div>
             </div>
             <div class="download-actions">
@@ -152,7 +153,16 @@
             <div class="instructions-list">
               <div class="instruction-item" *ngFor="let instruction of step.instructions; let i = index">
                 <div class="instruction-number">{{ i + 1 }}</div>
-                <div class="instruction-text" [innerHTML]="instruction"></div>
+                <div class="instruction-text" *ngIf="step.id !== 7" [innerHTML]="sanitizeHtml(instruction)"></div>
+                <div class="instruction-text" *ngIf="step.id === 7">
+                  <ng-container [ngSwitch]="i">
+                    <ng-container *ngSwitchCase="0">{{ instruction }}</ng-container>
+                    <ng-container *ngSwitchCase="1">
+                      Create your Master Account at <a routerLink="/register" class="register-link">Register Page</a>
+                    </ng-container>
+                    <ng-container *ngSwitchDefault>{{ instruction }}</ng-container>
+                  </ng-container>
+                </div>
               </div>
             </div>
           </div>
@@ -170,7 +180,7 @@
               <div class="instructions-list">
                 <div class="instruction-item" *ngFor="let instruction of step.instructions; let i = index">
                   <div class="instruction-number">{{ i + 1 }}</div>
-                  <div class="instruction-text" [innerHTML]="instruction"></div>
+                  <div class="instruction-text" [innerHTML]="sanitizeHtml(instruction)"></div>
                 </div>
               </div>
             </div>
@@ -182,8 +192,8 @@
               Useful Tips
             </h4>
             <div class="tips-list">
-              <div class="tip-item" *ngFor="let tip of step.tips">
-                <span class="tip-text">{{ tip }}</span>
+              <div class="tip-item" *ngFor="let tip of step.tips; let i = index">
+                <span class="tip-text" [innerHTML]="sanitizeHtml(tip)"></span>
               </div>
             </div>
           </div>

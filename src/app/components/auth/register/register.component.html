@@ -7,7 +7,7 @@
       <!-- Email -->
       <div class="form-group">
         <label for="email"><i class="fas fa-envelope"></i> Email</label>
-        <input id="email" type="email" formControlName="email" class="form-control" placeholder="you@example.com">
+        <input id="email" type="email" formControlName="email" class="form-control" placeholder="you@example.com" autocomplete="email">
         <div *ngIf="registerForm.get('email')?.invalid && registerForm.get('email')?.touched" class="error-message">
           <span *ngIf="registerForm.get('email')?.errors?.['required']">Requerido</span>
           <span *ngIf="registerForm.get('email')?.errors?.['email']">Email inválido</span>
@@ -19,7 +19,7 @@
         <label for="password"><i class="fas fa-lock"></i> Password</label>
         <div class="password-input-container">
           <input id="password" [type]="passwordVisible ? 'text' : 'password'" formControlName="password"
-            class="form-control" placeholder="Enter your password">
+            class="form-control" placeholder="Enter your password" autocomplete="new-password">
           <button type="button" class="password-toggle" (click)="togglePasswordVisibility()">
             <i class="fas" [ngClass]="passwordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
           </button>
@@ -38,7 +38,7 @@
         <label for="confirmPassword"><i class="fas fa-lock"></i> Confirm</label>
         <div class="password-input-container">
           <input id="confirmPassword" [type]="confirmPasswordVisible ? 'text' : 'password'"
-            formControlName="confirmPassword" class="form-control" placeholder="Repeat password">
+            formControlName="confirmPassword" class="form-control" placeholder="Repeat password" autocomplete="new-password">
           <button type="button" class="password-toggle" (click)="toggleConfirmPasswordVisibility()">
             <i class="fas" [ngClass]="confirmPasswordVisible ? 'fa-eye-slash' : 'fa-eye'"></i>
           </button>

@@ -2,7 +2,7 @@
      [class.loading]="isLoading"
      [class.loaded]="isLoaded"
      (click)="toggleSkeleton()"
-     *ngIf="!isLoaded">
+     *ngIf="shouldShowButton">
   
   <!-- Icono de robot cuando no está cargado -->
   <i class="fas fa-robot robot-icon" *ngIf="!isLoading"></i>

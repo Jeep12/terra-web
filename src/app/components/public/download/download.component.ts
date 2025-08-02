@@ -1,6 +1,8 @@
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { PreloadComponent } from "../preload/preload.component";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 interface DownloadStep {
   id: number;
@@ -16,16 +18,19 @@ interface DownloadStep {
   launcherIcon?: string;
   warnings?: string[];
   tips?: string[];
+  safeTips?: SafeHtml[];
 }
 
 @Component({
   selector: 'app-download',
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, PreloadComponent],
   templateUrl: './download.component.html',
   styleUrls: ['./download.component.css']
 })
 export class DownloadComponent implements OnInit, OnDestroy {
   @ViewChild('downloadContainer', { static: true }) downloadContainer!: ElementRef;
+
+  constructor(private sanitizer: DomSanitizer) {}
 
   downloadSteps: DownloadStep[] = [
     {
@@ -54,9 +59,9 @@ export class DownloadComponent implements OnInit, OnDestroy {
       description: 'Download the RAR file of the Lineage 2 client',
       icon: 'fas fa-download',
       completed: false,
-      downloadUrl: 'https://terra-l2.com/downloads/client',
+      downloadUrl: 'https://drive.google.com/file/d/1_S9uPh-92r3wzT9Rgs68itT1voq8lPHA/view?usp=sharing',
       fileSize: '9.89 GB',
-      fileName: 'Lineage II Terra.rar',
+      fileName: 'Lineage II Classic 3.0.rar',
       launcherIcon: 'assets/images/winrar_icon_256x256.png',
       warnings: [
         'Large file (9.89 GB) - Make sure you have a stable connection',
@@ -159,10 +164,12 @@ export class DownloadComponent implements OnInit, OnDestroy {
       icon: 'fas fa-gamepad',
       completed: false,
       instructions: [
-        'Click the "Play" button in the launcher',
-        'Enter your account credentials',
-        'Select your character and server',
-        'Enjoy the game!'
+        'First, you need a Master Account to create a Game Account',
+        'Create your Master Account at Register Page',
+        'You\'ll receive a 6-digit verification code by email',
+        'Use the verification code to complete your Game Account registration',
+        'Click the "Play and Enjoy!" button in the launcher',
+
       ],
       tips: [
         'Make sure your account is activated',
@@ -182,13 +189,10 @@ export class DownloadComponent implements OnInit, OnDestroy {
 
     // Aplicar SVG inicial (estado 0 - colores base)
     this.handleScrollAnimation();
-
-    console.log('🎯 Scroll animation listener agregado');
   }
 
   ngOnDestroy() {
     window.removeEventListener('scroll', this.handleScrollAnimation.bind(this));
-    console.log('🧹 Scroll listener removido');
   }
 
 
@@ -213,8 +217,7 @@ export class DownloadComponent implements OnInit, OnDestroy {
     const transitioningLayer = Math.floor(layerProgress) + 1;
     const transitionProgress = (layerProgress % 1) * 100;
 
-    console.log(`🎨 Scroll: ${scrollTop}px (${(scrollProgress * 100).toFixed(1)}%)`);
-    console.log(`📊 Capas activas: ${activeLayers}, Transicionando: Capa ${transitioningLayer} (${transitionProgress.toFixed(1)}%)`);
+
   }
 
   private generateAnimatedSVG(scrollProgress: number): string {
@@ -340,18 +343,11 @@ export class DownloadComponent implements OnInit, OnDestroy {
   }
 
   testScroll() {
-    console.log('🧪 TESTING SCROLL FUNCTIONALITY');
-    console.log('1. Document scrollHeight:', document.documentElement.scrollHeight);
-    console.log('2. Window innerHeight:', window.innerHeight);
-    console.log('3. Current scroll position:', window.pageYOffset);
-    console.log('4. Can scroll?', document.documentElement.scrollHeight > window.innerHeight);
-    
     // Intentar hacer scroll programáticamente
     window.scrollTo(0, 100);
-    setTimeout(() => {
-      console.log('5. After scrollTo(0, 100):', window.pageYOffset);
-    }, 100);
   }
 
-
+  sanitizeHtml(html: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(html);
+  }
 }

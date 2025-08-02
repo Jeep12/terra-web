@@ -67,6 +67,19 @@
 <body [class.nav-scrolled]="scrolled">
   <app-root></app-root>
 
+  <!-- Script para configurar event listeners pasivos -->
+  <script>
+    // Configurar event listeners pasivos por defecto para evitar warnings
+    const originalAddEventListener = EventTarget.prototype.addEventListener;
+    EventTarget.prototype.addEventListener = function(type, listener, options) {
+      // Para eventos táctiles y de mouse, usar passive por defecto si no se especifica
+      if (typeof options === 'undefined' && (type.includes('touch') || type.includes('mouse'))) {
+        options = { passive: true };
+      }
+      return originalAddEventListener.call(this, type, listener, options);
+    };
+  </script>
+
   <!-- Bootstrap JS con defer -->
   <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"

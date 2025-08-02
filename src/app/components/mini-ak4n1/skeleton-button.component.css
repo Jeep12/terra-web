@@ -1,5 +1,5 @@
 .skeleton-button-container {
-  position: fixed !important;
+  position: absolute !important;
   bottom: 20px !important;
   right: 20px !important;
   width: 60px !important;
@@ -10,7 +10,7 @@
   justify-content: center !important;
   border:1.5px groove white;
   cursor: pointer !important;
-  z-index: 10000 !important;
+  z-index: 9999 !important;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important; /* Sombra más oscura */
   color: white !important;
   font-weight: bold !important;

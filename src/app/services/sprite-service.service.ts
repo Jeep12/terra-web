@@ -196,7 +196,6 @@ export class SpriteServiceService {
         next = 0;
         // Si termina una animación especial, vuelve a la automática
         if (this.isBusy) {
-          console.log('[Sprite] Terminó animación especial:', anim, '-> retoma ciclo idle/walk');
           this.isBusy = false;
           // Siempre retomar ciclo idle/walk después de animación especial
           // Si estaba caminando antes, fuerza un nuevo movimiento

@@ -1,5 +1,6 @@
-import { Component, ViewChild, ElementRef, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, ElementRef, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-skeleton-button',
@@ -8,57 +9,226 @@ import { CommonModule } from '@angular/common';
   templateUrl: './skeleton-button.component.html',
   styleUrls: ['./skeleton-button.component.css']
 })
-export class SkeletonButtonComponent implements OnInit {
+export class SkeletonButtonComponent implements OnInit, OnDestroy {
   @Output() skeletonActivated = new EventEmitter<void>();
 
   public isLoading = false;
   public isLoaded = false;
+  public imagesAreCached = false; // Nueva propiedad para el resultado
+  public shouldShowButton = true; // Nueva propiedad para controlar visibilidad
+
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
-    console.log('🔘 SkeletonButtonComponent inicializado');
+    // Ocultar el botón inicialmente hasta que el preload se cierre
+    this.isLoaded = false;
+    this.isLoading = false;
+    this.shouldShowButton = false;
     
-    // Verificar si ya está cargado desde sessionStorage
-    this.updateButtonState();
+    // Esperar a que el preload se cierre antes de mostrar el botón
+    this.waitForPreloadToClose();
     
-    // Verificar que el botón esté en el DOM solo si no está cargado
-    if (!this.isLoaded) {
-      setTimeout(() => {
-        this.checkButtonVisibility();
-      }, 100);
-    }
+    // Escuchar evento de activación automática
+    window.addEventListener('skeletonAutoActivated', this.onSkeletonAutoActivated.bind(this) as EventListener);
+    
+    // Esperar un poco más antes de verificar cache para dar tiempo al sprite
+    setTimeout(() => {
+      this.checkImagesCache().then(allCached => {
+        this.imagesAreCached = allCached;
+        
+        // Si no están todas cacheadas, verificar si el sprite ya se activó automáticamente
+        if (!allCached) {
+          this.checkIfSkeletonIsAlreadyActive();
+        }
+      });
+    }, 500); // Esperar 500ms para dar tiempo al sprite de verificar
+    
+    setTimeout(() => {
+      this.checkButtonVisibility();
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    // Remover listener al destruir el componente
+    window.removeEventListener('skeletonAutoActivated', this.onSkeletonAutoActivated.bind(this) as EventListener);
   }
 
   /**
-   * Actualiza el estado del botón basado en sessionStorage
+   * Maneja el evento de activación automática del skeleton
    */
-  public updateButtonState(): void {
-    const skeletonLoaded = sessionStorage.getItem('skeleton_loaded');
-    if (skeletonLoaded === 'true') {
+  private onSkeletonAutoActivated(event: Event): void {
+    // Esperar un poco para asegurar que el sprite esté completamente cargado
+    setTimeout(() => {
       this.isLoaded = true;
-      console.log('🔘 Skeleton ya cargado anteriormente - ocultando botón');
-    } else {
-      this.isLoaded = false;
-      console.log('🔘 Skeleton no cargado, mostrando botón');
+      this.shouldShowButton = false;
+    }, 100);
+  }
+
+  /**
+   * Verifica si las imágenes críticas están en cache
+   * @returns true si todas las imágenes están cacheadas, false si no
+   */
+  public async checkImagesCache(): Promise<boolean> {
+    const criticalImages = [
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Idle/0_Skeleton_Crusader_Idle_000.png',
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Walking/0_Skeleton_Crusader_Walking_000.png',
+      'https://assets.l2terra.online/sprites/Skeleton_Crusader_3/PNG/PNG%20Sequences/Running/0_Skeleton_Crusader_Running_000.png'
+    ];
+    let cachedCount = 0;
+    const totalImages = criticalImages.length;
+    
+    for (const imageUrl of criticalImages) {
+      const isCached = await this.isImageCached(imageUrl);
+      if (isCached) {
+        cachedCount++;
+      }
     }
     
-    console.log('🔘 Estado final - isLoaded:', this.isLoaded, 'isLoading:', this.isLoading);
+    const allCached = cachedCount === totalImages;
+    
+    return allCached;
+  }
+
+  /**
+   * Verifica si una imagen específica está en cache
+   */
+  private async isImageCached(imageUrl: string): Promise<boolean> {
+    return new Promise((resolve) => {
+      const img = new Image();
+      
+      img.onload = () => {
+        // Si se carga rápidamente, probablemente está en cache
+        resolve(true);
+      };
+      
+      img.onerror = () => {
+        resolve(false);
+      };
+      
+      // NO agregar timestamp para permitir que el cache funcione
+      img.src = imageUrl;
+      
+      // Timeout después de 1 segundo (más rápido para detectar cache)
+      setTimeout(() => {
+        resolve(false);
+      }, 1000);
+    });
+  }
+
+  /**
+   * Método público para usar en el HTML
+   * @returns true si las imágenes están cacheadas
+   */
+  public areImagesCached(): boolean {
+    return this.imagesAreCached;
+  }
+
+  /**
+   * Actualiza el estado del botón
+   */
+  public updateButtonState(): void {
+    // Estado del botón actualizado
   }
 
   private checkButtonVisibility(): void {
     const button = document.querySelector('.skeleton-button-container');
     if (button) {
-      console.log('✅ Botón encontrado en el DOM');
       const rect = button.getBoundingClientRect();
-      console.log('📍 Posición del botón:', rect);
-      console.log('👁️ Botón visible:', rect.width > 0 && rect.height > 0);
-    } else {
-      console.log('❌ Botón NO encontrado en el DOM');
+      // Botón visible en el DOM
+    }
+  }
+
+  /**
+   * Espera a que el preload se cierre antes de mostrar el botón
+   */
+  private waitForPreloadToClose(): void {
+    let checkCount = 0;
+    const maxChecks = 100; // Máximo 10 segundos (100 * 100ms)
+    
+    const checkPreload = () => {
+      checkCount++;
+      const preloader = document.querySelector('.nk-preloader') as HTMLElement;
+      
+      if (preloader) {
+        const isVisible = preloader.style.display !== 'none' && 
+                         preloader.style.opacity !== '0' && 
+                         preloader.offsetParent !== null;
+        
+        if (isVisible && checkCount < maxChecks) {
+          // El preload aún está visible, esperar más
+          setTimeout(checkPreload, 100);
+        } else {
+          // El preload se cerró o timeout, verificar si el sprite ya está activo
+          this.checkSpriteStateAfterPreload();
+        }
+      } else {
+        // No hay preload, verificar estado del sprite
+        this.checkSpriteStateAfterPreload();
+      }
+    };
+    
+    // Esperar un poco antes de empezar a verificar
+    setTimeout(checkPreload, 500);
+  }
+
+  /**
+   * Verifica el estado del sprite después de que el preload se cierre
+   */
+  private checkSpriteStateAfterPreload(): void {
+    // Esperar un poco para que el sprite tenga tiempo de activarse si va a hacerlo automáticamente
+    setTimeout(() => {
+      const skeletonElement = document.querySelector('.skeleton-wrapper') as HTMLElement;
+      const spriteElement = document.querySelector('.sprite') as HTMLImageElement;
+      
+      if (skeletonElement && spriteElement) {
+        const isSpriteActive = skeletonElement.style.display !== 'none' && 
+                              skeletonElement.offsetParent !== null &&
+                              spriteElement.complete && 
+                              spriteElement.naturalWidth > 0;
+        
+        if (isSpriteActive) {
+          this.isLoaded = true;
+          this.shouldShowButton = false;
+        } else {
+          this.shouldShowButton = true;
+        }
+      } else {
+        this.shouldShowButton = true;
+      }
+    }, 1000); // Esperar 1 segundo para dar tiempo a la activación automática
+  }
+
+  /**
+   * Verifica si el skeleton ya está activo (por activación automática)
+   */
+  private checkIfSkeletonIsAlreadyActive(): void {
+    // Verificar si el skeleton está visible en el DOM
+    const skeletonElement = document.querySelector('.skeleton-wrapper') as HTMLElement;
+    const spriteElement = document.querySelector('.sprite') as HTMLImageElement;
+    
+    if (skeletonElement && spriteElement) {
+      const isVisible = skeletonElement.style.display !== 'none' && 
+                       skeletonElement.offsetParent !== null &&
+                       spriteElement.complete && 
+                       spriteElement.naturalWidth > 0;
+      
+      if (isVisible) {
+        this.isLoaded = true;
+        this.shouldShowButton = false;
+        return;
+      }
+    }
+    
+    // También verificar si el evento de activación automática ya se disparó
+    if (this.imagesAreCached) {
+      // Esperar un poco más para dar tiempo a que el sprite se active
+      setTimeout(() => {
+        this.checkIfSkeletonIsAlreadyActive();
+      }, 1000);
     }
   }
 
   async toggleSkeleton(): Promise<void> {
-    console.log('🔘 Botón skeleton clickeado');
-    
     if (this.isLoaded) {
       // Si ya está cargado, solo mostrar un mensaje
       this.showNotification('¡El Skeleton ya está activo!', 'info');
@@ -70,7 +240,6 @@ export class SkeletonButtonComponent implements OnInit {
     }
 
     this.isLoading = true;
-    console.log('🔘 Iniciando carga del skeleton...');
 
     try {
       // Emitir evento para activar el skeleton
@@ -81,15 +250,11 @@ export class SkeletonButtonComponent implements OnInit {
       
       this.isLoaded = true;
       this.isLoading = false;
-      
-      // Guardar en sessionStorage
-      sessionStorage.setItem('skeleton_loaded', 'true');
+      this.shouldShowButton = false; // Ocultar el botón después de cargar manualmente
       
       this.showNotification('¡Skeleton cargado exitosamente!', 'success');
-      console.log('🔘 Skeleton cargado exitosamente');
       
     } catch (error) {
-      console.error('❌ Error cargando skeleton:', error);
       this.isLoading = false;
       this.showNotification('Error al cargar el Skeleton', 'error');
     }
@@ -103,8 +268,6 @@ export class SkeletonButtonComponent implements OnInit {
     const checkInterval = 100; // Verificar cada 100ms
     let elapsedTime = 0;
     
-    console.log('⏳ Esperando a que el skeleton se cargue completamente...');
-    
     while (elapsedTime < maxWaitTime) {
       // Buscar el elemento del skeleton en el DOM
       const skeletonElement = document.querySelector('.skeleton-wrapper');
@@ -116,7 +279,6 @@ export class SkeletonButtonComponent implements OnInit {
         
         // Verificar si la imagen está completamente cargada
         if (sprite.complete && sprite.naturalWidth > 0) {
-          console.log('✅ Skeleton detectado como cargado completamente');
           return;
         }
       }
@@ -124,8 +286,6 @@ export class SkeletonButtonComponent implements OnInit {
       await new Promise(resolve => setTimeout(resolve, checkInterval));
       elapsedTime += checkInterval;
     }
-    
-    console.warn('⚠️ Timeout esperando skeleton, pero continuando...');
   }
 
   private showNotification(message: string, type: 'success' | 'error' | 'info'): void {
