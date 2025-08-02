@@ -1,0 +1,24 @@
+<div class="skeleton-button-container" 
+     [class.loading]="isLoading"
+     [class.loaded]="isLoaded"
+     (click)="toggleSkeleton()"
+     *ngIf="!isLoaded">
+  
+  <!-- Icono de robot cuando no está cargado -->
+  <i class="fas fa-robot robot-icon" *ngIf="!isLoading"></i>
+  
+  <!-- Spinner cuando está cargando -->
+  <div class="loading-spinner" *ngIf="isLoading">
+    <i class="fas fa-spinner fa-spin"></i>
+  </div>
+  
+
+  <!-- Tooltip -->
+  <div class="tooltip" *ngIf="!isLoading">
+    Loading Mini Ak4n1
+  </div>
+  
+  <div class="tooltip" *ngIf="isLoading">
+    Cargando...
+  </div>
+</div> 

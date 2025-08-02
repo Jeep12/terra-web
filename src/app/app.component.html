@@ -1,7 +1,5 @@
 <router-outlet></router-outlet>
 
-
-
 <!-- Acá sí el offcanvas envuelve al componente -->
 <div class="offcanvas offcanvas-end chatbot-container" tabindex="-1" id="offCanvasChat"
     aria-labelledby="offCanvasChatLabel">
@@ -17,4 +15,9 @@
     </div>
 </div>
 
-<app-mini-ak4n1></app-mini-ak4n1>
+<!-- Skeleton cargado bajo demanda -->
+<app-mini-ak4n1 #skeletonComponent></app-mini-ak4n1>
+
+<!-- Botón flotante para activar skeleton -->
+<app-skeleton-button #skeletonButton (skeletonActivated)="onSkeletonActivated()"></app-skeleton-button>
+

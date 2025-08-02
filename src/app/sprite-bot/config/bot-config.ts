@@ -72,8 +72,8 @@ export const BOT_CONFIG = {
   movementSpeed: 0.15,                // Muy baja para movimientos lentos
 
   // ===== CONFIGURACIÓN DE FÍSICA =====
-  gravity: 0.3,                    // Gravedad más suave
-  maxFallSpeed: 0.8,               // Velocidad máxima más suave
+  gravity: 3,                    // Gravedad más suave
+  maxFallSpeed: 3,               // Velocidad máxima más suave
   jumpPower: 7,                     // Salto más suave y bajo
 
   // ===== CONFIGURACIÓN DE DRAG & DROP =====
@@ -95,7 +95,7 @@ export const BOT_CONFIG = {
 
   // ===== CONFIGURACIÓN DE POSICIONAMIENTO =====
   initialX: 350,
-  initialY: 100,  // Posición inicial más alta para que pueda caer
+  initialY: 0,  // Posición inicial más alta para que pueda caer
   spriteWidth: 100,
   spriteHeight: 100,
 
@@ -117,14 +117,19 @@ export const BOT_CONFIG = {
   // ===== CONFIGURACIÓN DE DIÁLOGOS =====
   defaultDialog: "Hello, I'm the Skeleton Crusader!",
   dialogMessages: [
-    'Our Terra server is under development!',
-    'Click here for more information!',
-    'Stay tuned for upcoming updates!',
-    'Have questions? Tap me!',
-    'Join our Discord for more info! <button>Discord</button>',
-    'Drag and drop me!',
-    'Click on me!',
-    "Let's go for a walk!"
+    // English
+    'Our Terra server is temporarily on pause.',
+    'Development is paused while we focus on studies.',
+    'For updates, join our Discord community.',
+    'We’ll be back stronger soon!',
+    'Thanks for your support!',
+  
+    // Español
+    'Nuestro servidor Terra está en pausa temporal.',
+    'Pausamos el desarrollo por temas de estudio.',
+    'Unite a nuestro Discord para más novedades.',
+    '¡Volveremos con todo pronto!',
+    '¡Gracias por el aguante!'
   ],
 
   // ===== CONFIGURACIÓN DE ANIMACIONES =====

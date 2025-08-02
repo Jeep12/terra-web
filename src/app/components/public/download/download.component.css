@@ -1,301 +1,1538 @@
-html, body {
-  height: 100%;
+/* ========================================
+   CSS VARIABLES FOR COLORS
+   ======================================== */
+.download-container {
+
+  --hover-step: #dabe64;
+  --active-step: linear-gradient(to right, #746535, #dabe64);
+  /* Step 1: System Requirements - Green */
+  --step-1-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-1-hover: var(--hover-step);
+  --step-1-active: var(--active-step);
+
+  /* Step 2: Download Client - Blue */
+  --step-2-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-2-hover: var(--hover-step);
+  --step-2-active: var(--active-step);
+
+  /* Step 3: Extract Client - Orange */
+  --step-3-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-3-hover: var(--hover-step);
+  --step-3-active: var(--active-step);
+
+  /* Step 4: Download Launcher - Purple */
+  --step-4-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-4-hover: var(--hover-step);
+  --step-4-active: var(--active-step);
+
+  /* Step 5: Install Launcher - Red */
+  --step-5-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-5-hover: var(--hover-step);
+  --step-5-active: var(--active-step);
+
+  /* Step 6: Configure Launcher - Teal */
+  --step-6-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-6-hover: var(--hover-step);
+  --step-6-active: var(--active-step);
+
+  /* Step 7: Play! - Gold */
+  --step-7-bg: linear-gradient(to right, #746535, #dabe64);
+  --step-7-hover: var(--hover-step);
+  --step-7-active: var(--active-step);
+
+  /* Completed state */
+  --completed-bg: #4caf50;
+  --completed-hover: linear-gradient(to bottom, #000000, #0c0f20);
+}
+
+/* ========================================
+   DOWNLOAD COMPONENT STYLES
+   ======================================== */
+
+/* ========================================
+   MAIN CONTAINER
+   ======================================== */
+.download-container {
+  font-family: "Marcellus SC";
+  color: #dabe64;
+  width: 100%;
   margin: 0;
-  padding: 0;
-  /* overflow-y: hidden;  <-- QUITADO para permitir scroll */
-  overflow-x: hidden;
-}
-
-.flame-container.flame-top {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  z-index: 2147483647;
-  pointer-events: none;
-  display: block;
-}
-.flame-image.flame-top-img {
-  width: 100vw;
-  max-width: 100vw;
-  min-width: 100vw;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 8px 32px #000a);
-  transform: rotate(180deg);
-  user-select: none;
-  pointer-events: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 2147483647;
-}
-
-
-
-.download-bg {
-  position: relative;
-  width: 100vw;
+  padding: 2rem;
   min-height: 100vh;
-  overflow: visible;
-  z-index: 0;
-}
-
-.download-video {
-  position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  object-fit: cover;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.llama-negra {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 180px;
-  max-width: 40vw;
-  z-index: 2;
-  user-select: none;
-  pointer-events: none;
-}
-
-.download-content {
+  background-color: transparent !important;
+  box-sizing: border-box;
+  overflow-x: hidden;
   position: relative;
-  z-index: 3;
+  z-index: 1;
+  transition: background-image 0.3s ease;
+
+  /* Propiedades para el SVG de fondo */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: black !important;
+}
+
+/* ========================================
+   HEADER SECTION
+   ======================================== */
+.download-header {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 2rem;
+}
+
+.header-content {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.header-title {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  color: #dabe64;
+  text-shadow: 0 0 10px rgba(218, 190, 100, 0.5);
+}
+
+.header-subtitle {
+  font-size: 1.2rem;
+  color: #a0a0a0;
+  line-height: 1.6;
+}
+
+/* ========================================
+   STEPS NAVIGATION BAR
+   ======================================== */
+.steps-navbar {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.steps-nav-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  align-items: start;
-  min-height: 100vh;
-  width: 100vw;
-  padding: 0 4vw 4vw 4vw;
-  box-sizing: border-box;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0.5rem 0;
 }
 
-.download-left,
-.download-right {
-  width: 30vw;
-  min-width: 220px;
-  max-width: 480px;
-  background: rgba(20, 20, 30, 0.38);
-  padding: 2vw 1vw;
-  color: #fff;
-  backdrop-filter: blur(8px);
-  border-top: 0.5px solid #fff2;
-  transition: box-shadow 0.2s, border 0.2s;
+.steps-nav-row {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+
+/* ========================================
+   STEP NAV ITEMS - SQUARE DESIGN
+   ======================================== */
+.step-nav-item {
+  width: 140px;
+  min-width: 110px;
+  max-width: 150px;
+  text-align: center;
+  height: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  color: white !important;
+  background: var(--step-1-bg) !important;
+  border-radius: 8px;
+  border: 2px solid transparent;
   position: relative;
-  margin-left: 90px;
-  margin-right: 30px;
+  z-index: 3;
 }
 
-.download-title-main {
-
-  z-index: 999;
+.step-nav-item:hover {
+  background: var(--hover-step) !important;
+  border-color: rgba(218, 190, 100, 0.3);
+  transform: translateY(-2px);
 }
 
-.download-title-main h1 {
-  border: none;
+.step-nav-item.active {
+  background: var(--active-step) !important;
+  color: #000;
+  border-color: #dabe64;
+  box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
 }
 
-.download-left::before {
-  content: "";
-  display: block;
-  width: 10px;
-  position: absolute;
-  width: 10px;
-  top: 0px;
-  height: 100%;
-  left: -10px;
-  border-right: 10px solid #dabe64;
-  border-bottom: 10px solid transparent;
-  border-top: 10px solid transparent;
-
+.step-nav-item.completed {
+  background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(76, 175, 80, 0.1) 100%);
+  border-color: rgba(76, 175, 80, 0.5);
+  position: relative;
 }
 
-.download-right::before {
-  content: "";
-  display: block;
-  width: 10px;
-  position: absolute;
-  width: 10px;
-  top: 0px;
-  height: 100%;
-  left: -10px;
-  border-right: 10px solid #dabe64;
-  border-bottom: 10px solid transparent;
-  border-top: 10px solid transparent;
-
-}
-
-.download-left h2,
-.download-right h2 {
-  color: #dabe64;
-  font-size: 1.5rem;
-  margin-bottom: 0.7rem;
-  margin-top: 0;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  text-shadow: 0 2px 12px #000a;
-}
-
-.download-left ol,
-.download-left ul {
-  margin: 0 0 1.2rem 1.2rem;
-  padding: 0;
-  color: #fff;
-  font-size: 1.08rem;
-  line-height: 1.7;
-  letter-spacing: 0.2px;
-}
-
-.download-left ol {
-  list-style: decimal inside;
-}
-
-.download-left ul {
-  list-style: disc inside;
-}
-
-.download-links {
+.step-nav-content {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem;
-  margin-top: 1.2rem;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.step-nav-title {
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+
+
+/* ========================================
+   INDIVIDUAL STEP STYLES - SQUARE
+   ======================================== */
+
+/* Step 1: System Requirements */
+.step-nav-item.step-1 {
+  background: var(--step-1-bg) !important;
+}
+
+.step-nav-item.step-1:hover {
+  background: var(--step-1-hover) !important;
+}
+
+.step-nav-item.step-1.active {
+  background: var(--step-1-active) !important;
+  color: #fff;
+}
+
+/* Step 2: Download Client */
+.step-nav-item.step-2 {
+  background: var(--step-2-bg) !important;
+}
+
+.step-nav-item.step-2:hover {
+  background: var(--step-2-hover) !important;
+}
+
+.step-nav-item.step-2.active {
+  background: var(--step-2-active) !important;
+  color: #fff;
+}
+
+/* Step 3: Extract Client */
+.step-nav-item.step-3 {
+  background: var(--step-3-bg) !important;
+}
+
+.step-nav-item.step-3:hover {
+  background: var(--step-3-hover) !important;
+}
+
+.step-nav-item.step-3.active {
+  background: var(--step-3-active) !important;
+  color: #fff;
+}
+
+/* Step 4: Download Launcher */
+.step-nav-item.step-4 {
+  background: var(--step-4-bg) !important;
+}
+
+.step-nav-item.step-4:hover {
+  background: var(--step-4-hover) !important;
+}
+
+.step-nav-item.step-4.active {
+  background: var(--step-4-active) !important;
+  color: #fff;
+}
+
+/* Step 5: Install Launcher */
+.step-nav-item.step-5 {
+  background: var(--step-5-bg) !important;
+}
+
+.step-nav-item.step-5:hover {
+  background: var(--step-5-hover) !important;
+}
+
+.step-nav-item.step-5.active {
+  background: var(--step-5-active) !important;
+  color: #fff;
+}
+
+/* Step 6: Configure Launcher */
+.step-nav-item.step-6 {
+  background: var(--step-6-bg) !important;
+}
+
+.step-nav-item.step-6:hover {
+  background: var(--step-6-hover) !important;
+}
+
+.step-nav-item.step-6.active {
+  background: var(--step-6-active) !important;
+  color: #fff;
+}
+
+/* Step 7: Play! */
+.step-nav-item.step-7 {
+  background: var(--step-7-bg) !important;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.2);
+}
+
+.step-nav-item.step-7:hover {
+  background: var(--step-7-hover) !important;
+  transform: scale(1.08);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.3);
+}
+
+.step-nav-item.step-7.active {
+  background: var(--step-7-active) !important;
+  color: #000;
+  transform: scale(1.1);
+  box-shadow: 0 8px 20px rgba(255, 193, 7, 0.4);
+}
+
+/* ========================================
+   PROGRESS SECTION
+   ======================================== */
+.progress-section {
+  margin-bottom: 2rem;
+  text-align: center;
+  width: 80%;
+  margin: auto;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #dabe64 0%, #b8941f 100%);
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  color: #dabe64;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ========================================
+   STEPS CONTAINER
+   ======================================== */
+.steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  width: 80%;
+  margin: auto;
+}
+
+.step-card {
+  transition: all 0.3s ease;
+  opacity: 0.6;
+  transform: scale(0.98);
+  position: relative;
+  width: 80%;
+  margin: auto;
+}
+
+.step-card.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.step-card.completed {
+  opacity: 0.8;
+}
+
+/* Hide non-active steps */
+.step-card:not(.active) {
+  display: none;
+}
+
+.step-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.step-info {
+  flex: 1;
+}
+
+.step-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #dabe64;
+  margin-bottom: 0.5rem;
+}
+
+.step-description {
+  color: #a0a0a0;
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.step-icon {
+  font-size: 2rem;
+  color: #dabe64;
+  margin-left: 1rem;
+}
+
+.step-content {
+  margin-top: 1.5rem;
+}
+
+/* ========================================
+   WARNINGS SECTION
+   ======================================== */
+.warnings-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.warnings-title {
+  color: #ffc107;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.warnings-title i {
+  font-size: 1.2rem;
+}
+
+.warnings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.warning-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.warning-text {
+  color: #ffc107;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ========================================
+   TIPS SECTION
+   ======================================== */
+.tips-section {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.tips-title {
+  color: #4caf50;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.tips-title i {
+  font-size: 1.2rem;
+}
+
+.tips-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tip-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.5rem;
+}
+
+.tip-text {
+  color: #4caf50;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ========================================
+   REQUIREMENTS LIST
+   ======================================== */
+.requirements-list {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+
+
+}
+
+.requirement-item i {
+  font-size: 1.5rem;
+  color: #dabe64;
+  width: 24px;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.requirement-item .fab.fa-windows {
+  color: #0078d4;
+}
+
+.requirement-item .fas.fa-microchip {
+  color: #ff6b35;
+}
+
+.requirement-item .fas.fa-memory {
+  color: #6c5ce7;
+}
+
+.requirement-item .fas.fa-tv {
+  color: #00b894;
+}
+
+.requirement-item .fas.fa-hdd {
+  color: #fdcb6e;
+}
+
+.requirement-item .fas.fa-wifi {
+  color: #e17055;
+}
+
+/* ========================================
+   DOWNLOAD SECTION
+   ======================================== */
+.download-section {
+  margin-top: 2rem;
+
+}
+
+.file-info {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+}
+
+.file-icon {
+  width: 64px;
+  height: 64px;
+  margin-right: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file-icon-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+
+.file-icon i {
+  font-size: 2rem;
+  color: #dabe64;
+}
+
+.file-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: #dabe64;
+  font-size: 1.2rem;
+}
+
+.file-size {
+  color: #a0a0a0;
+  font-size: 0.9rem;
+}
+
+.download-actions {
+  margin-top: 1.5rem;
+  width: 100%;
+
+
+}
+
+.download-buttons-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
 }
 
 .download-btn {
-  background: rgba(0, 0, 0, 0.55);
-  color: #fff;
-  border: 1.5px solid #fff2;
-  border-radius: 10px;
-  padding: 1em 1.7em;
-  font-size: 1.08rem;
-  font-weight: 700;
-  cursor: pointer;
-  text-align: center;
-  text-decoration: none;
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
-  outline: none;
-  box-shadow: 0 2px 12px #0008;
-  letter-spacing: 0.5px;
-}
-
-.download-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  background: rgba(0, 0, 0, 0.25);
-  color: #bbb;
-  border: 1.5px solid #fff2;
-}
-
-.download-btn.available {
-  background: linear-gradient(90deg, #dabe64 60%, #bfa23a 100%);
-  color: #23232a;
-  border: 1.5px solid #dabe64;
-  box-shadow: 0 2px 16px #dabe6440;
-}
-
-.download-btn.available:hover {
-  background: linear-gradient(90deg, #fff2b0 60%, #dabe64 100%);
-  color: #23232a;
-  border: 2px solid #fff2b0;
-  box-shadow: 0 4px 24px #dabe6440;
-}
-
-.download-title-main {
-  width: 100vw;
-  text-align: center;
-  margin-top: 8.5rem;
-  margin-bottom: 2.2rem;
-  z-index: 10;
+  width: 200px;
+  margin: 0 auto;
   position: relative;
-}
-
-.download-title-main h1 {
-  color: #dabe64;
-  font-size: 2.3rem;
-  font-weight: 900;
-  letter-spacing: 2px;
-  text-shadow: 0 4px 24px #000a, 0 1px 0 #fff2;
-  display: inline-block;
-  background: rgba(20, 20, 30, 0.22);
-  border-radius: 18px;
-  padding: 0.7rem 2.2rem;
-  box-shadow: 0 2px 16px #0008;
-}
-
-.download-title-main h1 i {
-  font-size: 2.1rem;
-  color: #dabe64;
-  filter: drop-shadow(0 2px 8px #0008);
+  padding: 1rem;
+  min-height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .download-btn i {
-  margin-right: 0.7em;
-  font-size: 1.1em;
-  vertical-align: middle;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
 }
 
-.video-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0,0,0,0.45);
-  z-index: 2;
-  pointer-events: none;
+.download-btn span {
+  display: block;
 }
 
-@media (max-width: 900px) {
-  .download-content {
+.download-btn.btn-primary {}
+
+.download-btn.btn-primary:hover {}
+
+.download-btn.btn-secondary {}
+
+.download-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+  color: #666;
+}
+
+.download-btn.disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.recommended-badge {
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  background: #28a745;
+  color: white;
+  font-size: 0.65rem;
+  padding: 3px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+.disabled-badge {
+  position: absolute;
+  top: -10px;
+  right: -5px;
+  background: #6c757d;
+  color: white;
+  font-size: 0.65rem;
+  padding: 3px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* ========================================
+   INSTRUCTIONS SECTION
+   ======================================== */
+.instructions-section {
+  margin-top: 2rem;
+  padding: 2rem;
+}
+
+.instructions-title {
+  color: #dabe64;
+  font-size: 1.7rem;
+  text-align: start;
+  font-family: "Marcellus SC";
+}
+
+.instructions-list {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.instruction-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.instruction-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #dabe64 0%, #b8941f 100%);
+  color: #000;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+}
+
+.instruction-text {
+  color: #e0e0e0;
+  line-height: 1.6;
+  flex: 1;
+}
+
+.instruction-text a {
+  color: #dabe64;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.instruction-text a:hover {
+  text-decoration: underline;
+}
+
+/* ========================================
+   INSTRUCTIONS WITH LAUNCHER (STEP 6)
+   ======================================== */
+.instructions-with-launcher {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.launcher-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.launcher-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 2rem;
+}
+
+.launcher-icon-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+}
+
+.launcher-icon {
+  width: 100%;
+  max-width: 90%;
+  height: auto;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.launcher-label {
+  color: #dabe64;
+  font-weight: 600;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Instructions Section for Step 6 */
+.instructions-with-launcher .instructions-section {
+  margin-top: 0;
+}
+
+/* ========================================
+   NAVIGATION BUTTONS
+   ======================================== */
+.navigation-buttons {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(218, 190, 100, 0.2);
+}
+
+.nav-buttons-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-family: "Marcellus SC";
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.nav-btn i {
+  font-size: 0.9rem;
+}
+
+.nav-btn.btn-previous {
+  background: rgba(255, 255, 255, 0.1);
+  color: #dabe64;
+  border: 1px solid rgba(218, 190, 100, 0.3);
+}
+
+.nav-btn.btn-previous:hover:not(:disabled) {
+  background: rgba(218, 190, 100, 0.1);
+  border-color: rgba(218, 190, 100, 0.5);
+  transform: translateX(-2px);
+}
+
+.nav-btn.btn-next {
+  background: linear-gradient(135deg, #dabe64 0%, #b8941f 100%);
+  color: #000;
+  border: 1px solid #dabe64;
+}
+
+.nav-btn.btn-next:hover:not(:disabled) {
+  background: linear-gradient(135deg, #e6c875 0%, #c4a52a 100%);
+  transform: translateX(2px);
+  box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
+}
+
+.nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: rgba(255, 255, 255, 0.05);
+  color: #666;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-btn:disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ========================================
+   HELP SECTION
+   ======================================== */
+.help-section {
+  margin-top: 3rem;
+  padding: 2rem;
+}
+
+.help-card {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.help-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.help-header i {
+  font-size: 2rem;
+  color: #dabe64;
+}
+
+.help-header h3 {
+  font-size: 1.5rem;
+  color: #dabe64;
+  margin: 0;
+}
+
+.help-content {
+  color: #a0a0a0;
+  line-height: 1.6;
+}
+
+.help-content ul {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.help-content li {
+  color: #a0a0a0;
+}
+
+.help-link {
+  color: #dabe64;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.help-link:hover {
+  color: #fff;
+  text-shadow: 0 0 5px rgba(218, 190, 100, 0.5);
+}
+
+/* ========================================
+   VIDEO SECTION
+   ======================================== */
+.video-section {
+  margin-top: 3rem;
+  padding: 2rem;
+}
+
+.video-container {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.video-container h3 {
+  font-size: 1.5rem;
+  color: #dabe64;
+  margin-bottom: 1.5rem;
+}
+
+.video-container video {
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
+@media (max-width: 1200px) {
+  .step-nav-item {
+    width: 130px;
+    min-width: 110px;
+    max-width: 160px;
+  }
+
+  .step-nav-title {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .download-container {
+    padding: 1rem;
+  }
+
+  .header-title {
+    font-size: 2rem;
+  }
+
+  .header-subtitle {
+    font-size: 1rem;
+  }
+
+  .steps-nav-container {
+    gap: 0.5rem;
+  }
+
+  .steps-nav-row {
+    gap: 1rem;
+    justify-content: center;
+  }
+
+  .step-nav-item {
+    width: 120px;
+    min-width: 100px;
+    max-width: 140px;
+    height: 60px;
+  }
+
+  .step-nav-title {
+    font-size: 10px;
+    line-height: 1.1;
+  }
+
+  .step-header {
     flex-direction: column;
-    justify-content: flex-start;
+    gap: 1rem;
+  }
+
+  .step-title {
+    font-size: 1.2rem;
+  }
+
+  .step-description {
+    font-size: 0.9rem;
+  }
+
+  .download-actions {
+    flex-direction: column;
+  }
+
+  .download-buttons-grid {
+    flex-direction: column;
     align-items: center;
-    padding: 0 2vw 2vw 2vw;
-    min-height: 100vh;
   }
-  .download-left, .download-right {
-    width: 96vw;
-    min-width: 0;
-    max-width: 98vw;
-    margin-bottom: 2vw;
-    padding: 5vw 3vw;
-    margin-left: 0;
+
+  .download-btn {
+    min-height: 70px;
+    width: 100%;
+    max-width: 180px;
+    padding: 0.75rem;
+  }
+
+  .download-btn i {
+    font-size: 1.2rem;
+  }
+
+  .recommended-badge,
+  .disabled-badge {
+    font-size: 0.6rem;
+    padding: 2px 5px;
+    top: -8px;
+    right: -3px;
+  }
+
+  .download-btn span {
+    font-size: 0.9rem;
+  }
+
+  .file-info {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .file-icon {
     margin-right: 0;
+    margin-bottom: 1rem;
   }
-  .flame-image.flame-top-img {
-    width: 100vw;
-    max-width: 100vw;
-    min-width: 100vw;
-    height: auto;
-    top: 0;
-    left: 0;
-    position: fixed;
-    z-index: 999;
+
+  .instructions-with-launcher {
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
-  .download-title-main {
-    margin-top: 6.5rem;
-    margin-bottom: 1.2rem;
+
+  .launcher-preview {
+    padding: 1rem;
   }
-  .download-title-main h1 {
-    font-size: 1.3rem;
-    padding: 0.5rem 1rem;
+
+  .instruction-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .instruction-number {
+    align-self: center;
+  }
+
+  .help-card {
+    padding: 1rem;
+  }
+
+  .video-container {
+    padding: 1rem;
   }
 }
 
-@media (max-width: 600px) {
-  .download-title-main {
-    margin-top: 4.2rem;
-    margin-bottom: 0.7rem;
+@media (max-width: 480px) {
+  .download-container {
+    padding: 0.5rem;
   }
-  .download-title-main h1 {
-    font-size: 1.1rem;
-    padding: 0.4rem 0.5rem;
+
+  .header-title {
+    font-size: 1.5rem;
   }
-  .download-left, .download-right {
-    padding: 3vw 1vw;
+
+  .header-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .steps-nav-container {
+    gap: 0.5rem;
+  }
+
+  .steps-nav-row {
+    gap: 0.75rem;
+    justify-content: center;
+  }
+
+  .step-nav-item {
+    width: 100px;
+    min-width: 80px;
+    max-width: 120px;
+    height: 50px;
+  }
+
+  .step-nav-title {
+    font-size: 9px;
+    line-height: 1.0;
+  }
+
+  .step-card {
+    padding: 1rem;
+  }
+
+  .step-content {
+    margin-top: 1rem;
+  }
+
+  .file-info {
+    padding: 1rem;
+  }
+
+  .instruction-item {
+    padding: 0.75rem;
+  }
+
+  .instruction-number {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .help-card {
+    padding: 0.5rem;
+  }
+
+  .video-container {
+    padding: 0.5rem;
+  }
+
+  .download-buttons-grid {
+    gap: 0.5rem;
+  }
+
+  .download-btn {
+    min-height: 60px;
+    padding: 0.5rem;
+    width: 100%;
+    max-width: 160px;
+  }
+
+  .download-btn i {
+    font-size: 1rem;
+  }
+
+  .download-btn span {
+    font-size: 0.8rem;
+  }
+
+  .warnings-section,
+  .tips-section {
+    padding: 1rem;
+  }
+
+  .warnings-title,
+  .tips-title {
+    font-size: 1rem;
+  }
+
+  .warning-item,
+  .tip-item {
+    padding: 0.5rem;
+  }
+
+  .time-badge {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .download-container {
+    padding: 0.25rem;
+  }
+
+  .header-title {
+    font-size: 1.2rem;
+  }
+
+  .steps-nav-container {
+    gap: 0.4rem;
+  }
+
+  .steps-nav-row {
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  .step-nav-item {
+    width: 80px;
+    min-width: 60px;
+    max-width: 100px;
+    height: 45px;
+  }
+
+  .step-nav-title {
+    font-size: 8px;
+    line-height: 0.9;
+  }
+
+  .step-card {
+    padding: 0.75rem;
+  }
+
+  .step-content {
+    margin-top: 0.75rem;
+  }
+
+  .file-info {
+    padding: 0.75rem;
+  }
+
+  .instruction-item {
+    padding: 0.5rem;
+  }
+
+  .instruction-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .help-card {
+    padding: 0.25rem;
+  }
+
+  .video-container {
+    padding: 0.25rem;
+  }
+
+  .steps-container,
+  .help-section,
+  .video-section {
+    margin-top: 1.5rem;
+  }
+
+  .warnings-section,
+  .tips-section {
+    padding: 0.75rem;
+  }
+
+  .warnings-title,
+  .tips-title {
+    font-size: 0.9rem;
+  }
+
+  .warning-item,
+  .tip-item {
+    padding: 0.25rem;
+  }
+
+  .time-badge {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
+  }
+}
+
+@media (max-width: 480px) and (min-height: 800px) {
+  .download-container {
+    padding: 1rem;
+  }
+
+  .step-card {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-height: 480px) and (orientation: landscape) {
+  .download-container {
+    padding: 0.5rem;
+  }
+
+  .header-title {
+    font-size: 1.2rem;
+  }
+
+  .steps-nav-container {
+    gap: 0.5rem;
+  }
+
+  .steps-nav-row {
+    gap: 1rem;
+  }
+
+  .step-nav-item {
+    width: 80px;
+    min-width: 60px;
+    max-width: 100px;
+    height: 40px;
+  }
+
+  .step-nav-title {
+    font-size: 8px;
+    line-height: 1.0;
+  }
+
+  .step-card {
+    padding: 0.75rem;
+  }
+
+  .step-content {
+    margin-top: 0.75rem;
+  }
+
+  .file-info {
+    padding: 0.75rem;
+  }
+
+  .instruction-item {
+    padding: 0.5rem;
+  }
+
+  .instruction-number {
+    width: 24px;
+    height: 24px;
+    font-size: 0.7rem;
+  }
+
+  .help-card {
+    padding: 0.25rem;
+  }
+
+  .video-container {
+    padding: 0.25rem;
+  }
+
+  .btn-primary,
+  .btn-secondary,
+  .btn-torrent,
+  .btn-disabled {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+  }
+
+  .warnings-section,
+  .tips-section {
+    padding: 0.75rem;
+  }
+
+  .warnings-title,
+  .tips-title {
+    font-size: 0.9rem;
+  }
+
+  .warning-item,
+  .tip-item {
+    padding: 0.25rem;
+  }
+
+  .time-badge {
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
+  }
+
+  .recommended-badge,
+  .disabled-badge {
+    font-size: 0.55rem;
+    padding: 2px 4px;
+    top: -6px;
+    right: -2px;
+  }
+}
+
+/* ========================================
+   ANIMATIONS & EFFECTS
+   ======================================== */
+.btn-primary,
+.btn-secondary,
+.btn-torrent,
+.btn-disabled {
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #dabe64 0%, #b8941f 100%);
+  color: #000;
+  border: 1px solid #dabe64;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #e6c875 0%, #c4a52a 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(218, 190, 100, 0.3);
+}
+
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.1);
+  color: #dabe64;
+  border: 1px solid rgba(218, 190, 100, 0.3);
+}
+
+.btn-secondary:hover {
+  background: rgba(218, 190, 100, 0.1);
+  border-color: rgba(218, 190, 100, 0.5);
+  transform: translateY(-1px);
+}
+
+.btn-torrent {
+  background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%);
+  color: #fff;
+  border: 1px solid #ff6b35;
+}
+
+.btn-torrent:hover {
+  background: linear-gradient(135deg, #ff7f4d 0%, #f9a54e 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 107, 53, 0.3);
+}
+
+.btn-disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: #666;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  cursor: not-allowed;
+}
+
+.btn-disabled:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+.recommended {
+  position: relative;
+}
+
+.recommended-badge {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background: #28a745;
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* ========================================
+   GLOBAL STYLES
+   ======================================== */
+.download-container {}
+
+.step-card {}
+
+.step-nav-item {}
+
+.step-nav-item:hover {
+  backdrop-filter: blur(5px);
+}
+
+.step-nav-item.active {
+  backdrop-filter: blur(5px);
+}
+
+.download-btn {
+  backdrop-filter: blur(3px);
+}
+
+.download-btn:hover {
+  backdrop-filter: blur(5px);
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .download-container {
+    backdrop-filter: blur(2px);
+  }
+
+  .step-card {
+    backdrop-filter: blur(2px);
+  }
+
+  .step-nav-item {
+    backdrop-filter: blur(2px);
+  }
+
+  .download-btn {
+    backdrop-filter: blur(2px);
+  }
+}
+
+/* ========================================
+   RESPONSIVE DESIGN - SMALLEST SCREENS
+   ======================================== */
+@media (max-width: 320px) {
+  .step-nav-item {
+    width: 70px;
+    min-width: 50px;
+    max-width: 90px;
+    min-height: 35px;
+    height: 40px;
+  }
+
+  .step-nav-title {
+    font-size: 7px;
+    line-height: 0.8;
   }
 }

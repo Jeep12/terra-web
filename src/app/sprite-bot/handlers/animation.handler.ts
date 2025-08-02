@@ -12,6 +12,7 @@ export class AnimationHandler {
   private _animationFrameId: any;
   private _lastFrameTimestamp = performance.now();
   private _frameRate:any = BOT_CONFIG.defaultFrameRate;
+  private _isFirstFrame = true;
 
   constructor(
     private botState: BotStateService,
@@ -67,8 +68,14 @@ export class AnimationHandler {
     }
 
     const currentFrame = this.botState.currentFrame;
-    const nextFrame = (currentFrame + 1) % anim.frames;
     
+    // En la primera iteración, mantener el frame 0
+    if (this._isFirstFrame) {
+      this._isFirstFrame = false;
+      return;
+    }
+    
+    const nextFrame = (currentFrame + 1) % anim.frames;
     this.botState.setCurrentFrame(nextFrame);
 
     // Manejar animaciones especiales

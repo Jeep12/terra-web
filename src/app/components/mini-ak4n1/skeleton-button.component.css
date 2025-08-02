@@ -1,0 +1,116 @@
+.skeleton-button-container {
+  position: fixed !important;
+  bottom: 20px !important;
+  right: 20px !important;
+  width: 60px !important;
+  height: 60px !important;
+  background: linear-gradient(to right, #746535, #dabe64);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border:1.5px groove white;
+  cursor: pointer !important;
+  z-index: 10000 !important;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5) !important; /* Sombra más oscura */
+  color: white !important;
+  font-weight: bold !important;
+  clip-path: polygon(30% 0%, 70% 0%, 100% 30%, 100% 70%, 70% 100%, 30% 100%, 0% 70%, 0% 30%);
+
+}
+
+.skeleton-button-container:hover {
+  transform: scale(1.1) !important;
+  background: #c0392b !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+.skeleton-button-container:active {
+  transform: scale(0.95) !important;
+}
+
+.skeleton-button-container.loading {
+  background: #dabe64 !important;
+  animation: pulse 1.5s ease-in-out infinite !important;
+}
+
+.skeleton-button-container.loaded {
+  background: #27ae60 !important;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.robot-icon {
+  font-size: 24px !important;
+  color: white !important;
+}
+
+.loading-spinner {
+  font-size: 20px !important;
+  color: white !important;
+}
+
+.check-icon {
+  font-size: 20px !important;
+  color: white !important;
+}
+
+.tooltip {
+  position: absolute !important;
+  bottom: 70px !important;
+  right: 0 !important;
+  background: rgba(0, 0, 0, 0.9) !important;
+  color: white !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  white-space: nowrap !important;
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transition: all 0.3s ease !important;
+  pointer-events: none !important;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
+}
+
+.tooltip::after {
+  content: '' !important;
+  position: absolute !important;
+  top: 100% !important;
+  right: 20px !important;
+  border-left: 5px solid transparent !important;
+  border-right: 5px solid transparent !important;
+  border-top: 5px solid rgba(0, 0, 0, 0.9) !important;
+}
+
+.skeleton-button-container:hover .tooltip {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .skeleton-button-container {
+    width: 50px !important;
+    height: 50px !important;
+    bottom: 15px !important;
+    right: 15px !important;
+  }
+
+  .robot-icon {
+    font-size: 20px !important;
+  }
+
+  .loading-spinner {
+    font-size: 18px !important;
+  }
+
+  .check-icon {
+    font-size: 18px !important;
+  }
+}

@@ -137,20 +137,7 @@ export class DragHandler {
    * Maneja el evento mouseenter (hover)
    */
   onMouseEnter(event: MouseEvent): void {
-    // Pausar auto-walk durante hover
-    this.physicsHandler.pauseAutoWalk();
-    
-    // Animación de reacción
-    this.animationHandler.setAnimation('runSlashing');
-    this.dialogueHandler.handleInteractionDialog('hover');
 
-    // Reanudar después de un tiempo
-    setTimeout(() => {
-      if (this.botState.currentAnimation === 'runSlashing') {
-        this.animationHandler.setAnimation('idle');
-      }
-      this.physicsHandler.resumeAutoWalk();
-    }, 500);
   }
 
   /**

@@ -2,13 +2,14 @@ import { CommonModule } from "@angular/common"
 import { Component, type AfterViewInit, type OnDestroy, PLATFORM_ID, HostListener } from "@angular/core"
 import { isPlatformBrowser } from "@angular/common"
 import { Inject } from "@angular/core"
+import { RouterModule } from "@angular/router"
 
 declare var $: any
 
 @Component({
   selector: "app-carrousel-home",
-  standalone: true,
-  imports: [CommonModule],
+  standalone: true, 
+  imports: [CommonModule, RouterModule],
   templateUrl: "./carrousel-home.component.html",
   styleUrl: "./carrousel-home.component.css",
 })

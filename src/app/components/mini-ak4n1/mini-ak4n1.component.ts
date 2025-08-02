@@ -32,7 +32,7 @@ import { PhysicsHandler } from '../../sprite-bot/handlers/physics.handlers';
 })
 export class MiniAk4n1Component {
 
-  @ViewChild('sprite', { static: true }) spriteRef!: ElementRef<HTMLImageElement>;
+  @ViewChild('sprite', { static: false }) spriteRef!: ElementRef<HTMLImageElement>;
 
   @Input() frameRate: number = BOT_CONFIG.defaultFrameRate;
   @Input() animation: AnimationKey = 'idle';
@@ -49,6 +49,12 @@ export class MiniAk4n1Component {
   public selecting = false;
   public config = BOT_CONFIG;
 
+  // Nuevos estados para carga manual
+  public isLoaded = false;
+  public isLoading = false;
+  public loadProgress = 0;
+  public showComponent = false;
+
   constructor(
     private botState: BotStateService,
     private imagePreloader: ImageSpritePreloadService,
@@ -59,27 +65,16 @@ export class MiniAk4n1Component {
   ) { }
 
   ngOnInit(): void {
-    // console.log('🎮 Inicializando BotSpriteComponent...');
-
-    // Configurar CSS del componente
-    this.applyCSSConfig();
-
-    // Inicializar handlers
-    this.initializeHandlers();
-
-    // Suscribirse a cambios de estado
-    this.subscribeToStateChanges();
-
-    // Comenzar con el modo básico
-    this.startBasicMode();
+    // No inicializar automáticamente - esperar a que se active manualmente
+    this.showComponent = false;
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['animation'] && !changes['animation'].firstChange) {
+    if (changes['animation'] && !changes['animation'].firstChange && this.isLoaded) {
       this.animationHandler.setAnimation(this.animation);
     }
 
-    if (changes['frameRate'] && !changes['frameRate'].firstChange) {
+    if (changes['frameRate'] && !changes['frameRate'].firstChange && this.isLoaded) {
       this.animationHandler.startAnimation(this.frameRate);
     }
   }
@@ -96,9 +91,134 @@ export class MiniAk4n1Component {
   }
 
   /**
+   * Método público para activar la carga del skeleton
+   */
+  public async activateSkeleton(): Promise<void> {
+    if (this.isLoaded || this.isLoading) return;
+
+    this.isLoading = true;
+    this.loadProgress = 0;
+
+    try {
+      console.log('🎮 Activando skeleton...');
+      console.log('🔄 Cargando sprite!');
+      
+      // Esperar a que el DOM esté listo
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Cargar recursos progresivamente PRIMERO
+      await this.loadResourcesProgressively();
+
+      // MOSTRAR el componente ANTES de configurar CSS
+      this.showComponent = true;
+      
+      // Esperar un frame para que el DOM se actualice
+      await new Promise(resolve => requestAnimationFrame(resolve));
+      
+      // Configurar CSS del componente DESPUÉS de mostrar
+      await this.applyCSSConfig();
+
+      // Inicializar handlers DESPUÉS de cargar recursos
+      await this.initializeHandlers();
+
+      // Comenzar con el modo básico
+      this.startBasicMode();
+
+      // Marcar como cargado ANTES de suscribirse a cambios
+      this.isLoaded = true;
+      this.isLoading = false;
+      this.loadProgress = 100;
+
+      // Suscribirse a cambios de estado DESPUÉS de marcar como cargado
+      this.subscribeToStateChanges();
+
+      console.log('✅ Skeleton activado exitosamente - Sprite listo!');
+
+    } catch (error) {
+      console.error('❌ Error cargando skeleton:', error);
+      this.isLoading = false;
+      this.showComponent = false;
+    }
+  }
+
+  /**
+   * Carga recursos progresivamente con barra de progreso
+   */
+  private async loadResourcesProgressively(): Promise<void> {
+    const totalSteps = 6;
+    let currentStep = 0;
+
+    console.log('🎮 Iniciando carga progresiva de recursos...');
+
+    // Paso 1: Precargar animación idle (crítica)
+    currentStep++;
+    this.loadProgress = Math.round((currentStep / totalSteps) * 100);
+    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animación idle...`);
+    await this.imagePreloader.preloadAnimation('idle');
+    console.log('✅ Animación idle cargada');
+
+    // Paso 2: Precargar animaciones básicas de movimiento
+    currentStep++;
+    this.loadProgress = Math.round((currentStep / totalSteps) * 100);
+    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones básicas...`);
+    await Promise.all([
+      this.imagePreloader.preloadAnimation('walking'),
+      this.imagePreloader.preloadAnimation('running')
+    ]);
+    console.log('✅ Animaciones básicas cargadas');
+
+    // Paso 3: Precargar animaciones de salto
+    currentStep++;
+    this.loadProgress = Math.round((currentStep / totalSteps) * 100);
+    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones de salto...`);
+    await Promise.all([
+      this.imagePreloader.preloadAnimation('jumpStart'),
+      this.imagePreloader.preloadAnimation('jumpLoop')
+    ]);
+    console.log('✅ Animaciones de salto cargadas');
+
+    // Paso 4: Precargar animaciones de combate básicas
+    currentStep++;
+    this.loadProgress = Math.round((currentStep / totalSteps) * 100);
+    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones de combate...`);
+    await Promise.all([
+      this.imagePreloader.preloadAnimation('slashing'),
+      this.imagePreloader.preloadAnimation('throwing')
+    ]);
+    console.log('✅ Animaciones de combate cargadas');
+
+    // Paso 5: Precargar animaciones especiales
+    currentStep++;
+    this.loadProgress = Math.round((currentStep / totalSteps) * 100);
+    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Cargando animaciones especiales...`);
+    await Promise.all([
+      this.imagePreloader.preloadAnimation('kicking'),
+      this.imagePreloader.preloadAnimation('hurt'),
+      this.imagePreloader.preloadAnimation('idleBlinking')
+    ]);
+    console.log('✅ Animaciones especiales cargadas');
+
+    // Paso 6: Precargar resto de animaciones en segundo plano
+    currentStep++;
+    this.loadProgress = Math.round((currentStep / totalSteps) * 100);
+    console.log(`🔄 Paso ${currentStep}/${totalSteps}: Finalizando carga...`);
+    
+    // Cargar el resto en segundo plano sin bloquear
+    setTimeout(() => {
+      console.log('🔄 Cargando animaciones restantes en segundo plano...');
+      this.imagePreloader.preloadAllImagesAsync();
+    }, 100);
+
+    console.log('✅ Carga progresiva completada - Todas las imágenes descargadas!');
+  }
+
+  /**
    * Inicializa todos los handlers
    */
-  private initializeHandlers(): void {
+  private async initializeHandlers(): Promise<void> {
+    // Esperar a que el spriteRef esté disponible
+    await this.waitForSpriteRef();
+    
     // Inicializar drag handler con referencia al elemento
     this.dragHandler.initialize(this.spriteRef);
 
@@ -112,6 +232,12 @@ export class MiniAk4n1Component {
    * Se suscribe a los cambios de estado reactivos
    */
   private subscribeToStateChanges(): void {
+    // Solo suscribirse si el componente está cargado
+    if (!this.isLoaded) {
+      console.log('🎮 Componente no cargado, no suscribiendo a cambios de estado');
+      return;
+    }
+
     // Posición
     this.botState.position$
       .pipe(takeUntil(this.destroy$))
@@ -172,6 +298,11 @@ export class MiniAk4n1Component {
    * Actualiza la posición del elemento en el DOM
    */
   private updateDOMPosition(): void {
+    // Verificar que el spriteRef existe y tiene nativeElement
+    if (!this.spriteRef || !this.spriteRef.nativeElement) {
+      return; // Salir silenciosamente si no está listo
+    }
+
     const element = this.spriteRef.nativeElement.parentElement;
     if (element && !this.isDragging) {
       element.style.position = 'fixed';
@@ -185,6 +316,11 @@ export class MiniAk4n1Component {
    * Actualiza la dirección del sprite
    */
   private updateSpriteDirection(): void {
+    // Verificar que el spriteRef existe y tiene nativeElement
+    if (!this.spriteRef || !this.spriteRef.nativeElement) {
+      return; // Salir silenciosamente si no está listo
+    }
+
     const element = this.spriteRef.nativeElement;
     if (element) {
       element.style.transform = this.facingLeft ? 'scaleX(-1)' : 'scaleX(1)';
@@ -194,7 +330,10 @@ export class MiniAk4n1Component {
   /**
    * Aplica la configuración CSS
    */
-  private applyCSSConfig(): void {
+  private async applyCSSConfig(): Promise<void> {
+    // Esperar a que el spriteRef esté disponible
+    await this.waitForSpriteRef();
+    
     const element = this.spriteRef.nativeElement.parentElement?.parentElement;
     if (element) {
       element.style.setProperty('--skeleton-sprite-width', `${BOT_CONFIG.spriteWidth}px`);
@@ -209,9 +348,33 @@ export class MiniAk4n1Component {
   }
 
   /**
+   * Espera a que el spriteRef esté disponible
+   */
+  private async waitForSpriteRef(): Promise<void> {
+    const maxAttempts = 50; // Máximo 5 segundos (50 * 100ms)
+    let attempts = 0;
+    
+    while (!this.spriteRef || !this.spriteRef.nativeElement) {
+      attempts++;
+      if (attempts >= maxAttempts) {
+        console.error('❌ Timeout esperando spriteRef');
+        throw new Error('spriteRef no disponible después de múltiples intentos');
+      }
+      
+      await new Promise(resolve => setTimeout(resolve, 100));
+    }
+  }
+
+  /**
    * Asegura la posición fija del elemento
    */
   private ensureFixedPosition(): void {
+    // Verificar que el spriteRef existe y tiene nativeElement
+    if (!this.spriteRef || !this.spriteRef.nativeElement) {
+      console.warn('⚠️ spriteRef no está disponible para posicionamiento');
+      return;
+    }
+
     const element = this.spriteRef.nativeElement.parentElement;
     if (element) {
       element.style.position = 'fixed';
@@ -226,6 +389,10 @@ export class MiniAk4n1Component {
    * Obtiene la URL del frame actual
    */
   getFrameSrc(): string {
+    // Verificar que el animationHandler esté disponible
+    if (!this.animationHandler) {
+      return ''; // Retornar string vacío si no está inicializado
+    }
     return this.animationHandler.getCurrentFrameUrl();
   }
 
@@ -246,32 +413,42 @@ export class MiniAk4n1Component {
 
   @HostListener('mouseenter', ['$event'])
   onMouseEnter(event: MouseEvent): void {
-    this.dragHandler.onMouseEnter(event);
+    if (this.isLoaded) {
+      this.dragHandler.onMouseEnter(event);
+    }
   }
 
   @HostListener('mousedown', ['$event'])
   onMouseDown(event: MouseEvent): void {
-    this.dragHandler.onMouseDown(event);
+    if (this.isLoaded) {
+      this.dragHandler.onMouseDown(event);
+    }
   }
 
   @HostListener('document:mousemove', ['$event'])
   onMouseMove(event: MouseEvent): void {
-    this.dragHandler.onMouseMove(event);
+    if (this.isLoaded) {
+      this.dragHandler.onMouseMove(event);
+    }
   }
 
   @HostListener('document:mouseup', ['$event'])
   onMouseUp(event: MouseEvent): void {
-    this.dragHandler.onMouseUp(event);
+    if (this.isLoaded) {
+      this.dragHandler.onMouseUp(event);
+    }
   }
 
   @HostListener('mouseleave', ['$event'])
   onMouseLeave(event: MouseEvent): void {
-    this.dragHandler.onMouseLeave(event);
+    if (this.isLoaded) {
+      this.dragHandler.onMouseLeave(event);
+    }
   }
 
   @HostListener('window:keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
-    if (event.code === 'Space' && BOT_CONFIG.enableJump) {
+    if (this.isLoaded && event.code === 'Space' && BOT_CONFIG.enableJump) {
       event.preventDefault();
       this.physicsHandler.jump();
     }
@@ -279,7 +456,9 @@ export class MiniAk4n1Component {
 
   @HostListener('window:resize', ['$event'])
   onWindowResize(): void {
-    this.botState.updateScreenSize();
+    if (this.isLoaded) {
+      this.botState.updateScreenSize();
+    }
   }
 
   // ===== MÉTODOS PÚBLICOS PARA API EXTERNA =====
@@ -288,64 +467,80 @@ export class MiniAk4n1Component {
    * Reproduce una animación específica
    */
   public play(animName: AnimationKey): void {
-    this.animationHandler.setAnimation(animName);
-    this.botState.setCharacterState('custom');
+    if (this.isLoaded) {
+      this.animationHandler.setAnimation(animName);
+      this.botState.setCharacterState('custom');
+    }
   }
 
   /**
    * Hace que el bot muera
    */
   public die(): void {
-    this.animationHandler.playOnceAnimation('dying', () => {
-      this.animationHandler.setAnimation('idle');
-      this.botState.setCharacterState('idle');
-      this.dialogueHandler.setDialog("I'm alive again!", 2000);
-    });
+    if (this.isLoaded) {
+      this.animationHandler.playOnceAnimation('dying', () => {
+        this.animationHandler.setAnimation('idle');
+        this.botState.setCharacterState('idle');
+        this.dialogueHandler.setDialog("I'm alive again!", 2000);
+      });
 
-    this.botState.setCharacterState('dying');
-    this.dialogueHandler.setDialog("I'm dying!", 2500);
+      this.botState.setCharacterState('dying');
+      this.dialogueHandler.setDialog("I'm dying!", 2500);
+    }
   }
 
   /**
    * Mueve el bot a una posición específica
    */
   public moveTo(x: number, y?: number): void {
-    this.physicsHandler.moveTo(x, y);
+    if (this.isLoaded) {
+      this.physicsHandler.moveTo(x, y);
+    }
   }
 
   /**
    * Hace que el bot salte
    */
   public jump(): void {
-    this.physicsHandler.jump();
+    if (this.isLoaded) {
+      this.physicsHandler.jump();
+    }
   }
 
   /**
    * Agrega un mensaje de diálogo
    */
   public addDialogMessage(message: string): void {
-    this.dialogueHandler.addDialogMessage(message);
+    if (this.isLoaded) {
+      this.dialogueHandler.addDialogMessage(message);
+    }
   }
 
   /**
    * Establece los mensajes de diálogo
    */
   public setDialogMessages(messages: string[]): void {
-    this.dialogueHandler.setDialogMessages(messages);
+    if (this.isLoaded) {
+      this.dialogueHandler.setDialogMessages(messages);
+    }
   }
 
   /**
    * Establece un diálogo específico
    */
   public setDialog(text: string, duration?: number): void {
-    this.dialogueHandler.setDialog(text, duration);
+    if (this.isLoaded) {
+      this.dialogueHandler.setDialog(text, duration);
+    }
   }
 
   /**
    * Fuerza la precarga de una animación
    */
   public async forceLoadAnimation(animKey: AnimationKey): Promise<void> {
-    return this.imagePreloader.preloadAnimation(animKey);
+    if (this.isLoaded) {
+      return this.imagePreloader.preloadAnimation(animKey);
+    }
   }
 
   /**
@@ -373,7 +568,10 @@ export class MiniAk4n1Component {
    * Obtiene el estado actual del bot
    */
   public getBotState(): any {
+    if (!this.isLoaded) return { loaded: false };
+    
     return {
+      loaded: true,
       animation: this.botState.currentAnimation,
       state: this.botState.characterState,
       position: this.botState.position,

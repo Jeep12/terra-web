@@ -1,6 +1,6 @@
 <!-- bot-sprite.component.html (Actualizado) -->
 
-<div class="skeleton-wrapper">
+<div class="skeleton-wrapper" *ngIf="showComponent">
   <!-- Contenedor del sprite con drag manual mejorado -->
   <div class="sprite-container" 
        [class.dragging]="isDragging"
@@ -18,5 +18,49 @@
          [src]="getFrameSrc()" 
          [alt]="animation" 
          (error)="onImageError($event)" />
+  </div>
+</div>
+
+<!-- Indicador de carga mejorado -->
+<div class="loading-overlay" *ngIf="isLoading">
+  <div class="loading-content">
+    <div class="loading-header">
+      <div class="loading-spinner"></div>
+      <h3 class="loading-title">Cargando Skeleton Crusader</h3>
+    </div>
+    
+    <div class="loading-progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="loadProgress"></div>
+      </div>
+      <div class="progress-text">{{ loadProgress }}%</div>
+    </div>
+    
+    <div class="loading-steps">
+      <div class="step" [class.active]="loadProgress >= 16">
+        <span class="step-icon">🎮</span>
+        <span class="step-text">Animación Idle</span>
+      </div>
+      <div class="step" [class.active]="loadProgress >= 33">
+        <span class="step-icon">🏃</span>
+        <span class="step-text">Movimiento</span>
+      </div>
+      <div class="step" [class.active]="loadProgress >= 50">
+        <span class="step-icon">🦘</span>
+        <span class="step-text">Salto</span>
+      </div>
+      <div class="step" [class.active]="loadProgress >= 67">
+        <span class="step-icon">⚔️</span>
+        <span class="step-text">Combate</span>
+      </div>
+      <div class="step" [class.active]="loadProgress >= 83">
+        <span class="step-icon">✨</span>
+        <span class="step-text">Especiales</span>
+      </div>
+      <div class="step" [class.active]="loadProgress >= 100">
+        <span class="step-icon">✅</span>
+        <span class="step-text">Completado</span>
+      </div>
+    </div>
   </div>
 </div>
