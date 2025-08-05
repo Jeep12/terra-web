@@ -1,6 +1,7 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -11,7 +12,7 @@ import { Router } from '@angular/router';
   templateUrl: './two-factor.component.html',
   styleUrls: ['./two-factor.component.css'],
 })
-export class TwoFactorComponent {
+export class TwoFactorComponent implements OnInit {
   currentStep = 1;
   emailSent = false;
   email = '';
@@ -22,9 +23,25 @@ export class TwoFactorComponent {
   codeInputs = ['', '', '', '', '', ''];
   showNoTokenError = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService, 
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
+    console.log('🔍 [2FA COMPONENT] Componente 2FA inicializado');
+  }
 
-
+  ngOnInit() {
+    // Obtener email de query parameters
+    this.route.queryParams.subscribe(params => {
+      this.email = params['email'] || '';
+      console.log('🔍 [2FA COMPONENT] Email recibido:', this.email);
+      
+      // Si tenemos email, enviar código automáticamente
+      if (this.email) {
+        this.send2FACode();
+      }
+    });
   }
 
   isCodeIncomplete() {
@@ -36,10 +53,22 @@ export class TwoFactorComponent {
     this.responseMessage = '';
     this.isError = false;
 
-    this.authService.request2FACode().subscribe({
+    console.log('🔍 [2FA COMPONENT] Solicitando código 2FA para:', this.email);
+
+    // Si no tenemos email, mostrar error
+    if (!this.email) {
+      this.loading = false;
+      this.isError = true;
+      this.responseMessage = 'No se recibió email para enviar el código 2FA';
+      return;
+    }
+
+    this.authService.request2FACode(this.email).subscribe({
       next: (response: any) => {
         this.loading = false;
         this.currentStep = 2;
+
+        console.log('🔍 [2FA COMPONENT] Código 2FA enviado exitosamente:', response);
 
         if (response?.message) {
           this.responseMessage = response.message;
@@ -54,14 +83,15 @@ export class TwoFactorComponent {
         this.loading = false;
         this.isError = true;
         this.currentStep = 2;
-        this.email = error.error.email;
+        
+        console.log('🔍 [2FA COMPONENT] Error enviando código 2FA:', error);
+
         if (error.error.code == "NO_TOKEN") {
           this.showNoTokenError = true;
         } else if (error.error.code == "2FA_REQUIRED_NO_DEVICE") {
           alert("Please log in again to be redirected.");
           this.navigateToLogin();
           this.showNoTokenError = true;
-
         } else {
           this.showNoTokenError = false;
         }
@@ -119,20 +149,30 @@ export class TwoFactorComponent {
       localStorage.setItem('deviceId', deviceId);
     }
 
+    console.log('🔍 [2FA COMPONENT] Verificando código 2FA:', code);
+    console.log('🔍 [2FA COMPONENT] DeviceId:', deviceId);
+
     this.loading = true;
     this.responseMessage = '';
     this.isError = false;
 
-    this.authService.verify2FACode(code).subscribe({
+    this.authService.verify2FACode(code,this.email).subscribe({
       next: (res: any) => {
         this.loading = false;
+        console.log('🔍 [2FA COMPONENT] Código 2FA verificado exitosamente:', res);
+        
         this.responseMessage = res.message || 'Code verified successfully!';
         this.isError = false;
-        // redirigir o lo que necesites acá
+        
+        // Limpiar cache y redirigir al dashboard
+        this.authService.clearUserCache();
+        this.router.navigate(['/dashboard']);
       },
       error: (err) => {
         this.loading = false;
         this.isError = true;
+        console.log('🔍 [2FA COMPONENT] Error verificando código 2FA:', err);
+        
         this.responseMessage = err.error?.message || 'Invalid 2FA code, try again.';
       }
     });
@@ -147,9 +187,6 @@ export class TwoFactorComponent {
     });
   }
 
-
-
-
   goBackToEmail() {
     this.currentStep = 1;
     this.responseMessage = '';
@@ -163,12 +200,21 @@ export class TwoFactorComponent {
     this.responseMessage = '';
     this.isError = false;
 
-    setTimeout(() => {
-      this.loadingResend = false;
-      this.responseMessage = '2FA code resent to ' + this.email;
-    }, 1500);
-  }
+    console.log('🔍 [2FA COMPONENT] Reenviando código 2FA para:', this.email);
 
+    this.authService.request2FACode(this.email).subscribe({
+      next: (response: any) => {
+        this.loadingResend = false;
+        this.responseMessage = '2FA code resent to ' + this.email;
+        console.log('🔍 [2FA COMPONENT] Código 2FA reenviado exitosamente');
+      },
+      error: (error) => {
+        this.loadingResend = false;
+        this.responseMessage = 'Error resending code';
+        console.log('🔍 [2FA COMPONENT] Error reenviando código 2FA:', error);
+      }
+    });
+  }
 
   navigateToLogin() {
     this.router.navigate(['/login']);

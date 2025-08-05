@@ -1,8 +1,9 @@
-import { Component, HostListener, OnInit, Renderer2 } from '@angular/core';
+import { Component, HostListener, OnInit, Renderer2, OnDestroy } from '@angular/core';
 import { RouterOutlet, Router, RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
 import { AccountMaster } from '../../models/master.account.model';
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -11,25 +12,19 @@ import { AccountMaster } from '../../models/master.account.model';
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   isDarkMode = false;
-
   navVisible = true;
-
   resolucionCambiada: boolean = false;
   accountM: AccountMaster | any = null;
   scrolled = false;
+  private subscription = new Subscription();
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private renderer: Renderer2
-
-  ) {
-
-
-  }
-
+  ) {}
 
   toggleDarkMode() {
     this.isDarkMode = !this.isDarkMode;
@@ -49,7 +44,8 @@ export class DashboardComponent implements OnInit {
       this.isDarkMode = true;
       this.renderer.addClass(document.body, 'dark-mode');
     }
-    this.authService.getCurrentUser().subscribe({
+    
+    const userSub = this.authService.getCurrentUser().pipe(take(1)).subscribe({
       next: user => {
         if (user) {
           this.accountM = user;
@@ -65,8 +61,13 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
+    
+    this.subscription.add(userSub);
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -80,16 +81,15 @@ export class DashboardComponent implements OnInit {
   }
 
   logout() {
-    this.authService.logout().subscribe({
+    const logoutSub = this.authService.logout().pipe(take(1)).subscribe({
       next: () => this.router.navigate(['/login']),
       error: err => console.error(err)
     });
+    this.subscription.add(logoutSub);
   }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
     this.scrolled = window.scrollY > 50; // o el valor que quieras
   }
-
-
 }

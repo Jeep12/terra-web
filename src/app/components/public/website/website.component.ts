@@ -1,8 +1,9 @@
 import { CommonModule } from "@angular/common";
 import { Component, HostListener, OnInit, OnDestroy } from "@angular/core";
 import { NavigationStart, NavigationEnd, Router, RouterModule, ActivatedRoute, RouterEvent } from '@angular/router';
-import { filter, Observable, Subject } from "rxjs";
+import { filter, Observable, Subject, takeUntil, take } from "rxjs";
 import { AuthService } from "../../../services/auth.service";
+import { AuthStateService } from "../../../services/auth-state.service";
 import { PreloaderService } from "../../../services/preloader.service";
 
 @Component({
@@ -19,12 +20,18 @@ export class WebsiteComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
+    private authStateService: AuthStateService,
     private router: Router,
     private route: ActivatedRoute,
     public preloadService: PreloaderService
   ) {
-    this.isLoggedIn$ = this.authService.isLoggedIn();
-
+    // Inicializar el estado de autenticación solo una vez
+    const initSub = this.authStateService.initializeAuthState().pipe(
+      take(1),
+      takeUntil(this.destroy$)
+    ).subscribe();
+    
+    this.isLoggedIn$ = this.authStateService.isAuthenticated$;
   }
 
   ngOnInit(): void { }

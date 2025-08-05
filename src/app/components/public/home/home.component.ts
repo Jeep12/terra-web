@@ -19,41 +19,48 @@ import { Subscription, timer } from 'rxjs';
     CarrouselHomeComponent,
     StreamersSectionComponent,
     PreloadComponent
-
-
-
   ],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
-export class HomeComponent {
-
+export class HomeComponent implements OnDestroy {
   showPreloadOpen = true;
   showPreloadClose = false;
   private isDestroying = false;
   private navigationSub!: Subscription;
+  private subscription = new Subscription();
 
   isMenuOpen = false;
   isStatisticsDropdownOpen = false;
 
   constructor(private preloaderService: PreloaderService, private router: Router) {
-
+    // Comentado temporalmente para evitar interferencias con la navegación
+    /*
     this.navigationSub = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart && !this.isDestroying) {
         // NO funciona en Angular Router, se deja para aclarar la intención
         this.handleBeforeDestroy(event.url);
       }
     });
+    */
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+    if (this.navigationSub) {
+      this.navigationSub.unsubscribe();
+    }
   }
 
   handleBeforeDestroy(nextUrl: string) {
     this.isDestroying = true;
 
     // Retraso real de 1.2 segundos (1200 ms)
-    timer(1200).subscribe(() => {
+    const timerSub = timer(1200).subscribe(() => {
       // Navegar manualmente después del delay
       this.router.navigateByUrl(nextUrl);
     });
+    this.subscription.add(timerSub);
   }
 
   toggleMenu() {
@@ -67,6 +74,4 @@ export class HomeComponent {
   closeDropdowns() {
     this.isStatisticsDropdownOpen = false;
   }
-
-
 }

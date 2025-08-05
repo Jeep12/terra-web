@@ -1,13 +1,15 @@
-import { Component, OnInit, Renderer2 } from '@angular/core';
+import { Component, OnInit, Renderer2, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-website-not-found',
   templateUrl: './website-not-found.component.html',
   styleUrls: ['./website-not-found.component.css']
 })
-export class WebsiteNotFoundComponent implements OnInit {
+export class WebsiteNotFoundComponent implements OnInit, OnDestroy {
+  private subscription = new Subscription();
 
   constructor(
     private renderer: Renderer2,
@@ -16,7 +18,7 @@ export class WebsiteNotFoundComponent implements OnInit {
   ) {}
 
   goToWebsite(): void {
-    this.authService.isLoggedIn().subscribe({
+    const authSub = this.authService.isLoggedIn().pipe(take(1)).subscribe({
       next: (logged) => {
         if (logged) {
           this.router.navigate(['/dashboard']);
@@ -26,8 +28,10 @@ export class WebsiteNotFoundComponent implements OnInit {
       },
       error: (err) => {
         console.error('Error checking login status', err);
+        this.router.navigate(['/login']);
       }
     });
+    this.subscription.add(authSub);
   }
 
   ngOnInit(): void {
@@ -41,5 +45,9 @@ export class WebsiteNotFoundComponent implements OnInit {
         this.renderer.removeClass(authContainer, 'dark-mode');
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 }

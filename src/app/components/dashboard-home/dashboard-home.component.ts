@@ -11,6 +11,7 @@ import { CLASS_TABLE, getClassNameById } from '../../enums/class-table.enum';
 import { AccountGameResponse } from '../../models/game.account.model';
 import { Clan } from '../../models/clan.model';
 import { ClanService } from '../../services/clan.service';
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -146,6 +147,9 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
   ];
 
   private clansPlayersMap: Map<number, Clan> = new Map();
+  private subscription = new Subscription();
+  private resizeListener: any;
+  private userEmail: string | null = null; // Cache del email del usuario
   Object: any;
 
   constructor(
@@ -158,13 +162,19 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Ajustar visibleStatsCount según el ancho de pantalla
     this.updateVisibleStatsCount();
-    window.addEventListener('resize', this.updateVisibleStatsCount.bind(this));
+    this.resizeListener = this.updateVisibleStatsCount.bind(this);
+    window.addEventListener('resize', this.resizeListener);
 
     // Obtener datos del usuario actual incluyendo email desde el endpoint /me
-    this.authService.getCurrentUser().subscribe({
+    const userSub = this.authService.getCurrentUser().pipe(take(1)).subscribe({
       next: (user: AccountMaster) => {
-        const email = user.email;
-        this.loadCharactersByEmail(email);
+        this.userEmail = user.email;
+        if (this.userEmail) {
+          this.loadCharactersByEmail(this.userEmail);
+        } else {
+          this.error = 'User not authenticated.';
+          this.loading = false;
+        }
       },
       error: () => {
         this.error = 'User not authenticated.';
@@ -172,6 +182,7 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
       }
     });
 
+    this.subscription.add(userSub);
 
     // Add keyboard event listener for Escape key
     document.addEventListener('keydown', this.handleKeyDown.bind(this));
@@ -181,9 +192,10 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    window.removeEventListener('resize', this.updateVisibleStatsCount.bind(this));
+    window.removeEventListener('resize', this.resizeListener);
     // Remove keyboard event listener
     document.removeEventListener('keydown', this.handleKeyDown.bind(this));
+    this.subscription.unsubscribe();
   }
 
   private setupModalListeners(): void {
@@ -215,7 +227,7 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
     this.loadPage(email, 0);
 
     // Cargar estadísticas del backend
-    this.characterService.getCharacterStatsByEmail(email).subscribe({
+    const statsSub = this.characterService.getCharacterStatsByEmail(email).pipe(take(1)).subscribe({
       next: (stats: CharacterStats) => {
         this.characterStats = stats;
       },
@@ -223,6 +235,8 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
         console.error('Error loading character stats:', err);
       }
     });
+
+    this.subscription.add(statsSub);
   }
 
   private loadPage(email: string, page: number) {
@@ -236,7 +250,7 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
     // Limpiar el mapa de clanes al cambiar de página para evitar conflictos
     this.clansPlayersMap.clear();
 
-    this.characterService.getCharactersByEmailPaginated(email, page, this.itemsPerPage).subscribe({
+    const pageSub = this.characterService.getCharactersByEmailPaginated(email, page, this.itemsPerPage).pipe(take(1)).subscribe({
       next: (response: PaginatedResponse<Character>) => {
         this.characters = response.content;
         this.filteredCharacters = response.content; // Inicialmente igual a los personajes cargados
@@ -273,7 +287,7 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
           });
 
           // Cargar items del personaje
-          this.characterService.getItemsByCharacterId(char.charId).subscribe({
+          const itemsSub = this.characterService.getItemsByCharacterId(char.charId).pipe(take(1)).subscribe({
             next: (items: any) => {
               // Obtener el objeto de items de este personaje
               const charItems = this.characterItems.get(char.charId);
@@ -342,8 +356,10 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
             }
           });
 
+          this.subscription.add(itemsSub);
+
           if (char.clanid) {
-            this.clanService.getClanById(char.clanid).subscribe({
+            const clanSub = this.clanService.getClanById(char.clanid).pipe(take(1)).subscribe({
               next: (clan) => {
                 this.addClanToMap(clan);
                 // Forzar detección de cambios después de cargar el clan
@@ -352,6 +368,7 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
               error: (err) => {
               }
             });
+            this.subscription.add(clanSub);
           }
 
           totalpvp += char.pvpkills || 0;
@@ -366,6 +383,8 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
         this.pageLoading = false;
       }
     });
+
+    this.subscription.add(pageSub);
   }
 
   private addClanToMap(clan: Clan): void {
@@ -631,45 +650,23 @@ export class DashboardHomeComponent implements OnInit, OnDestroy {
 
   // Métodos de paginación actualizados para usar el backend
   changePage(page: number): void {
-    if (page >= 0 && page < this.totalPages && page !== this.currentPage) {
-      // Obtener el email del usuario actual
-      this.authService.getCurrentUser().subscribe({
-        next: (user: AccountMaster) => {
-          // Pequeño delay para transición suave
-          setTimeout(() => {
-            this.loadPage(user.email, page);
-          }, 100);
-        },
-        error: () => {
-          this.error = 'User not authenticated.';
-        }
-      });
+    if (page >= 0 && page < this.totalPages && page !== this.currentPage && this.userEmail) {
+      // Usar el email cacheado en lugar de hacer otra llamada
+      setTimeout(() => {
+        this.loadPage(this.userEmail!, page);
+      }, 100);
     }
   }
 
   nextPage(): void {
-    if (this.hasNext) {
-      this.authService.getCurrentUser().subscribe({
-        next: (user: AccountMaster) => {
-          this.loadPage(user.email, this.currentPage + 1);
-        },
-        error: () => {
-          this.error = 'User not authenticated.';
-        }
-      });
+    if (this.hasNext && this.userEmail) {
+      this.loadPage(this.userEmail, this.currentPage + 1);
     }
   }
 
   previousPage(): void {
-    if (this.hasPrevious) {
-      this.authService.getCurrentUser().subscribe({
-        next: (user: AccountMaster) => {
-          this.loadPage(user.email, this.currentPage - 1);
-        },
-        error: () => {
-          this.error = 'User not authenticated.';
-        }
-      });
+    if (this.hasPrevious && this.userEmail) {
+      this.loadPage(this.userEmail, this.currentPage - 1);
     }
   }
 

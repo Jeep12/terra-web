@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from './guards/auth.guard';
 
-
 export const routes: Routes = [
     {
         path: '',
@@ -17,27 +16,27 @@ export const routes: Routes = [
     },
     {
         path: 'login',
-        loadComponent: () => import('./components/auth/login/login.component').then(m => m.LoginComponent)
+        loadComponent: () => import('./components/auth/login/login.component').then(m => m.LoginComponent),
     },
     {
         path: 'register',
-        loadComponent: () => import('./components/auth/register/register.component').then(m => m.RegisterComponent)
+        loadComponent: () => import('./components/auth/register/register.component').then(m => m.RegisterComponent),
     },
     {
         path: 'reset-password',
-        loadComponent: () => import('./components/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent)
+        loadComponent: () => import('./components/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent),
     },
     {
         path: 'forgot-password',
-        loadComponent: () => import('./components/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent)
+        loadComponent: () => import('./components/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent),
     },
     {
         path: 'resend-email-verification',
-        loadComponent: () => import('./components/auth/resend-email-verification/resend-email-verification.component').then(m => m.ResendEmailVerificationComponent)
+        loadComponent: () => import('./components/auth/resend-email-verification/resend-email-verification.component').then(m => m.ResendEmailVerificationComponent),
     },
     {
         path: 'verify-email',
-        loadComponent: () => import('./components/auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent)
+        loadComponent: () => import('./components/auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent),
     },
     {
         path: 'two-factor-step',
@@ -47,49 +46,44 @@ export const routes: Routes = [
     {
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard2/dashboard2.component').then(m => m.Dashboard2Component),
-        canActivate: [authGuard], // importalo arriba, no lo pongas con promesas
+        canActivate: [authGuard],
 
         children: [
-
-
             {
                 path: '',
                 pathMatch: 'full',
-                redirectTo: 'home-dashboard' // Ruta por defecto
+                redirectTo: 'home-dashboard'
             },
             {
-                path: 'home-dashboard', // <- ¡Sin "dashboard/"!
+                path: 'home-dashboard',
                 loadComponent: () => import('./components/dashboard-home/dashboard-home.component').then(m => m.DashboardHomeComponent)
             },
             {
-                path: 'create-account-game', // <- ¡Sin "dashboard/"!
+                path: 'create-account-game',
                 loadComponent: () => import('./components/game/create-account-game/create-account-game.component').then(m => m.CreateAccountGameComponent)
             },
             {
-                path: 'change-password-game', // <- ¡Sin "dashboard/"!
+                path: 'change-password-game',
                 loadComponent: () => import('./components/game/change-password-game/change-password-game.component').then(m => m.ChangePasswordGameComponent)
             },
             {
-                path: 'buy-terra-coin', // <- ¡Sin "dashboard/"!
+                path: 'buy-terra-coin',
                 loadComponent: () => import('./components/game/buy-terra-coin/buy-terra-coin.component').then(m => m.BuyTerraCoinComponent)
-            }
-            ,
+            },
             {
-                path: 'send-terra-coin', // <- ¡Sin "dashboard/"!
+                path: 'send-terra-coin',
                 loadComponent: () => import('./components/game/send-terra-coin/send-terra-coin.component').then(m => m.SendTerraCoinComponent)
-            }
-            ,
+            },
             {
-                path: 'support', // <- ¡Sin "dashboard/"!
+                path: 'support',
                 loadComponent: () => import('./components/support/support.component').then(m => m.SupportComponent)
-            }
-            ,
+            },
             {
                 path: 'offline-market',
                 loadComponent: () => import('./components/game/offline-market/offline-market.component').then(m => m.OfflineMarketComponent)
             },
             {
-                path: 'setting-account-master', // <- ¡Sin "dashboard/"!
+                path: 'setting-account-master',
                 loadComponent: () => import('./components/auth/settins-account-master/settings-account-master.component').then(m => m.SettingsAccountMasterComponent)
             }
         ]

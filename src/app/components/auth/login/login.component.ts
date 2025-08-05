@@ -31,9 +31,6 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   isAuthenticating = false;
 
-
-
-
   constructor(
     private fb: FormBuilder,
     private router: Router,
@@ -51,8 +48,8 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
-
+    // NO verificar autenticación automáticamente para evitar loops
+    // Solo verificar si viene de otra página
   }
 
   goToNextStep(): void {
@@ -83,10 +80,12 @@ export class LoginComponent implements OnInit {
         next: (res) => {
           this.btnGoToResendEmailVerification = false;
           this.authService.setEmail(this.userEmail);
+          // Limpiar cache de usuario para forzar nueva carga
+          this.authService.clearUserCache();
           this.router.navigate(['/dashboard']);
         },
         error: (err) => {
-              this.isAuthenticating = false;
+          this.isAuthenticating = false;
 
           if (err.error?.error === 'EMAIL_NOT_VERIFIED') {
             this.btnGoToResendEmailVerification = true;
@@ -120,6 +119,8 @@ export class LoginComponent implements OnInit {
 
     try {
       const user = await this.googleAuth.signInWithGoogle();
+      // Limpiar cache de usuario para forzar nueva carga
+      this.authService.clearUserCache();
       this.router.navigate(['/dashboard']);
     } catch (error) {
       this.errorMessage = 'Error al iniciar sesión con Google';
@@ -135,6 +136,8 @@ export class LoginComponent implements OnInit {
 
     try {
       const user = await this.googleAuth.signInWithFacebook();
+      // Limpiar cache de usuario para forzar nueva carga
+      this.authService.clearUserCache();
       this.router.navigate(['/dashboard']);
     } catch (error) {
       this.errorMessage = 'Error al iniciar sesión con Facebook';

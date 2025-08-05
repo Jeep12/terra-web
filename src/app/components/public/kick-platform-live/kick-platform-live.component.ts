@@ -3,6 +3,7 @@ import { CommonModule } from "@angular/common"
 import { StreamingService } from "../../../services/streaming.service"
 import { DomSanitizer, SafeResourceUrl } from "@angular/platform-browser"
 import { HttpClient } from "@angular/common/http"
+import { Subscription, take } from 'rxjs';
 
 @Component({
   selector: "app-kick-platform-live",
@@ -20,10 +21,11 @@ export class KickPlatformLiveComponent implements OnInit, OnDestroy {
   showIframe = false // Controla si mostrar iframe o previsualización
 
   // Lista de canales
-  channels: string[] = ["napoplays", "duendepablo", "djshavi"]
+  channels: string[] = ["napoplays", "bananirou", "djshavi"]
   currentSlug = ""
 
   safeUrl: SafeResourceUrl | null = null
+  private subscription = new Subscription();
 
   constructor(
     private streamingService: StreamingService,
@@ -36,6 +38,7 @@ export class KickPlatformLiveComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
   loadChannel(slug: string): void {
@@ -69,7 +72,7 @@ export class KickPlatformLiveComponent implements OnInit, OnDestroy {
   }
 
   private loadChannelFromStreamingService(slug: string): void {
-    this.streamingService.getKickChannel(slug).subscribe({
+    const streamSub = this.streamingService.getKickChannel(slug).pipe(take(1)).subscribe({
       next: (res: any) => {
 
         if (res.data && res.data.length > 0) {
@@ -89,6 +92,7 @@ export class KickPlatformLiveComponent implements OnInit, OnDestroy {
         this.loading = false
       },
     })
+    this.subscription.add(streamSub);
   }
 
   showStream(): void {

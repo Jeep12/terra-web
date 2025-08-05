@@ -84,69 +84,90 @@ export class CarrouselHomeComponent implements AfterViewInit, OnDestroy {
     // Esperar a que el DOM esté completamente cargado
     setTimeout(() => {
       try {
-        if (typeof $ !== "undefined" && $(".slider").length > 0) {
-          // Configurar jQuery para usar event listeners pasivos
-          this.setupJQueryPassiveEvents();
-          
-          // Configurar event listeners pasivos antes de inicializar Slick
-          this.setupPassiveEventListeners();
-          
-          $(".slider").slick({
-            dots: false,
-            arrows: false,
-            autoplay: true,
-            autoplaySpeed: 1000,
-            infinite: true,
-            fade: true,
-            cssEase: "ease-in-out",
-            speed: 1000,
-            pauseOnHover: true,
-            pauseOnFocus: true,
-            adaptiveHeight: false,
-            variableWidth: false,
-            responsive: [
-              {
-                breakpoint: 1024,
-                settings: {
-                  autoplaySpeed: 3800,
-                  speed: 900,
-                },
-              },
-              {
-                breakpoint: 768,
-                settings: {
-                  autoplaySpeed: 3500,
-                  speed: 800,
-                },
-              },
-              {
-                breakpoint: 480,
-                settings: {
-                  autoplaySpeed: 3000,
-                  speed: 600,
-                },
-              },
-            ],
-          })
-
-          this.slickInitialized = true
-
-          // Event listeners para mejor control
-          $(".slider").on("beforeChange", (event: any, slick: any, currentSlide: any, nextSlide: any) => {
-            // Opcional: agregar lógica antes del cambio de slide
-          })
-
-          // Forzar redimensionamiento después de la inicialización
-          setTimeout(() => {
-            $(".slider").slick("setPosition")
-          }, 200)
-        } else {
-          console.warn("Slick carousel could not be initialized")
+        // Verificar que jQuery esté disponible
+        if (typeof $ === "undefined") {
+          console.warn("jQuery is not loaded. Slick carousel cannot be initialized.")
+          return;
         }
+
+        // Verificar que Slick esté disponible
+        if (typeof $.fn.slick === "undefined") {
+          console.warn("Slick carousel is not loaded. jQuery plugin not found.")
+          return;
+        }
+
+        // Verificar que el elemento slider exista
+        const sliderElement = $(".slider");
+        if (sliderElement.length === 0) {
+          console.warn("Slider element not found. Slick carousel could not be initialized.")
+          return;
+        }
+
+        // Configurar jQuery para usar event listeners pasivos
+        this.setupJQueryPassiveEvents();
+        
+        // Configurar event listeners pasivos antes de inicializar Slick
+        this.setupPassiveEventListeners();
+        
+        // Inicializar Slick
+        sliderElement.slick({
+          dots: false,
+          arrows: false,
+          autoplay: true,
+          autoplaySpeed: 1000,
+          infinite: true,
+          fade: true,
+          cssEase: "ease-in-out",
+          speed: 1000,
+          pauseOnHover: true,
+          pauseOnFocus: true,
+          adaptiveHeight: false,
+          variableWidth: false,
+          responsive: [
+            {
+              breakpoint: 1024,
+              settings: {
+                autoplaySpeed: 3800,
+                speed: 900,
+              },
+            },
+            {
+              breakpoint: 768,
+              settings: {
+                autoplaySpeed: 3500,
+                speed: 800,
+              },
+            },
+            {
+              breakpoint: 480,
+              settings: {
+                autoplaySpeed: 3000,
+                speed: 600,
+              },
+            },
+          ],
+        })
+
+        this.slickInitialized = true
+        console.log("Slick carousel initialized successfully")
+
+        // Event listeners para mejor control
+        sliderElement.on("beforeChange", (event: any, slick: any, currentSlide: any, nextSlide: any) => {
+          // Opcional: agregar lógica antes del cambio de slide
+        })
+
+        // Forzar redimensionamiento después de la inicialización
+        setTimeout(() => {
+          try {
+            sliderElement.slick("setPosition")
+          } catch (error) {
+            console.warn("Error setting position:", error)
+          }
+        }, 200)
       } catch (error) {
         console.error("Error initializing slick carousel:", error)
       }
-    }, 100)
+    }, 200) // Aumentado el timeout para dar más tiempo a que se carguen las librerías
   }
 
   /**
