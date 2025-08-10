@@ -15,9 +15,9 @@ declare var $: any
 })
 export class CarrouselHomeComponent implements AfterViewInit, OnDestroy {
   slides = [
-    { img: "/assets/images/bgc1.jpg", alt: "Hero Slide 1" },
-    { img: "/assets/images/bgc2.jpg", alt: "Hero Slide 2" },
-    { img: "/assets/images/bgc3.jpg", alt: "Hero Slide 3" },
+    { img: "https://assets.l2terra.online/bgc1.webp", alt: "Hero Slide 1" },
+    { img: "https://assets.l2terra.online/bgc2.webp", alt: "Hero Slide 2" },
+    { img: "https://assets.l2terra.online/bgc3.webp", alt: "Hero Slide 3" },
   ]
 
   private slickInitialized = false

@@ -6,7 +6,7 @@ import { SkeletonButtonComponent } from "./components/mini-ak4n1/skeleton-button
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, BotterraComponent, MiniAk4n1Component, SkeletonButtonComponent],
+  imports: [RouterOutlet, BotterraComponent ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

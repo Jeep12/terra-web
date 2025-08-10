@@ -4,10 +4,11 @@ import { Router, RouterModule, RouterOutlet } from "@angular/router"
 import { AuthService } from "../../services/auth.service"
 import { AccountMaster } from "../../models/master.account.model"
 import { Subscription, take } from 'rxjs';
+import { PreloadComponent } from "../public/preload/preload.component";
 
 @Component({
   selector: "app-dashboard2",
-  imports: [CommonModule, RouterOutlet, RouterModule],
+  imports: [CommonModule, RouterOutlet, RouterModule, PreloadComponent],
   standalone: true,
   templateUrl: "./dashboard2.component.html",
   styleUrl: "./dashboard2.component.css",
