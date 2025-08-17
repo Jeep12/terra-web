@@ -1,5 +1,5 @@
 # 🔧 Configuración de Endpoints - Sistema Optimizado
-
+asd
 ## 📋 Descripción
 
 Este sistema optimizado reemplaza el enfoque anterior de listas hardcodeadas de endpoints en el interceptor HTTP con un sistema basado en configuración centralizada y patrones.
