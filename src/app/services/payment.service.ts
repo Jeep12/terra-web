@@ -5,15 +5,6 @@ import { map, catchError } from 'rxjs/operators';
 import { CoinPackage, PaymentMethod, PaymentRequest, PaymentResponse } from '../models/coin-package.model';
 import { environment } from '../environments/environment';
 
-// Mercado Pago SDK - se cargará dinámicamente
-// 
-// NOTA: Este servicio está configurado para funcionar en modo de desarrollo.
-// Para usar el SDK real de Mercado Pago en producción, se requiere:
-// 1. Configurar el backend para crear preferencias
-// 2. Implementar webhooks para recibir notificaciones
-// 3. Configurar las URLs de retorno
-// 4. Usar las credenciales reales de Mercado Pago
-
 @Injectable({
   providedIn: 'root'
 })
@@ -38,7 +29,7 @@ export class PaymentService {
     // Solo inicializar una vez
     if (this.mercadopago) return;
     
-    console.log('Inicializando Mercado Pago SDK (una sola vez)');
+    console.log('Inicializando Mercado Pago SDK');
     this.mercadopago = {}; // Placeholder para futura implementación
   }
 
@@ -66,45 +57,12 @@ export class PaymentService {
     console.log('Enviando request con frontend URLs:', request);
     console.log('Dominio actual:', window.location.origin);
     console.log('Entorno:', environment.production ? 'PRODUCCIÓN' : 'DESARROLLO');
+    console.log('API URL:', environment.apiUrl);
     
-    return this.http.post<any>(`${environment.apiUrl}api/payments/create-preference`, request).pipe(
-      catchError(error => {
-        console.error('Error creando preferencia de Mercado Pago:', error);
-        
-        // 🔧 SOLUCIÓN TEMPORAL: Simular pago exitoso para desarrollo
-        if (error.status === 400) {
-          console.warn('🔧 MODO DESARROLLO: Simulando pago exitoso debido a error del backend');
-          
-          // Simular respuesta exitosa después de 2 segundos
-          return new Observable(observer => {
-            setTimeout(() => {
-              observer.next({
-                preferenceId: 'dev_preference_' + Date.now(),
-                initPoint: 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=DEV_MODE',
-                sandboxInitPoint: 'https://www.mercadopago.com.ar/checkout/v1/redirect?pref_id=DEV_MODE',
-                publicKey: 'DEV_PUBLIC_KEY',
-                status: 'success',
-                message: 'Pago simulado para desarrollo',
-                // 🔗 Simular back_urls para desarrollo
-                back_urls: {
-                  success: `${window.location.origin}/payment-success`,
-                  failure: `${window.location.origin}/payment-failure`,
-                  pending: `${window.location.origin}/payment-pending`
-                },
-                auto_return: 'approved',
-                notification_url: `${environment.apiUrl}api/payments/webhook`
-              });
-              observer.complete();
-            }, 2000);
-          });
-        }
-        
-        throw error;
-      })
-    );
+    return this.http.post<any>(`${environment.apiUrl}api/payments/create-preference`, request);
   }
 
-    // Procesar pago con Mercado Pago
+  // Procesar pago con Mercado Pago
   processMercadoPagoPayment(paymentRequest: PaymentRequest): Observable<PaymentResponse> {
     return new Observable(observer => {
       console.log('Procesando pago con Mercado Pago:', paymentRequest);
@@ -149,30 +107,14 @@ export class PaymentService {
           if (paymentUrl) {
             console.log('URL de pago obtenida:', paymentUrl);
             
-            // Verificar si es modo desarrollo
-            if (paymentUrl.includes('DEV_MODE')) {
-              console.warn('🔧 MODO DESARROLLO: Simulando pago exitoso');
-              
-              // Simular pago exitoso después de 3 segundos
-              setTimeout(() => {
-                observer.next({
-                  id: preference.preferenceId,
-                  status: 'approved' as const,
-                  paymentUrl: null,
-                  message: 'Pago simulado exitosamente (modo desarrollo)',
-                  preferenceData: preference
-                });
-              }, 3000);
-            } else {
-              // NO redirigir automáticamente - solo devolver la información
-              observer.next({
-                id: preference.preferenceId || preference.id,
-                status: 'pending' as const,
-                paymentUrl: paymentUrl,
-                message: 'Preferencia creada exitosamente. Revisa los datos antes de continuar.',
-                preferenceData: preference
-              });
-            }
+            // NO redirigir automáticamente - solo devolver la información
+            observer.next({
+              id: preference.preferenceId || preference.id,
+              status: 'pending' as const,
+              paymentUrl: paymentUrl,
+              message: 'Preferencia creada exitosamente. Revisa los datos antes de continuar.',
+              preferenceData: preference
+            });
           } else {
             observer.next({
               id: preference.preferenceId || preference.id,
