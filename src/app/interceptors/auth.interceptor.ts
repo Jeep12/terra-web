@@ -3,46 +3,83 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError, switchMap, filter, take, finalize } from 'rxjs';
 import { AuthService } from '../services/auth.service';
+import { ENDPOINT_CONFIG, type EndpointType } from '../config/endpoint-config';
+
+// Función para verificar si una URL coincide con un patrón
+function matchesPattern(url: string, patterns: readonly string[]): boolean {
+  return patterns.some(pattern => url.includes(pattern));
+}
+
+// Función para verificar si una URL es de un dominio externo
+function isExternalDomain(url: string): boolean {
+  return ENDPOINT_CONFIG.EXTERNAL_DOMAINS.some((domain: string) => url.includes(domain));
+}
+
+// Función para determinar el tipo de endpoint
+function getEndpointType(url: string): EndpointType {
+  // Verificar si es dominio externo
+  if (isExternalDomain(url)) {
+    return 'PUBLIC';
+  }
+  
+  // Verificar si es endpoint público
+  if (matchesPattern(url, [...ENDPOINT_CONFIG.PUBLIC]) || 
+      matchesPattern(url, [...ENDPOINT_CONFIG.PUBLIC_PATTERNS])) {
+    return 'PUBLIC';
+  }
+  
+  // Verificar si requiere manejo especial
+  if (matchesPattern(url, [...ENDPOINT_CONFIG.SPECIAL_HANDLING])) {
+    return 'SPECIAL';
+  }
+  
+  // Por defecto, es protegido
+  return 'PROTECTED';
+}
+
+// Función para determinar si se debe intentar refresh
+function shouldAttemptRefresh(url: string, errorCode?: string): boolean {
+  const endpointType = getEndpointType(url);
+  
+  // NO hacer refresh para endpoints públicos o especiales
+  if (endpointType === 'PUBLIC' || endpointType === 'SPECIAL') {
+    return false;
+  }
+  
+  // NO hacer refresh para errores específicos que indican problemas de autenticación
+  if (errorCode && ENDPOINT_CONFIG.NON_REFRESHABLE_ERRORS.includes(errorCode as any)) {
+    return false;
+  }
+  
+  // Para endpoints protegidos, intentar refresh
+  return true;
+}
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const authService = inject(AuthService);
   
   const deviceId = localStorage.getItem('deviceId') || '';
-  const isWebhookN8n = req.url.includes('n8n.l2terra.online');
-  const isAuthEndpoint = req.url.includes('/api/auth/me');
-  const is2FAEndpoint = req.url.includes('/api/auth/request-2fa-code') || req.url.includes('/api/auth/verify-2fa-code');
-  const isRefreshEndpoint = req.url.includes('/api/auth/refresh');
-  const isPublicEndpoint = req.url.includes('/api/auth/login') || 
-                         req.url.includes('/api/auth/register') ||
-                         req.url.includes('/api/auth/resend-reset-email') ||
-                         req.url.includes('/api/auth/reset-password') ||
-                         req.url.includes('/api/auth/verify-email') ||
-                         req.url.includes('/api/auth/resend-verification') ||
-                         req.url.includes('/api/auth/google/login') ||
-                         req.url.includes('/api/auth/request-2fa-code') ||
-                         req.url.includes('/api/auth/verify-2fa-code') ||
-                         req.url.includes('/api/kick/channels') ||
-                         req.url.includes('/api/game/ranking/top-pvp') ||
-                         req.url.includes('/api/game/ranking/top-pk');
+  const isExternal = isExternalDomain(req.url);
+  const endpointType = getEndpointType(req.url);
 
   // Preparar headers
   let headers = req.headers;
   
-  // Agregar device ID si no es webhook
-  if (!isWebhookN8n) {
+  // Agregar device ID si no es dominio externo
+  if (!isExternal) {
     headers = headers.set('X-Device-Id', deviceId);
   }
 
   const authReq = req.clone({
-    withCredentials: !isWebhookN8n,
+    withCredentials: !isExternal,
     headers: headers,
   });
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       // Para endpoints de autenticación, manejar errores 401/403 de forma silenciosa
-      if (isAuthEndpoint && (error.status === 401 || error.status === 403)) {
+      if (req.url.includes('/api/auth/me') && (error.status === 401 || error.status === 403)) {
         const silentError = new Error();
         silentError.name = 'SilentAuthError';
         silentError.message = error.message;
@@ -59,38 +96,35 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => silentError);
       }
 
-      // Manejar errores específicos
-      if (error.status === 401) {
+      // Manejar errores 401/403
+      if (error.status === 401 || error.status === 403) {
         const errorCode = error.error?.code;
 
-        // Si es TOKEN_EXPIRED, hacer refresh automático
-        if (errorCode === 'TOKEN_EXPIRED') {
-          return handleTokenRefresh(req, next, authService, router);
+        // Manejar errores específicos que requieren acciones especiales
+        switch (errorCode) {
+          case 'TOKEN_EXPIRED':
+            // Token expirado, intentar refresh
+            return handleTokenRefresh(req, next, authService, router);
+            
+          case '2FA_REQUIRED_UNTRUSTED_DEVICE':
+            // 2FA requerido, dejar que el AuthService maneje la redirección
+            return throwError(() => error);
+            
+          case 'REFRESH_TOKEN_EXPIRED':
+            // Refresh token expirado, hacer logout
+            authService.logout().subscribe(() => {
+              router.navigate(['/login']);
+            });
+            return throwError(() => error);
+            
+          default:
+            // Para otros errores, verificar si se debe intentar refresh
+            if (shouldAttemptRefresh(req.url, errorCode)) {
+              return handleTokenRefresh(req, next, authService, router);
+            }
+            // Si no se debe hacer refresh, dejar que el error llegue al componente
+            return throwError(() => error);
         }
-
-        // Si es 2FA_REQUIRED_UNTRUSTED_DEVICE, redirigir a 2FA
-        if (errorCode === '2FA_REQUIRED_UNTRUSTED_DEVICE') {
-          // La redirección la maneja el AuthService en getCurrentUser
-          return throwError(() => error);
-        }
-
-        // Si es REFRESH_TOKEN_EXPIRED, hacer logout
-        if (errorCode === 'REFRESH_TOKEN_EXPIRED') {
-          authService.logout().subscribe(() => {
-            router.navigate(['/login']);
-          });
-          return throwError(() => error);
-        }
-
-        // Para otros errores 401, intentar refresh si no es un endpoint de refresh
-        if (!isRefreshEndpoint && !is2FAEndpoint) {
-          return handleTokenRefresh(req, next, authService, router);
-        }
-      }
-
-      // Para errores 403, también intentar refresh si no es endpoint de refresh
-      if (error.status === 403 && !isRefreshEndpoint && !is2FAEndpoint) {
-        return handleTokenRefresh(req, next, authService, router);
       }
       
       // Para otros errores, mantener el comportamiento normal
@@ -116,20 +150,7 @@ function handleTokenRefresh(
       take(1),
       switchMap(() => {
         console.log('🔄 [REFRESH] Reintentando request después del refresh:', originalReq.url);
-        // Clonar el request original con los headers actualizados
-        const deviceId = localStorage.getItem('deviceId') || '';
-        let headers = originalReq.headers;
-        
-        if (!originalReq.url.includes('n8n.l2terra.online')) {
-          headers = headers.set('X-Device-Id', deviceId);
-        }
-        
-        const updatedReq = originalReq.clone({
-          withCredentials: !originalReq.url.includes('n8n.l2terra.online'),
-          headers: headers,
-        });
-        
-        return next(updatedReq);
+        return retryRequest(originalReq, next);
       }),
       catchError((error) => {
         console.error('🔄 [REFRESH] Error en reintento:', error.status, error.message);
@@ -143,20 +164,7 @@ function handleTokenRefresh(
   return authService.refreshToken().pipe(
     switchMap((response) => {
       console.log('🔄 [REFRESH] Refresh exitoso, reintentando:', originalReq.url);
-      // Clonar el request original con los headers actualizados
-      const deviceId = localStorage.getItem('deviceId') || '';
-      let headers = originalReq.headers;
-      
-      if (!originalReq.url.includes('n8n.l2terra.online')) {
-        headers = headers.set('X-Device-Id', deviceId);
-      }
-      
-      const updatedReq = originalReq.clone({
-        withCredentials: !originalReq.url.includes('n8n.l2terra.online'),
-        headers: headers,
-      });
-      
-      return next(updatedReq);
+      return retryRequest(originalReq, next);
     }),
     catchError((error) => {
       console.error('🔄 [REFRESH] Error en refresh:', error.status, error.message);
@@ -173,4 +181,22 @@ function handleTokenRefresh(
       console.log('🔄 [REFRESH] Proceso de refresh finalizado');
     })
   );
+}
+
+// Función auxiliar para reintentar requests con headers actualizados
+function retryRequest(originalReq: HttpRequest<any>, next: HttpHandlerFn) {
+  const deviceId = localStorage.getItem('deviceId') || '';
+  const isExternal = isExternalDomain(originalReq.url);
+  let headers = originalReq.headers;
+  
+  if (!isExternal) {
+    headers = headers.set('X-Device-Id', deviceId);
+  }
+  
+  const updatedReq = originalReq.clone({
+    withCredentials: !isExternal,
+    headers: headers,
+  });
+  
+  return next(updatedReq);
 }

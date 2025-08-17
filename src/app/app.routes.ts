@@ -43,6 +43,20 @@ export const routes: Routes = [
         loadComponent: () => import('./components/auth/two-factor/two-factor.component').then(m => m.TwoFactorComponent)
     },
 
+    // 🔗 Rutas de Payment - Nivel principal para acceso directo desde Mercado Pago
+    {
+        path: 'payment-success',
+        loadComponent: () => import('./components/payment/payment-success.component').then(m => m.PaymentSuccessComponent)
+    },
+    {
+        path: 'payment-failure',
+        loadComponent: () => import('./components/payment/payment-failure.component').then(m => m.PaymentFailureComponent)
+    },
+    {
+        path: 'payment-pending',
+        loadComponent: () => import('./components/payment/payment-pending.component').then(m => m.PaymentPendingComponent)
+    },
+
     {
         path: 'dashboard',
         loadComponent: () => import('./components/dashboard2/dashboard2.component').then(m => m.Dashboard2Component),

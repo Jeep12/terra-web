@@ -86,13 +86,30 @@ export class LoginComponent implements OnInit {
         },
         error: (err) => {
           this.isAuthenticating = false;
-
-          if (err.error?.error === 'EMAIL_NOT_VERIFIED') {
+          console.log('❌ [LOGIN ERROR] Error completo:', err);
+          
+          // Manejar diferentes tipos de errores
+          if (err.status === 429) {
+            // Rate limit excedido
+            this.errors.push(err.error.message);
+          } else if (err.error?.code === 'EMAIL_NOT_VERIFIED' || err.error?.error === 'EMAIL_NOT_VERIFIED') {
+            // Email no verificado
             this.btnGoToResendEmailVerification = true;
-            this.errors.push('Your email is not verified. Please verify it or resend verification email.');
-          } else {
+            this.errors.push('Tu email no está verificado. Por favor verifícalo o reenvía el email de verificación.');
+          } else if (err.error?.code === 'LOGIN_FAILED' || err.status === 401) {
+            // Credenciales inválidas
             this.btnGoToResendEmailVerification = false;
-            this.errors.push(err.error?.message || 'Login failed');
+            this.errors.push(err.error?.message || 'Credenciales inválidas. Verifica tu email y contraseña.');
+          } else if (err.error?.code === 'USER_DISABLED') {
+            // Usuario deshabilitado
+            this.errors.push('Tu cuenta ha sido deshabilitada. Contacta al soporte.');
+          } else if (err.error?.code === 'TWO_FACTOR_NOT_PASSED') {
+            // 2FA requerido
+            this.errors.push('Se requiere autenticación de dos factores.');
+          } else {
+            // Otros errores
+            this.btnGoToResendEmailVerification = false;
+            this.errors.push(err.error?.message || 'Error al iniciar sesión. Intenta nuevamente.');
           }
         },
         complete: () => {

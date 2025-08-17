@@ -1,6 +1,339 @@
-<br>
-<br>
-<br>
+<div class="buy-terra-coin-container">
+  <!-- Header -->
+  <div class="header-section">
+    <h1 class="main-title">
+      <i class="title-icon">💰</i>
+      Comprar Terra Coins
+    </h1>
+    <p class="subtitle">Selecciona el paquete que mejor se adapte a tus necesidades</p>
+  </div>
 
-<h1 style="    font-family: 'Segoe UI';text-transform: uppercase;color: #dabe64;width: 100%;text-align: center;">Buy Terra Coin</h1>
-    <img class="logoTerra" style="display: block;margin: 20px auto;" src="assets/images/dwarfsite-dev.png" width="50%" height="700px">
+  <!-- Error Message -->
+  <div *ngIf="errorMessage" class="error-message">
+    <i>⚠️</i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Stepper -->
+  <div class="custom-stepper">
+    <!-- Stepper Header -->
+    <div class="stepper-header">
+      <div class="step-indicator" [class.active]="currentStep === 0" [class.completed]="currentStep > 0">
+        <span class="step-number">1</span>
+        <span class="step-label">Seleccionar Paquete</span>
+      </div>
+      <div class="step-indicator" [class.active]="currentStep === 1">
+        <span class="step-number">2</span>
+        <span class="step-label">Método de Pago</span>
+      </div>
+    </div>
+    
+    <!-- Paso 1: Selección de Paquete -->
+    <div class="step-content" *ngIf="currentStep === 0">
+      <div class="packages-grid" *ngIf="!loadingPackages; else loadingPackagesTpl">
+        <div 
+          *ngFor="let pkg of packages" 
+          class="package-card"
+          [class.popular]="pkg.popular"
+          [class.selected]="selectedPackage?.id === pkg.id"
+          (click)="selectPackage(pkg)">
+          
+          <!-- Badge Popular -->
+          <div *ngIf="pkg.popular" class="popular-badge">
+            <i>⭐</i>
+            Más Popular
+          </div>
+
+          <!-- Badge Descuento -->
+          <div *ngIf="pkg.originalPrice && pkg.originalPrice > pkg.price" class="discount-badge">
+            -{{ getDiscountPercentage(pkg) }}%
+          </div>
+
+          <div class="package-header">
+            <h3 class="package-name">{{ pkg.name }}</h3>
+            <p class="package-description">{{ pkg.description }}</p>
+          </div>
+
+          <div class="package-content">
+            <!-- Cantidad de Monedas -->
+            <div class="coins-section">
+              <div class="coins-amount">
+                <i class="coin-icon">💰</i>
+                <span class="coins-number">{{ pkg.coinsAmount | number }}</span>
+                <span class="coins-label">Coins</span>
+              </div>
+              
+              <!-- Bonus -->
+              <div *ngIf="pkg.bonusCoins > 0" class="bonus-section">
+                <div class="bonus-amount">
+                  <i class="bonus-icon">➕</i>
+                  <span class="bonus-number">+{{ pkg.bonusCoins | number }}</span>
+                  <span class="bonus-label">Bonus</span>
+                </div>
+                <div class="bonus-percentage">+{{ pkg.bonusPercentage }}%</div>
+              </div>
+            </div>
+
+            <!-- Total -->
+            <div class="total-section">
+              <div class="total-coins">
+                <span class="total-label">Total:</span>
+                <span class="total-number">{{ pkg.totalCoins | number }} Coins</span>
+              </div>
+            </div>
+
+            <!-- Precio -->
+            <div class="price-section">
+              <div *ngIf="pkg.originalPrice && pkg.originalPrice > pkg.price" class="original-price">
+                ${{ pkg.originalPrice | number }}
+              </div>
+              <div class="current-price">
+                ${{ pkg.price | number }}
+              </div>
+            </div>
+          </div>
+
+          <div class="package-actions">
+            <button 
+              class="select-button"
+              [disabled]="!pkg.active">
+              <i>🛒</i>
+              Seleccionar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Loading Template -->
+      <ng-template #loadingPackagesTpl>
+        <div class="loading-container">
+          <div class="spinner"></div>
+          <p>Cargando paquetes...</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <!-- Paso 2: Método de Pago -->
+    <div class="step-content" *ngIf="currentStep === 1">
+      <div class="selected-package-summary" *ngIf="selectedPackage">
+        <h3>Paquete Seleccionado</h3>
+        <div class="summary-card">
+          <div class="summary-info">
+            <h4>{{ selectedPackage.name }}</h4>
+            <p>{{ selectedPackage.totalCoins | number }} Coins</p>
+            <p class="summary-price">${{ selectedPackage.price | number }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="payment-methods-section">
+        <h3>Selecciona tu método de pago</h3>
+        
+        <div class="payment-methods-grid" *ngIf="!loadingPaymentMethods; else loadingPaymentMethodsTpl">
+          <div 
+            *ngFor="let method of paymentMethods" 
+            class="payment-method-card"
+            [class.selected]="isPaymentMethodSelected(method)"
+            [class.disabled]="!method.enabled"
+            (click)="selectPaymentMethod(method)">
+            
+            <div class="payment-method-content">
+              <div class="payment-icon">
+                <i *ngIf="method.id === 'mercadopago'" class="payment-logo">💳</i>
+                <i *ngIf="method.id === 'paypal'" class="payment-logo">💳</i>
+                <img *ngIf="method.id !== 'mercadopago' && method.id !== 'paypal'" [src]="method.icon" [alt]="method.name" class="payment-logo">
+              </div>
+              
+              <div class="payment-info">
+                <h4>{{ method.name }}</h4>
+                <p>{{ method.description }}</p>
+                
+                <div *ngIf="method.comingSoon" class="coming-soon">
+                  <i>⏰</i>
+                  Próximamente
+                </div>
+              </div>
+
+              <div class="payment-status">
+                <i *ngIf="method.enabled" class="enabled-icon">✅</i>
+                <i *ngIf="!method.enabled" class="disabled-icon">❌</i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Loading Template -->
+        <ng-template #loadingPaymentMethodsTpl>
+          <div class="loading-container">
+            <div class="spinner"></div>
+            <p>Cargando métodos de pago...</p>
+          </div>
+        </ng-template>
+      </div>
+
+      <!-- Resumen Final -->
+      <div class="final-summary" *ngIf="selectedPackage && selectedPaymentMethod">
+        <hr class="divider">
+        
+        <div class="summary-details">
+          <div class="summary-row">
+            <span>Paquete:</span>
+            <span>{{ selectedPackage.name }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Monedas Base:</span>
+            <span>{{ selectedPackage.coinsAmount | number }}</span>
+          </div>
+          <div class="summary-row" *ngIf="selectedPackage.bonusCoins > 0">
+            <span>Bonus:</span>
+            <span>+{{ selectedPackage.bonusCoins | number }}</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Total Monedas:</span>
+            <span>{{ selectedPackage.totalCoins | number }}</span>
+          </div>
+          <div class="summary-row total-row">
+            <span>Precio Final:</span>
+            <span>${{ selectedPackage.price | number }}</span>
+          </div>
+          <div class="summary-row">
+            <span>Método de Pago:</span>
+            <span>{{ selectedPaymentMethod.name }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Información de Preferencia -->
+  <div *ngIf="showPreferenceInfo && preferenceData" class="preference-info-section">
+    <div class="preference-card">
+      <div class="preference-header">
+        <h3>📋 Información de la Preferencia de Pago</h3>
+        <p>Revisa los datos antes de continuar con el pago</p>
+      </div>
+
+      <div class="preference-content">
+        <!-- Información básica -->
+        <div class="info-section">
+          <h4>🔑 Datos Básicos</h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">ID de Preferencia:</span>
+              <span class="info-value">{{ getPreferenceInfo()?.preferenceId || 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Estado:</span>
+              <span class="info-value">{{ getPreferenceInfo()?.status || 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Public Key:</span>
+              <span class="info-value">{{ getPreferenceInfo()?.publicKey || 'N/A' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- URLs de pago -->
+        <div class="info-section">
+          <h4>🔗 URLs de Pago</h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">URL Principal:</span>
+              <span class="info-value url-value">{{ getPreferenceInfo()?.initPoint || 'N/A' }}</span>
+            </div>
+            <div class="info-item" *ngIf="getPreferenceInfo()?.sandboxInitPoint">
+              <span class="info-label">URL Sandbox:</span>
+              <span class="info-value url-value">{{ getPreferenceInfo()?.sandboxInitPoint }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuración -->
+        <div class="info-section" *ngIf="getPreferenceInfo()?.backUrls || getPreferenceInfo()?.autoReturn || getPreferenceInfo()?.notificationUrl">
+          <h4>⚙️ Configuración</h4>
+          <div class="info-grid">
+            <div class="info-item" *ngIf="getPreferenceInfo()?.autoReturn">
+              <span class="info-label">Auto Return:</span>
+              <span class="info-value">{{ getPreferenceInfo()?.autoReturn }}</span>
+            </div>
+            <div class="info-item" *ngIf="getPreferenceInfo()?.notificationUrl">
+              <span class="info-label">Webhook URL:</span>
+              <span class="info-value url-value">{{ getPreferenceInfo()?.notificationUrl }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Back URLs -->
+        <div class="info-section" *ngIf="getPreferenceInfo()?.backUrls">
+          <h4>🔗 URLs de Retorno</h4>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">✅ Success URL:</span>
+              <span class="info-value url-value">{{ getPreferenceInfo()?.backUrls?.success || 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">❌ Failure URL:</span>
+              <span class="info-value url-value">{{ getPreferenceInfo()?.backUrls?.failure || 'N/A' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">⏳ Pending URL:</span>
+              <span class="info-value url-value">{{ getPreferenceInfo()?.backUrls?.pending || 'N/A' }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Datos completos (JSON) -->
+        <div class="info-section">
+          <h4>📄 Datos Completos (JSON)</h4>
+          <div class="json-container">
+            <pre class="json-content">{{ preferenceData | json }}</pre>
+          </div>
+        </div>
+      </div>
+
+      <div class="preference-actions">
+        <button 
+          (click)="cancelPreferenceReview()"
+          class="cancel-preference-button">
+          <i>❌</i>
+          Cancelar
+        </button>
+        
+        <button 
+          (click)="continueToPayment()"
+          class="continue-payment-button">
+          <i>💳</i>
+          Continuar con el Pago
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botones de Navegación -->
+  <div class="navigation-buttons">
+    <button 
+      *ngIf="currentStep > 0"
+      (click)="goBack()"
+      class="back-button">
+      <i>⬅️</i>
+      Volver
+    </button>
+    
+    <button 
+      (click)="cancel()"
+      class="cancel-button">
+      <i>❌</i>
+      Cancelar
+    </button>
+    
+    <button 
+      *ngIf="currentStep === 1 && selectedPaymentMethod"
+      (click)="confirmPurchase()"
+      [disabled]="processingPayment"
+      class="confirm-button">
+      <div *ngIf="processingPayment" class="button-spinner"></div>
+      <i *ngIf="!processingPayment">💳</i>
+      {{ processingPayment ? 'Procesando...' : 'Confirmar Compra' }}
+    </button>
+  </div>
+</div>
